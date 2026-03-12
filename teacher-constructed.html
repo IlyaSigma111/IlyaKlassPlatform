@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИЛЬЯКЛАСС - Проведение викторины</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #6366f1;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #6366f1;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            color: #818cf8;
+        }
+
+        .question-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #6366f1;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #818cf8;
+        }
+
+        .answers {
+            display: grid;
+            gap: 10px;
+        }
+
+        .answer {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .students-list {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .finish-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title" id="quizTitle">Загрузка...</h1>
+            <span id="questionCounter">0/0</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="stat-value" id="studentsCount">0</div><div>Учеников</div></div>
+            <div class="stat-card"><div class="stat-value" id="answeredCount">0</div><div>Ответили</div></div>
+        </div>
+
+        <div id="questionCard" class="question-card">
+            <div class="question" id="questionText">Загрузка...</div>
+            <div class="answers" id="answersList"></div>
+        </div>
+
+        <div class="students-list" id="studentsList">
+            <h3 style="color:#6366f1;">👥 Подключились:</h3>
+            <div id="studentsContainer"></div>
+        </div>
+
+        <button class="finish-btn" onclick="finishQuiz()">🏁 Завершить викторину</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== ТВОЙ SUPABASE КОНФИГ =====
+        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session');
+        const quizId = urlParams.get('quiz');
+
+        let currentQuestion = 0;
+        let questions = [];
+
+        async function loadQuiz() {
+            const { data: quiz } = await supabase.from('quizzes').select('title').eq('id', quizId).single();
+            document.getElementById('quizTitle').textContent = quiz?.title || 'Викторина';
+
+            const { data: qs } = await supabase.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            questions = qs || [];
+            
+            loadSession();
+        }
+
+        function loadSession() {
+            // Подписка на изменения сессии
+            const subscription = supabase
+                .channel('session-changes')
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` }, 
+                    payload => { 
+                        if (payload.new) updateUI(payload.new); 
+                    })
+                .subscribe();
+
+            // Первая загрузка
+            supabase.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                if (data?.[0]) updateUI(data[0]);
+            });
+        }
+
+        function updateUI(session) {
+            const students = session.students || {};
+            document.getElementById('studentsCount').textContent = Object.keys(students).length;
+
+            let answered = 0;
+            let studentsHtml = '';
+            Object.entries(students).forEach(([id, s]) => {
+                const hasAnswered = s.answers && s.answers[currentQuestion] !== undefined;
+                if (hasAnswered) answered++;
+                studentsHtml += `<div class="student-item"><span>${s.name}</span><span>${hasAnswered ? '✓' : '⏳'}</span></div>`;
+            });
+            document.getElementById('answeredCount').textContent = answered;
+            document.getElementById('studentsContainer').innerHTML = studentsHtml || '<p>Пока никого</p>';
+
+            if (questions.length) {
+                document.getElementById('questionCounter').textContent = `Вопрос ${currentQuestion+1}/${questions.length}`;
+                displayQuestion(questions[currentQuestion]);
+            }
+        }
+
+        function displayQuestion(q) {
+            document.getElementById('questionText').textContent = q.question;
+            let answersHtml = '';
+            q.answers.forEach((a, i) => {
+                answersHtml += `<div class="answer" onclick="selectAnswer(${i})">${a}</div>`;
+            });
+            document.getElementById('answersList').innerHTML = answersHtml;
+        }
+
+        window.selectAnswer = async (index) => {
+            const correct = questions[currentQuestion].correct;
+            alert(index === correct ? '✅ Правильно' : '❌ Неправильно');
+        };
+
+        window.finishQuiz = async () => {
+            if (confirm('Завершить викторину?')) {
+                await supabase.from('sessions').update({ status:'finished' }).eq('id', sessionId);
+                window.close();
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key==='ArrowRight' && currentQuestion < questions.length-1) { 
+                currentQuestion++; 
+                supabase.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                    if (data?.[0]) updateUI(data[0]);
+                });
+            }
+            else if (e.key==='ArrowLeft' && currentQuestion > 0) { 
+                currentQuestion--; 
+                supabase.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                    if (data?.[0]) updateUI(data[0]);
+                });
+            }
+        });
+
+        loadQuiz();
+    </script>
+</body>
+</html>
