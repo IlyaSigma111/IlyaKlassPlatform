@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИЛЬЯКЛАСС - Профиль</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+        }
+
+        body.light-theme {
+            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #1e293b;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .logo-il {
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-yaclass {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: inherit;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .user-role {
+            font-size: 10px;
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .user-role.developer { color: var(--danger); }
+        .user-role.moderator { color: var(--accent); }
+
+        .logout-btn, .theme-btn {
+            padding: 7px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover, .theme-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 25px;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .profile-sidebar {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .profile-main {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 30px;
+            padding: 30px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .profile-role {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+        }
+
+        .profile-role.developer {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .profile-role.moderator {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .settings-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-title {
+            font-size: 18px;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: 500;
+        }
+
+        .setting-description {
+            font-size: 12px;
+            opacity: 0.5;
+            margin-top: 2px;
+        }
+
+        .setting-input {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            color: inherit;
+            width: 220px;
+        }
+
+        .setting-value {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .setting-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <header class="header">
+        <div class="header-left">
+            <div class="logo" onclick="window.location='index.html'">
+                <span class="logo-il">ИЛЬ</span>
+                <span class="logo-yaclass">ЯКЛАСС</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Викторины</a>
+                <a href="results.html" class="nav-link">Результаты</a>
+                <a href="profile.html" class="nav-link active">Профиль</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️ Светлая</button>
+            <div id="userSection"></div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="content" class="loading">Загрузка профиля...</div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== ТВОЙ SUPABASE КОНФИГ =====
+        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2);
+        }
+
+        function cleanDisplayName(name) {
+            return name ? name.replace(/\s*\(\d+\)$/, '') : name;
+        }
+
+        function getCurrentSimpleUser() {
+            const u = localStorage.getItem('currentSimpleUser');
+            return u ? JSON.parse(u) : null;
+        }
+
+        const DEFAULT_AVATAR = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23333\' stroke=\'%236366f1\' stroke-width=\'2\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'40\' text-anchor=\'middle\' fill=\'%236366f1\'%3E👤%3C/text%3E%3C/svg%3E';
+
+        let currentUser = null;
+        let userRole = null;
+        let userFullName = null;
+        let userIsModerator = false;
+
+        // ===== ТЕМА =====
+        function toggleTheme() {
+            const b = document.body;
+            const t = document.getElementById('themeToggle');
+            if (b.classList.contains('dark-theme')) {
+                b.classList.replace('dark-theme', 'light-theme');
+                t.textContent = '🌙 Темная';
+                localStorage.setItem('theme', 'light');
+            } else {
+                b.classList.replace('light-theme', 'dark-theme');
+                t.textContent = '☀️ Светлая';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.className = savedTheme + '-theme';
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
+
+        // ===== ОСНОВНАЯ ЛОГИКА =====
+        (async function init() {
+            const simple = getCurrentSimpleUser();
+            if (simple) {
+                currentUser = { id: simple.id, email: simple.username+'@local', username: simple.username };
+                userRole = simple.role;
+                userFullName = simple.fullName || simple.username;
+                userIsModerator = simple.isModerator || false;
+                updateUI();
+                loadProfile(simple);
+            } else {
+                window.location.href = 'index.html';
+            }
+        })();
+
+        function updateUI() {
+            const s = document.getElementById('userSection');
+            if (!s) return;
+            const dn = cleanDisplayName(userFullName||currentUser.username);
+            let rt = '', rc = '';
+            if (userRole==='developer') { rt='👑 Разработчик'; rc='developer'; }
+            else if (userIsModerator) { rt='🛡️ Модератор'; rc='moderator'; }
+            else rt = userRole==='teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
+            s.innerHTML = `<div class="user-card"><img src="${DEFAULT_AVATAR}" class="avatar"><div class="user-info"><span class="user-name">${dn}</span><span class="user-role ${rc}">${rt}</span></div><button onclick="signOut()" class="logout-btn">Выйти</button></div>`;
+        }
+
+        function signOut() {
+            localStorage.removeItem('currentSimpleUser');
+            window.location.href = 'index.html';
+        }
+
+        function loadProfile(user) {
+            const c = document.getElementById('content');
+            const isDev = userRole === 'developer';
+            let rt = '', rc = '';
+            if (isDev) { rt='👑 Разработчик'; rc='developer'; }
+            else if (userIsModerator) { rt='🛡️ Модератор'; rc='moderator'; }
+            else rt = userRole==='teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
+
+            c.innerHTML = `
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <img src="${DEFAULT_AVATAR}" class="profile-avatar">
+                        <div class="profile-name">${cleanDisplayName(userFullName)}</div>
+                        <div class="profile-email">${currentUser.email}</div>
+                        <div class="profile-role ${rc}">${rt}</div>
+                        ${userRole==='teacher'||isDev||userIsModerator?`
+                            <div style="margin-top:25px;">
+                                <h3 style="color:#6366f1; margin-bottom:10px;">➕ Управление</h3>
+                                <button class="submit-btn" onclick="window.location.href='index.html#addQuiz'">➕ Добавить викторину</button>
+                            </div>
+                        `:''}
+                    </div>
+                    <div class="profile-main">
+                        <h2 class="settings-title">⚙️ Настройки</h2>
+                        <div class="settings-section">
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Имя</div>
+                                    <div class="setting-description">Как вас видят</div>
+                                </div>
+                                <input type="text" id="fullNameInput" class="setting-input" value="${cleanDisplayName(userFullName)}">
+                            </div>
+                            <button class="submit-btn" onclick="saveFullName()">Сохранить</button>
+                        </div>
+                        ${userRole==='student'?`
+                            <div class="settings-section">
+                                <h3 class="settings-title">📊 Статистика</h3>
+                                <div class="setting-item"><span>Пройдено:</span><span class="setting-value" id="totalQuizzes">0</span></div>
+                                <div class="setting-item"><span>Баллов:</span><span class="setting-value" id="totalScore">0</span></div>
+                                <div class="setting-item"><span>Средний:</span><span class="setting-value" id="avgScore">0</span></div>
+                            </div>
+                        `:''}
+                    </div>
+                </div>
+            `;
+            if (userRole==='student') loadStudentStats();
+        }
+
+        async function loadStudentStats() {
+            const { data: results } = await supabase
+                .from('results')
+                .select('*')
+                .eq('student_id', currentUser.id);
+            
+            let t=0,c=0;
+            if (results) {
+                results.forEach(r => { t+=r.score||0; c++; });
+            }
+            ['totalQuizzes','totalScore','avgScore'].forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.textContent = id==='totalQuizzes'?c : id==='totalScore'?t : c? (t/c).toFixed(1):0;
+            });
+        }
+
+        async function saveFullName() {
+            const n = document.getElementById('fullNameInput')?.value;
+            if (!n) return alert('Введите имя');
+            const simple = getCurrentSimpleUser();
+            if (simple) {
+                await supabase
+                    .from('simple_users')
+                    .update({ full_name: n, username: n })
+                    .eq('id', simple.id);
+                
+                simple.fullName = n;
+                simple.username = n;
+                localStorage.setItem('currentSimpleUser', JSON.stringify(simple));
+            }
+            alert('Сохранено');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
