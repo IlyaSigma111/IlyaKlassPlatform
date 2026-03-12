@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ИЛЬЯКЛАСС</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+        }
+
+        body.light-theme {
+            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #1e293b;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .logo-il {
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-yaclass {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: inherit;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .user-role {
+            font-size: 10px;
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .user-role.developer { color: var(--danger); }
+        .user-role.moderator { color: var(--accent); }
+
+        .logout-btn, .theme-btn {
+            padding: 7px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover, .theme-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 25px;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .login-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 40px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .login-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .login-big-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            color: white;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .login-big-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px var(--primary);
+        }
+
+        .login-options {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .login-option-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: inherit;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .login-option-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 40px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .role-option {
+            flex: 1;
+            min-width: 180px;
+            padding: 30px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .role-option:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .role-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .role-option h3 {
+            color: var(--primary-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-light);
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            color: inherit;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: inherit;
+            padding: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .test-accounts {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 18px 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .subject-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .subject-card.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .subject-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .subject-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .subject-count {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .add-quiz-btn {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .add-quiz-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .quiz-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-kahoot {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .badge-simple {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .badge-constructed {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+        }
+
+        .badge-board {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .delete-btn:hover {
+            opacity: 1;
+        }
+
+        .quiz-class {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .quiz-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .quiz-subject {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 12px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: inherit;
+        }
+
+        .btn-teacher {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-student {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-external {
+            background: var(--accent);
+            color: white;
+        }
+
+        .my-quizzes-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .session-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .session-preview {
+            cursor: pointer;
+        }
+
+        .session-title {
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 6px;
+        }
+
+        .session-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        .session-right {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .session-status {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .status-finished {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+        }
+
+        .toggle-icon {
+            font-size: 14px;
+            color: var(--primary-light);
+        }
+
+        .session-details {
+            padding: 15px 0 5px;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            margin-top: 12px;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .student-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .student-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .student-status {
+            color: var(--success);
+            font-size: 11px;
+        }
+
+        .score-input {
+            width: 70px;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            background: rgba(0, 0, 0, 0.2);
+            color: inherit;
+            text-align: center;
+        }
+
+        .finish-quiz-btn, .save-scores-btn {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary-light);
+            padding: 8px;
+            border-radius: 15px;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .quiz-form {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .quiz-form.visible {
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .radio-option.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .remove-question {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .answer-option input[type="text"] {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .correct-badge {
+            color: var(--success);
+            font-size: 12px;
+        }
+
+        .add-question-btn {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px dashed var(--primary);
+            color: var(--primary-light);
+            padding: 12px;
+            border-radius: 20px;
+            width: 100%;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .question-count {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .question-count input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .result-subject {
+            color: var(--primary-light);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-score {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .result-date {
+            font-size: 11px;
+            opacity: 0.5;
+            margin-top: 5px;
+        }
+
+        .danger-zone {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .danger-zone h3 {
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        .clear-stats-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .empty-state, .empty-message {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .header-left {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .nav-menu {
+                justify-content: center;
+            }
+            .subjects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .quiz-grid, .sessions-grid {
+                grid-template-columns: 1fr;
+            }
+            .login-options {
+                flex-direction: column;
+            }
+            .role-options {
+                flex-direction: column;
+            }
+            .radio-group {
+                flex-direction: column;
+            }
+            .radio-option {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            .quiz-actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <header class="header">
+        <div class="header-left">
+            <div class="logo" onclick="window.location='index.html'">
+                <span class="logo-il">ИЛЬ</span>
+                <span class="logo-yaclass">ЯКЛАСС</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link active">Викторины</a>
+                <a href="results.html" class="nav-link">Результаты</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️ Светлая</button>
+            <div id="userSection"></div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="content" class="loading">Загрузка...</div>
+    </main>
+
+    <!-- Модальные окна -->
+    <div id="simpleLoginModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <h2>🔑 Вход</h2>
+            <div class="login-options">
+                <button class="login-option-btn active" onclick="showSimpleLogin()">👤 По нику</button>
+                <button class="login-option-btn" onclick="showGoogleLogin()">G Google</button>
+            </div>
+            <div id="googleLoginSection" style="display: none;">
+                <button class="login-big-btn" onclick="signIn()">Войти через Google</button>
+            </div>
+            <div id="simpleLoginSection">
+                <div class="form-group">
+                    <input type="text" id="simpleUsername" placeholder="Никнейм">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="simplePassword" placeholder="Пароль">
+                </div>
+                <button class="submit-btn" onclick="simpleLogin()">Войти</button>
+                <button class="close-btn" onclick="showRegisterModal()">Регистрация</button>
+            </div>
+            <div class="test-accounts">
+                Тестовые: teacher/123, student/123, moderator/123, Илья/123
+            </div>
+            <button class="close-btn" onclick="closeLoginModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 450px;">
+            <h2>📝 Регистрация</h2>
+            <div class="form-group">
+                <input type="text" id="regUsername" placeholder="Никнейм">
+            </div>
+            <div class="form-group">
+                <input type="password" id="regPassword" placeholder="Пароль">
+            </div>
+            <div class="form-group">
+                <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль">
+            </div>
+            <div class="form-group">
+                <select id="regRole">
+                    <option value="student">Ученик</option>
+                    <option value="teacher">Учитель</option>
+                </select>
+            </div>
+            <button class="submit-btn" onclick="registerUser()">Зарегистрироваться</button>
+            <button class="close-btn" onclick="closeRegisterModal()">Назад</button>
+        </div>
+    </div>
+
+    <div id="roleModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Выберите роль</h2>
+            <div class="role-options">
+                <div class="role-option" onclick="selectRole('teacher')">
+                    <div class="role-icon">👨‍🏫</div>
+                    <h3>Учитель</h3>
+                </div>
+                <div class="role-option" onclick="selectRole('student')">
+                    <div class="role-icon">👨‍🎓</div>
+                    <h3>Ученик</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="subjectModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Ваши предметы</h2>
+            <div id="subjectsCheckboxList" class="subjects-grid" style="grid-template-columns: repeat(2,1fr);"></div>
+            <div style="display: flex; gap: 10px; margin: 20px 0;">
+                <input type="text" id="newSubjectInput" placeholder="Новый предмет">
+                <button class="add-quiz-btn" onclick="addNewSubject()">➕</button>
+            </div>
+            <button class="submit-btn" onclick="saveTeacherSubjects()">Сохранить</button>
+            <button class="close-btn" onclick="skipSubjectSelection()">Пропустить</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===== ТВОЙ SUPABASE КОНФИГ =====
+        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2);
+        }
+
+        function cleanDisplayName(name) {
+            return name ? name.replace(/\s*\(\d+\)$/, '') : name;
+        }
+
+        function getBaseName(name) {
+            return name ? name.replace(/\s*\(\d+\)$/, '').trim() : name;
+        }
+
+        function checkIfModerator(name) {
+            return name ? /\s*\(\d+\)$/.test(name) : false;
+        }
+
+        function hashPassword(p) {
+            let h = 0;
+            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
+            return h.toString(16);
+        }
+
+        function getCurrentSimpleUser() {
+            const u = localStorage.getItem('currentSimpleUser');
+            return u ? JSON.parse(u) : null;
+        }
+
+        // ===== ТЕМА =====
+        function toggleTheme() {
+            const b = document.body;
+            const t = document.getElementById('themeToggle');
+            if (b.classList.contains('dark-theme')) {
+                b.classList.replace('dark-theme', 'light-theme');
+                t.textContent = '🌙 Темная';
+                localStorage.setItem('theme', 'light');
+            } else {
+                b.classList.replace('light-theme', 'dark-theme');
+                t.textContent = '☀️ Светлая';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.className = savedTheme + '-theme';
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
+
+        // ===== МОДАЛКИ =====
+        window.showLoginModal = () => document.getElementById('simpleLoginModal').style.display = 'flex';
+        window.closeLoginModal = () => document.getElementById('simpleLoginModal').style.display = 'none';
+        window.showGoogleLogin = () => {
+            document.getElementById('googleLoginSection').style.display = 'block';
+            document.getElementById('simpleLoginSection').style.display = 'none';
+        };
+        window.showSimpleLogin = () => {
+            document.getElementById('googleLoginSection').style.display = 'none';
+            document.getElementById('simpleLoginSection').style.display = 'block';
+        };
+        window.showRegisterModal = () => {
+            closeLoginModal();
+            document.getElementById('registerModal').style.display = 'flex';
+        };
+        window.closeRegisterModal = () => {
+            document.getElementById('registerModal').style.display = 'none';
+            showLoginModal();
+        };
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none';
+        });
+
+        // ===== ПЕРЕМЕННЫЕ =====
+        let currentUser = null;
+        let userRole = null;
+        let userFullName = null;
+        let userIsModerator = false;
+        let teacherSubjects = [];
+        let selectedSubject = 'all';
+        let allSubjects = [];
+        let quizQuestions = [];
+        let constructorType = 'classic';
+
+        const DEFAULT_AVATAR = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23333\' stroke=\'%236366f1\' stroke-width=\'2\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'40\' text-anchor=\'middle\' fill=\'%236366f1\'%3E👤%3C/text%3E%3C/svg%3E';
+        const baseSubjects = ['Русский язык','Алгебра','Геометрия','Математика','Химия','Физика','Литература','Английский язык','История','Физкультура'];
+
+        // ===== ЗАГРУЗКА ПРЕДМЕТОВ =====
+        async function loadAllSubjects() {
+            const { data, error } = await supabase.from('subjects').select('name');
+            if (error) console.error(error);
+            allSubjects = data ? data.map(s => s.name) : baseSubjects;
+        }
+
+        // ===== ОСНОВНАЯ ЛОГИКА =====
+        (async function init() {
+            await loadAllSubjects();
+            
+            const simple = getCurrentSimpleUser();
+            if (simple) {
+                currentUser = { id: simple.id, email: simple.username+'@local', username: simple.username };
+                userRole = simple.role;
+                userFullName = simple.fullName || simple.username;
+                userIsModerator = simple.isModerator || false;
+                updateUI();
+                const saved = localStorage.getItem('selectedSubject_'+currentUser.id);
+                selectedSubject = saved && (saved==='all'||allSubjects.includes(saved)) ? saved : 'all';
+                loadContent();
+            } else {
+                currentUser = null;
+                updateUI();
+                loadContent();
+            }
+        })();
+
+        function updateUI() {
+            const s = document.getElementById('userSection');
+            if (!s) return;
+            if (currentUser) {
+                const dn = cleanDisplayName(userFullName||currentUser.username);
+                let rt = '', rc = '';
+                if (userRole==='developer') { rt='👑 Разработчик'; rc='developer'; }
+                else if (userIsModerator) { rt='🛡️ Модератор'; rc='moderator'; }
+                else rt = userRole==='teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
+                s.innerHTML = `<div class="user-card"><img src="${DEFAULT_AVATAR}" class="avatar"><div class="user-info"><span class="user-name">${dn}</span><span class="user-role ${rc}">${rt}</span></div><button onclick="signOut()" class="logout-btn">Выйти</button></div>`;
+            } else s.innerHTML = '';
+        }
+
+        function signOut() {
+            localStorage.removeItem('currentSimpleUser');
+            window.location.reload();
+        }
+
+        function loadContent() {
+            const c = document.getElementById('content');
+            if (!c) return;
+            if (!currentUser) {
+                c.innerHTML = `<div class="login-container"><div class="login-card"><div class="login-title"><span class="logo-il">ИЛЬ</span><span class="logo-yaclass">ЯКЛАСС</span></div><div class="login-subtitle">Войдите</div><button class="login-big-btn" onclick="showLoginModal()">🔑 Войти</button></div></div>`;
+                return;
+            }
+
+            let subs = userRole==='teacher' ? teacherSubjects.filter(s => allSubjects.includes(s)) : [...allSubjects];
+            c.innerHTML = `
+                <div class="subjects-grid" id="subjectsGrid">
+                    ${userRole==='student'?`<div class="subject-card ${selectedSubject==='all'?'selected':''}" onclick="selectSubject('all')"><div class="subject-icon">📚</div><div class="subject-name">Все</div><div class="subject-count" id="count-all">0</div></div>`:''}
+                    ${subs.map(s => `<div class="subject-card ${selectedSubject===s?'selected':''}" onclick="selectSubject('${s}')" id="subject-${s.replace(/\s/g,'')}"><div class="subject-icon">📖</div><div class="subject-name">${s}</div><div class="subject-count" id="count-${s.replace(/\s/g,'')}">0</div></div>`).join('')}
+                </div>
+                <div class="quizzes-section">
+                    <div class="section-header">
+                        <h2 class="section-title" id="selectedSubjectTitle">${selectedSubject==='all'?'Все предметы':selectedSubject}</h2>
+                        ${userRole==='teacher'||userRole==='developer'||userIsModerator?`<div style="display:flex;gap:8px;"><button class="add-quiz-btn" onclick="toggleForm()">➕ По ссылке</button><button class="add-quiz-btn" onclick="showConstructor()">🛠️ Конструктор</button></div>`:''}
+                    </div>
+                    <div id="quizForm" class="quiz-form"></div>
+                    <div id="quizzesList" class="quiz-grid"></div>
+                </div>
+                ${userRole==='teacher'||userRole==='developer'||userIsModerator?`<div class="my-quizzes-section"><h2 class="section-title">📋 Проведенные</h2><div id="myQuizzesList" class="sessions-grid"></div></div>`:`<div class="my-quizzes-section"><h2 class="section-title">📊 Мои результаты</h2><div id="myResults" class="results-grid"></div></div>`}
+            `;
+            loadAllQuizzes();
+            if (userRole==='teacher'||userRole==='developer'||userIsModerator) loadTeacherSessions(); else loadStudentResults();
+        }
+
+        window.selectSubject = function(s) {
+            selectedSubject = s;
+            if (currentUser) localStorage.setItem('selectedSubject_'+currentUser.id, s);
+            document.querySelectorAll('.subject-card').forEach(el => el.classList.remove('selected'));
+            if (s==='all') document.querySelector('.subject-card')?.classList.add('selected');
+            else document.getElementById('subject-'+s.replace(/\s/g,''))?.classList.add('selected');
+            document.getElementById('selectedSubjectTitle').innerHTML = s==='all' ? 'Все предметы' : s;
+            loadQuizzesBySubject(s);
+        };
+
+        async function loadAllQuizzes() {
+            const { data: quizzes, error } = await supabase.from('quizzes').select('*');
+            if (error || !quizzes) return;
+            const cnt = {}; allSubjects.forEach(s => cnt[s]=0);
+            quizzes.forEach(q => { if (cnt.hasOwnProperty(q.subject)) cnt[q.subject]++; });
+            allSubjects.forEach(s => { let el = document.getElementById('count-'+s.replace(/\s/g,'')); if (el) el.textContent = cnt[s]+' вик'; });
+            if (userRole==='student') { let el = document.getElementById('count-all'); if (el) el.textContent = quizzes.length+' вик'; }
+            loadQuizzesBySubject(selectedSubject);
+        }
+
+        async function loadQuizzesBySubject(subject) {
+            let query = supabase.from('quizzes').select('*');
+            if (subject!=='all') query = query.eq('subject', subject);
+            const { data: quizzes, error } = await query;
+            const cont = document.getElementById('quizzesList');
+            if (!cont) return;
+            if (!quizzes || quizzes.length===0) { cont.innerHTML = '<div class="empty-message">Нет викторин</div>'; return; }
+            let html = '';
+            let filt = quizzes;
+            if (userRole==='teacher' && teacherSubjects.length && subject==='all') filt = quizzes.filter(q => teacherSubjects.includes(q.subject));
+            for (const q of filt) {
+                if (userRole==='student' && q.type==='kahoot') {
+                    const { data: sessions } = await supabase.from('sessions').select('*').eq('quiz_id', q.id);
+                    if (!sessions?.some(s => s.status==='active')) continue;
+                }
+                let badge = 'badge-simple', btext = '📝 Простая';
+                if (q.type==='kahoot') { badge='badge-kahoot'; btext='🎮 Kahoot'; }
+                else if (q.type==='constructed') {
+                    if (q.constructor_type==='board') { badge='badge-board'; btext='📝 С доски'; }
+                    else { badge='badge-constructed'; btext='🛠️ Конструктор'; }
+                }
+                html += `<div class="quiz-card"><div class="quiz-header"><span class="quiz-badge ${badge}">${btext}</span>${userRole==='teacher'||userRole==='developer'||userIsModerator?`<button class="delete-btn" onclick="deleteQuiz('${q.id}')">🗑️</button>`:''}</div><div class="quiz-class">${q.class} класс</div><div class="quiz-title">${q.title}</div><div class="quiz-subject">${q.subject}</div>${q.type==='constructed'?`<div class="quiz-maxscore">Вопросов: ${q.question_count}</div>`:''}${q.type==='kahoot'?`<div class="quiz-maxscore">Макс: ${q.max_score}</div>`:''}<div class="quiz-actions">${userRole==='teacher'||userRole==='developer'||userIsModerator?`${q.type==='kahoot'?`<button class="btn btn-teacher" onclick="startQuiz('${q.id}','${q.link}','${q.subject}','${q.title}',${q.max_score})">▶️ Запустить</button>`:q.type==='constructed'?`<button class="btn btn-teacher" onclick="startConstructedQuiz('${q.id}','${q.constructor_type}')">▶️ Провести</button>`:`<a href="${q.link}" target="_blank" class="btn btn-external">🌐 Перейти</a>`}`:`${q.type==='kahoot'?`<button class="btn btn-student" onclick="joinQuiz('${q.id}','${q.link}','${q.subject}','${q.title}',${q.max_score})">🎮 Играть</button>`:q.type==='constructed' && q.constructor_type!=='board'?`<button class="btn btn-student" onclick="joinConstructedQuiz('${q.id}')">🛠️ Играть</button>`:q.type==='constructed' && q.constructor_type==='board'?`<span class="btn" style="background:#f59e0b;">👥 Устно</span>`:`<a href="${q.link}" target="_blank" class="btn btn-external">🌐 Перейти</a>`}</div></div>`;
+            }
+            cont.innerHTML = html || '<div class="empty-message">Нет викторин</div>';
+        }
+
+        window.deleteQuiz = async id => {
+            if (confirm('Удалить?')) {
+                await supabase.from('quizzes').delete().eq('id', id);
+            }
+        };
+
+        window.toggleForm = function() {
+            const f = document.getElementById('quizForm');
+            if (!f) return;
+            f.innerHTML = `<h3 style="color:#6366f1;">➕ По ссылке</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectQuizType('kahoot')" id="type-kahoot"><input type="radio" name="qt" checked> 🎮 Kahoot</div><div class="radio-option" onclick="selectQuizType('simple')" id="type-simple"><input type="radio" name="qt"> 📝 Простая</div></div></div><div class="form-group"><label>Класс</label><select id="quizClass">${[5,6,7,8,9,10,11].map(n=>`<option value="${n}">${n} класс</option>`).join('')}</select></div><div class="form-group"><label>Предмет</label><select id="quizSubject">${allSubjects.map(s=>`<option value="${s}">${s}</option>`).join('')}</select></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Описание</label><textarea id="quizDescription" rows="2"></textarea></div><div class="form-group"><label>Ссылка</label><input id="quizLink" placeholder="https://..."></div><div class="form-group" id="maxScoreGroup"><label>Макс. балл</label><input type="number" id="quizMaxScore" value="15"></div><button class="submit-btn" onclick="saveQuiz()">💾 Сохранить</button>`;
+            f.classList.toggle('visible');
+        };
+
+        window.selectQuizType = function(t) {
+            document.getElementById('type-kahoot')?.classList.toggle('selected', t==='kahoot');
+            document.getElementById('type-simple')?.classList.toggle('selected', t==='simple');
+            document.getElementById('maxScoreGroup').style.display = t==='kahoot' ? 'block' : 'none';
+        };
+
+        window.saveQuiz = async function() {
+            const t = document.querySelector('input[name="qt"]:checked')?.parentElement?.getAttribute('onclick')?.includes('kahoot') ? 'kahoot' : 'simple';
+            const id = generateId();
+            const data = {
+                id,
+                type: t,
+                class: document.getElementById('quizClass')?.value,
+                subject: document.getElementById('quizSubject')?.value,
+                title: document.getElementById('quizTitle')?.value,
+                description: document.getElementById('quizDescription')?.value,
+                link: document.getElementById('quizLink')?.value,
+                created_by: currentUser.id,
+                created_at: Date.now()
+            };
+            if (!data.title || !data.link) return alert('Заполните название и ссылку');
+            if (t==='kahoot') data.max_score = parseInt(document.getElementById('quizMaxScore')?.value) || 0;
+            const { error } = await supabase.from('quizzes').insert(data);
+            if (error) console.error(error);
+            document.getElementById('quizTitle').value = '';
+            document.getElementById('quizDescription').value = '';
+            document.getElementById('quizLink').value = '';
+            document.getElementById('quizMaxScore').value = '15';
+            document.getElementById('quizForm')?.classList.remove('visible');
+        };
+
+        window.startQuiz = async (id,link,sub,title,ms) => {
+            const sessionId = generateId();
+            await supabase.from('sessions').insert({
+                id: sessionId,
+                quiz_id: id,
+                quiz_subject: sub,
+                quiz_title: title,
+                max_score: ms||0,
+                teacher_id: currentUser.id,
+                teacher_name: userFullName||'Учитель',
+                status: 'active',
+                started_at: Date.now(),
+                students: {}
+            });
+            await supabase.from('teacher_sessions').insert({
+                teacher_id: currentUser.id,
+                session_id: sessionId,
+                quiz_subject: sub,
+                quiz_title: title,
+                max_score: ms||0,
+                status: 'active',
+                started_at: Date.now(),
+                students: {}
+            });
+            window.open(link,'_blank');
+        };
+
+        window.joinQuiz = async (id,link,sub,title,ms) => {
+            const n = userFullName || currentUser.username || 'Ученик';
+            if (!n) return;
+            const { data: sessions } = await supabase.from('sessions').select('*').eq('quiz_id', id);
+            const act = sessions?.find(s => s.status==='active');
+            if (!act) return alert('Нет активной викторины');
+            const studentData = {
+                name: n,
+                email: currentUser.email,
+                joined_at: Date.now()
+            };
+            act.students[currentUser.id] = studentData;
+            await supabase.from('sessions').update({ students: act.students }).eq('id', act.id);
+            await supabase.from('teacher_sessions').update({ students: act.students }).eq('session_id', act.id);
+            try { let u = new URL(link); u.searchParams.append('session',act.id); u.searchParams.append('student',currentUser.id); u.searchParams.append('name',n); window.open(u,'_blank'); }
+            catch(e) { window.open(link + (link.includes('?')?'&':'?') + `session=${act.id}&student=${currentUser.id}&name=${encodeURIComponent(n)}`,'_blank'); }
+        };
+
+        window.showConstructor = function() {
+            const f = document.getElementById('quizForm');
+            if (!f) return;
+            f.innerHTML = `<h3 style="color:#6366f1;">🛠️ Конструктор</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectConstructorType('classic')" id="type-classic"><input type="radio" name="ct" checked> 📱 С телефонами</div><div class="radio-option" onclick="selectConstructorType('board')" id="type-board"><input type="radio" name="ct"> 📝 С доски</div></div></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Класс</label><select id="quizClass">${[5,6,7,8,9,10,11].map(n=>`<option value="${n}">${n} класс</option>`).join('')}</select></div><div class="form-group"><label>Предмет</label><select id="quizSubject">${allSubjects.map(s=>`<option value="${s}">${s}</option>`).join('')}</select></div><div class="form-group"><label>Вопросов</label><div style="display:flex;gap:8px;"><input type="number" id="questionCount" value="5" min="1"><button class="add-quiz-btn" onclick="generateQuestions()">Создать</button></div></div><div id="questionsContainer"></div><button class="add-question-btn" id="addQuestionBtn" style="display:none" onclick="addQuestion()">➕ Добавить вопрос</button><button class="submit-btn" id="saveQuizBtn" style="display:none" onclick="saveQuizWithQuestions()">💾 Сохранить</button>`;
+            f.classList.add('visible');
+        };
+
+        window.selectConstructorType = function(t) {
+            document.getElementById('type-classic')?.classList.toggle('selected', t==='classic');
+            document.getElementById('type-board')?.classList.toggle('selected', t==='board');
+            constructorType = t;
+        };
+
+        window.generateQuestions = function() {
+            const cnt = parseInt(document.getElementById('questionCount')?.value) || 5;
+            quizQuestions = Array.from({length:cnt}, (_,i) => ({ id:Date.now()+i, question:'', answers:['','','',''], correct:0 }));
+            renderQuestions();
+            document.getElementById('addQuestionBtn').style.display = 'block';
+            document.getElementById('saveQuizBtn').style.display = 'block';
+        };
+
+        window.addQuestion = function() {
+            quizQuestions.push({ id:Date.now(), question:'', answers:['','','',''], correct:0 });
+            renderQuestions();
+        };
+
+        window.removeQuestion = function(idx) {
+            quizQuestions.splice(idx,1);
+            renderQuestions();
+            if (!quizQuestions.length) {
+                document.getElementById('addQuestionBtn').style.display = 'none';
+                document.getElementById('saveQuizBtn').style.display = 'none';
+            }
+        };
+
+        window.updateQuestion = function(idx, f, v) {
+            if (f==='question') quizQuestions[idx].question = v;
+            else if (f.startsWith('answer')) quizQuestions[idx].answers[parseInt(f.replace('answer',''))] = v;
+            else if (f==='correct') quizQuestions[idx].correct = parseInt(v);
+        };
+
+        function renderQuestions() {
+            const c = document.getElementById('questionsContainer');
+            if (!c) return;
+            let h = '';
+            quizQuestions.forEach((q,i) => {
+                h += `<div class="question-card"><div class="question-header"><span>Вопрос ${i+1}</span><button class="remove-question" onclick="removeQuestion(${i})">×</button></div><div class="form-group"><input value="${q.question}" onchange="updateQuestion(${i},'question',this.value)" placeholder="Вопрос"></div>`;
+                [0,1,2,3].forEach(j => {
+                    h += `<div class="answer-option"><input type="radio" name="correct-${q.id}" value="${j}" ${q.correct===j?'checked':''} onchange="updateQuestion(${i},'correct',this.value)"><input type="text" value="${q.answers[j]}" placeholder="Ответ ${j+1}" onchange="updateQuestion(${i},'answer${j}',this.value)">${q.correct===j?'<span class="correct-badge">✓</span>':''}</div>`;
+                });
+                h += '</div>';
+            });
+            c.innerHTML = h;
+        }
+
+        window.saveQuizWithQuestions = async function() {
+            const t = document.querySelector('input[name="ct"]:checked')?.parentElement?.getAttribute('onclick')?.includes('classic') ? 'classic' : 'board';
+            const title = document.getElementById('quizTitle')?.value;
+            const quizClass = document.getElementById('quizClass')?.value;
+            const subject = document.getElementById('quizSubject')?.value;
+            if (!title) return alert('Введите название');
+            for (let i=0;i<quizQuestions.length;i++) {
+                if (!quizQuestions[i].question) return alert(`Заполните вопрос ${i+1}`);
+                if (!quizQuestions[i].answers.some(a=>a)) return alert(`Добавьте ответы к вопросу ${i+1}`);
+            }
+            const quizId = generateId();
+            await supabase.from('quizzes').insert({
+                id: quizId,
+                type: 'constructed',
+                constructor_type: t,
+                class: quizClass,
+                subject,
+                title,
+                question_count: quizQuestions.length,
+                max_score: quizQuestions.length,
+                created_by: currentUser.id,
+                created_at: Date.now()
+            });
+            for (let i=0;i<quizQuestions.length;i++) {
+                await supabase.from('questions').insert({
+                    quiz_id: quizId,
+                    question_index: i,
+                    question: quizQuestions[i].question,
+                    answers: quizQuestions[i].answers,
+                    correct: quizQuestions[i].correct
+                });
+            }
+            alert('✅ Викторина создана');
+            document.getElementById('quizForm').classList.remove('visible');
+            quizQuestions = [];
+        };
+
+        window.startConstructedQuiz = async (id, type) => {
+            const { data: questions } = await supabase.from('questions').select('*').eq('quiz_id', id);
+            if (!questions?.length) return alert('Ошибка');
+            if (type==='board') { window.open(`teacher-board.html?quiz=${id}`,'_blank'); return; }
+            const sessionId = generateId();
+            await supabase.from('sessions').insert({
+                id: sessionId,
+                quiz_id: id,
+                quiz_type: 'constructed',
+                max_score: questions.length,
+                teacher_id: currentUser.id,
+                teacher_name: userFullName||'Учитель',
+                status: 'active',
+                started_at: Date.now(),
+                students: {}
+            });
+            await supabase.from('teacher_sessions').insert({
+                teacher_id: currentUser.id,
+                session_id: sessionId,
+                status: 'active',
+                started_at: Date.now(),
+                students: {}
+            });
+            window.open(`teacher-constructed.html?session=${sessionId}&quiz=${id}`,'_blank');
+        };
+
+        window.joinConstructedQuiz = async id => {
+            const n = userFullName || currentUser.username || 'Ученик';
+            if (!n) return;
+            const { data: sessions } = await supabase.from('sessions').select('*').eq('quiz_id', id);
+            const act = sessions?.find(s => s.status==='active');
+            if (!act) return alert('Нет активной');
+            act.students[currentUser.id] = { name: n, email: currentUser.email, joined_at: Date.now() };
+            await supabase.from('sessions').update({ students: act.students }).eq('id', act.id);
+            await supabase.from('teacher_sessions').update({ students: act.students }).eq('session_id', act.id);
+            window.open(`student-constructed.html?session=${act.id}&quiz=${id}&student=${currentUser.id}&name=${encodeURIComponent(n)}`,'_blank');
+        };
+
+        async function loadTeacherSessions() {
+            const { data: sessions } = await supabase.from('teacher_sessions').select('*').eq('teacher_id', currentUser.id);
+            const c = document.getElementById('myQuizzesList');
+            if (!c) return;
+            if (!sessions?.length) { c.innerHTML = '<div class="empty-state">Нет</div>'; return; }
+            let h = '<div class="sessions-grid">';
+            sessions.sort((a,b)=> (b.started_at||0)-(a.started_at||0)).forEach(s => {
+                const d = s.started_at ? new Date(s.started_at).toLocaleString() : '?';
+                h += `<div class="session-card"><div class="session-preview" onclick="toggleSessionDetails('sess-${s.session_id}')"><div><div class="session-title">${s.quiz_subject||'?'} - ${s.quiz_title||'?'}</div><div class="session-meta">📅 ${d} 👥 ${Object.keys(s.students||{}).length}</div></div><div class="session-right"><span class="session-status ${s.status==='active'?'status-active':'status-finished'}">${s.status==='active'?'🟢':'🔵'}</span><span class="toggle-icon">▼</span></div></div><div id="sess-${s.session_id}" class="session-details" style="display:none;">${renderStudents(s.students, s.max_score, s.session_id, s.status)}${s.status==='active'?`<button class="finish-quiz-btn" onclick="finishQuiz('${s.session_id}')">🏁 Завершить</button>`:''}${s.status==='finished'?`<button class="save-scores-btn" onclick="saveScores('${s.session_id}')">💾 Сохранить</button>`:''}</div></div>`;
+            });
+            if (userRole==='developer') h += `<div class="danger-zone"><h3>⚠️ Опасная зона</h3><button class="clear-stats-btn" onclick="clearAllStats()">🗑️ ОЧИСТИТЬ ВСЁ</button></div>`;
+            h += '</div>';
+            c.innerHTML = h;
+        }
+
+        window.toggleSessionDetails = id => {
+            const d = document.getElementById(id);
+            if (!d) return;
+            const i = d.closest('.session-card')?.querySelector('.toggle-icon');
+            if (d.style.display==='none') { d.style.display='block'; if (i) i.textContent='▲'; }
+            else { d.style.display='none'; if (i) i.textContent='▼'; }
+        };
+
+        function renderStudents(st, ms, sid, stat) {
+            if (!st || !Object.keys(st).length) return '<div class="empty-students">👥 Пока нет</div>';
+            let h = '<div class="students-grid">';
+            Object.keys(st).forEach(id => {
+                h += `<div class="student-card"><div class="student-name">${st[id].name}</div>${stat==='finished'?`<input type="number" class="score-input" id="score-${sid}-${id}" max="${ms}" min="0" value="${st[id].score||0}">`:'<div class="student-status">✓</div>'}</div>`;
+            });
+            return h+'</div>';
+        }
+
+        window.finishQuiz = async id => {
+            await supabase.from('sessions').update({ status:'finished' }).eq('id', id);
+            await supabase.from('teacher_sessions').update({ status:'finished' }).eq('session_id', id);
+        };
+
+        window.saveScores = async sid => {
+            const { data: session } = await supabase.from('sessions').select('*').eq('id', sid).single();
+            if (!session?.students) return alert('Нет учеников');
+            let cnt = 0;
+            for (const uid of Object.keys(session.students)) {
+                const inp = document.getElementById(`score-${sid}-${uid}`);
+                if (!inp) continue;
+                const sc = parseInt(inp.value);
+                if (isNaN(sc)) continue;
+                await supabase.from('results').insert({
+                    id: sid+'_'+uid,
+                    student_id: uid,
+                    student_name: session.students[uid].name,
+                    quiz_subject: session.quiz_subject,
+                    quiz_title: session.quiz_title,
+                    score: sc,
+                    max_score: session.max_score,
+                    teacher_id: currentUser.id,
+                    session_id: sid,
+                    date: Date.now()
+                });
+                session.students[uid].score = sc;
+                cnt++;
+            }
+            await supabase.from('teacher_sessions').update({ students: session.students }).eq('session_id', sid);
+            alert(`✅ Сохранено ${cnt}`);
+        };
+
+        window.clearAllStats = async () => {
+            if (!confirm('⚠️ Удалить ВСЕ?')) return;
+            if (prompt('Введите "УДАЛИТЬ ВСЁ"')!=='УДАЛИТЬ ВСЁ') return alert('Отмена');
+            const { data: results } = await supabase.from('results').select('id');
+            if (!results?.length) return alert('Нет результатов');
+            for (const r of results) await supabase.from('results').delete().eq('id', r.id);
+            alert(`✅ Удалено ${results.length}`);
+            window.location.reload();
+        };
+
+        function loadStudentResults() {
+            supabase.from('results').select('*').eq('student_id', currentUser.id).then(({ data: results }) => {
+                const c = document.getElementById('myResults');
+                if (!c) return;
+                if (!results?.length) { c.innerHTML = '<div class="empty-state">Нет результатов</div>'; return; }
+                let h = '<div class="results-grid">';
+                results.sort((a,b)=> (b.date||0)-(a.date||0)).forEach(r => {
+                    h += `<div class="result-card"><div class="result-subject">${r.quiz_subject}</div><div class="result-title">${r.quiz_title}</div><div class="result-score">${r.score}/${r.max_score}</div><div class="result-date">${r.date?new Date(r.date).toLocaleString():''}</div></div>`;
+                });
+                c.innerHTML = h+'</div>';
+            });
+        }
+
+        // ===== РЕГИСТРАЦИЯ =====
+        window.registerUser = async () => {
+            const u = document.getElementById('regUsername')?.value.trim();
+            const p = document.getElementById('regPassword')?.value;
+            const c = document.getElementById('regPasswordConfirm')?.value;
+            const r = document.getElementById('regRole')?.value;
+            if (!u || !p) return alert('Заполните поля');
+            if (p!==c) return alert('Пароли не совпадают');
+            if (p.length<3) return alert('Пароль минимум 3 символа');
+            const { data: existing } = await supabase.from('simple_users').select('username').ilike('username', u);
+            if (existing?.length) return alert('Ник занят');
+            const isMod = /\s*\(\d+\)$/.test(u);
+            const isDev = u.toLowerCase()==='илья' || u.toLowerCase()==='ilya';
+            const id = generateId();
+            await supabase.from('simple_users').insert({
+                id,
+                username: u,
+                password: hashPassword(p),
+                role: isDev?'developer':r,
+                is_moderator: isMod,
+                full_name: u,
+                created_at: Date.now()
+            });
+            localStorage.setItem('currentSimpleUser', JSON.stringify({ id, username: u, role: isDev?'developer':r, isModerator: isMod, fullName: u }));
+            closeRegisterModal(); window.location.reload();
+        };
+
+        window.simpleLogin = async () => {
+            const u = document.getElementById('simpleUsername')?.value.trim();
+            const p = document.getElementById('simplePassword')?.value;
+            if (!u || !p) return alert('Введите данные');
+            const { data: users } = await supabase.from('simple_users').select('*').ilike('username', u);
+            const user = users?.[0];
+            if (!user) return alert('Пользователь не найден');
+            if (user.password!==hashPassword(p)) return alert('Неверный пароль');
+            localStorage.setItem('currentSimpleUser', JSON.stringify({
+                id: user.id,
+                username: user.username,
+                role: user.role,
+                isModerator: user.is_moderator,
+                fullName: user.full_name
+            }));
+            closeLoginModal(); window.location.reload();
+        };
+
+        // ===== ТЕСТОВЫЕ АККАУНТЫ =====
+        setTimeout(async () => {
+            const test = [
+                { username:'teacher', password:'123', role:'teacher' },
+                { username:'student', password:'123', role:'student' },
+                { username:'moderator', password:'123', role:'student', isMod:true },
+                { username:'Илья', password:'123', role:'developer' }
+            ];
+            for (const t of test) {
+                const { data: existing } = await supabase.from('simple_users').select('username').ilike('username', t.username);
+                if (!existing?.length) {
+                    await supabase.from('simple_users').insert({
+                        id: generateId(),
+                        username: t.username,
+                        password: hashPassword(t.password),
+                        role: t.role,
+                        is_moderator: t.isMod||false,
+                        full_name: t.username,
+                        created_at: Date.now()
+                    });
+                }
+            }
+            console.log('✅ Тестовые аккаунты готовы');
+        }, 2000);
+    </script>
+</body>
+</html>
