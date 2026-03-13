@@ -36,6 +36,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .title {
@@ -90,6 +92,12 @@
             padding: 12px;
             cursor: pointer;
             text-align: center;
+            transition: 0.3s;
+        }
+
+        .answer:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--success);
         }
 
         .students-list {
@@ -97,6 +105,7 @@
             border: 2px solid var(--primary);
             border-radius: 15px;
             padding: 15px;
+            margin-top: 20px;
         }
 
         .student-item {
@@ -104,6 +113,10 @@
             justify-content: space-between;
             padding: 8px;
             border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
         }
 
         .finish-btn {
@@ -117,6 +130,18 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .finish-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary);
         }
     </style>
 </head>
@@ -124,12 +149,18 @@
     <div class="container">
         <div class="header">
             <h1 class="title" id="quizTitle">Загрузка...</h1>
-            <span id="questionCounter">0/0</span>
+            <span id="questionCounter" style="color:var(--primary);">0/0</span>
         </div>
 
         <div class="stats">
-            <div class="stat-card"><div class="stat-value" id="studentsCount">0</div><div>Учеников</div></div>
-            <div class="stat-card"><div class="stat-value" id="answeredCount">0</div><div>Ответили</div></div>
+            <div class="stat-card">
+                <div class="stat-value" id="studentsCount">0</div>
+                <div>Учеников</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="answeredCount">0</div>
+                <div>Ответили</div>
+            </div>
         </div>
 
         <div class="question-card">
@@ -142,7 +173,7 @@
             <div id="studentsContainer"></div>
         </div>
 
-        <button class="finish-btn" onclick="finishQuiz()">🏁 Завершить</button>
+        <button class="finish-btn" onclick="finishQuiz()">🏁 Завершить викторину</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -165,13 +196,24 @@
             const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
             questions = qs || [];
             
+            if (questions.length === 0) {
+                document.getElementById('questionText').textContent = 'Нет вопросов';
+                return;
+            }
+            
             loadSession();
         }
 
         function loadSession() {
             sb.channel('session-changes')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` }, 
-                    payload => { if (payload.new) updateUI(payload.new); })
+                .on('postgres_changes', { 
+                    event: '*', 
+                    schema: 'public', 
+                    table: 'sessions', 
+                    filter: `id=eq.${sessionId}` 
+                }, payload => { 
+                    if (payload.new) updateUI(payload.new); 
+                })
                 .subscribe();
 
             sb.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
@@ -193,7 +235,7 @@
                 studentsHtml += `<div class="student-item"><span>${s.name}</span><span>${hasAnswered ? '✓' : '⏳'}</span></div>`;
             }
             document.getElementById('answeredCount').textContent = answered;
-            document.getElementById('studentsContainer').innerHTML = studentsHtml || '<p>Пока никого</p>';
+            document.getElementById('studentsContainer').innerHTML = studentsHtml || '<p style="text-align:center; opacity:0.7;">Пока никого нет</p>';
 
             if (questions.length) {
                 document.getElementById('questionCounter').textContent = `Вопрос ${currentQuestion + 1}/${questions.length}`;
