@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Стили такие же как были */
         * {
             margin: 0;
             padding: 0;
@@ -164,6 +165,7 @@
         .nav-menu {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
@@ -882,6 +884,10 @@
 
         // ===== КОНСТРУКТОР =====
         window.openConstructor = function() {
+            if (!currentUser) {
+                alert('Сначала войдите в систему');
+                return;
+            }
             if (currentUser.role !== 'teacher') {
                 alert('Только учителя могут создавать викторины');
                 return;
@@ -959,21 +965,35 @@
         }
 
         async function addCoins(userId, amount, reason) {
-            const { data: user } = await sb.from('users').select('coins').eq('id', userId).single();
-            const newCoins = (user.coins || 0) + amount;
-            await sb.from('users').update({ coins: newCoins }).eq('id', userId);
+            if (!userId) return null;
             
-            // Обновляем в памяти
-            if (currentUser && currentUser.id === userId) {
-                currentUser.coins = newCoins;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                updateUI();
+            try {
+                const { data: user } = await sb.from('users').select('coins').eq('id', userId).single();
+                if (!user) return null;
+                
+                const newCoins = (user.coins || 0) + amount;
+                await sb.from('users').update({ coins: newCoins }).eq('id', userId);
+                
+                // Обновляем в памяти
+                if (currentUser && currentUser.id === userId) {
+                    currentUser.coins = newCoins;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateUI();
+                }
+                
+                return newCoins;
+            } catch (error) {
+                console.error('Ошибка добавления монет:', error);
+                return null;
             }
-            
-            return newCoins;
         }
 
         window.saveQuiz = async function() {
+            if (!currentUser) {
+                alert('Ошибка: пользователь не найден');
+                return;
+            }
+
             const title = document.getElementById('quizTitle').value;
             const quizClass = document.getElementById('quizClass').value;
             const subject = document.getElementById('quizSubject').value;
@@ -1041,11 +1061,13 @@
                 loadMyQuizzes();
 
             } catch (error) {
+                console.error('Ошибка сохранения:', error);
                 alert('Ошибка: ' + error.message);
             }
         };
 
         window.playQuiz = function(quizId) {
+            if (!quizId) return;
             window.location.href = `teacher.html?quiz=${quizId}`;
         };
 
@@ -1057,16 +1079,21 @@
         (function checkAuth() {
             const saved = localStorage.getItem('currentUser');
             if (saved) {
-                currentUser = JSON.parse(saved);
-                userCoins = currentUser.coins || 100;
-                userThemes = currentUser.themes || ['pink'];
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainScreen').classList.add('active');
-                updateUI();
-                loadMyQuizzes();
-                
-                const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-                applyTheme(savedTheme);
+                try {
+                    currentUser = JSON.parse(saved);
+                    userCoins = currentUser.coins || 100;
+                    userThemes = currentUser.themes || ['pink'];
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainScreen').classList.add('active');
+                    updateUI();
+                    loadMyQuizzes();
+                    
+                    const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+                    applyTheme(savedTheme);
+                } catch (e) {
+                    console.error('Ошибка парсинга пользователя:', e);
+                    localStorage.removeItem('currentUser');
+                }
             }
         })();
     </script>
