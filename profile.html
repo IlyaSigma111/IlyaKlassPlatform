@@ -279,6 +279,7 @@
         </div>
         <nav class="nav-menu">
             <a href="index.html" class="nav-link">Главная</a>
+            <a href="shop.html" class="nav-link">Магазин</a>
             <a href="results.html" class="nav-link">Результаты</a>
             <a href="profile.html" class="nav-link active">Профиль</a>
         </nav>
@@ -334,7 +335,7 @@
                     <div class="user-card">
                         <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
                         <span>${userName}</span>
-                        <span style="color: #ffd700;"><i class="fas fa-coins"></i> ${userCoins}</span>
+                        <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                         <button onclick="logout()" class="logout-btn">Выйти</button>
                     </div>
                 `;
@@ -440,6 +441,9 @@
                         <div class="settings-section">
                             <h2 class="settings-title">🎨 Мои темы</h2>
                             <div class="themes-grid" id="themesContainer"></div>
+                            <a href="shop.html" style="display: block; text-align: center; margin-top: 15px; color: #f59e0b;">
+                                <i class="fas fa-store"></i> В магазин за новыми темами
+                            </a>
                         </div>
                     </div>
                 </div>
