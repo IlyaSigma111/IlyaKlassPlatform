@@ -19,7 +19,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
         body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
@@ -56,6 +56,7 @@
         .nav-menu {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
@@ -65,6 +66,7 @@
             border-radius: 40px;
             color: white;
             text-decoration: none;
+            transition: all 0.3s;
         }
 
         .nav-link:hover {
@@ -240,11 +242,17 @@
             padding: 10px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-item:hover {
+            transform: scale(1.05);
+            background: rgba(99, 102, 241, 0.2);
         }
 
         .theme-item.active {
             border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.3);
         }
 
         .theme-color {
@@ -268,6 +276,14 @@
         @media (max-width: 768px) {
             .profile-container {
                 grid-template-columns: 1fr;
+            }
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .setting-input {
+                width: 100%;
             }
         }
     </style>
@@ -311,9 +327,25 @@
             { id: 'dark', name: 'Темная', color: '#2c3e50' }
         ];
 
+        // Функция применения темы (НЕТ РЕКУРСИИ!)
         function applyTheme(themeId) {
+            // Просто меняем класс body
             document.body.className = themeId + '-theme';
+            // Сохраняем в localStorage
             localStorage.setItem('currentTheme', themeId);
+            
+            // Обновляем подсветку активной темы (если есть контейнер)
+            const container = document.getElementById('themesContainer');
+            if (container) {
+                const items = container.querySelectorAll('.theme-item');
+                items.forEach(item => {
+                    if (item.dataset.theme === themeId) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
         }
 
         function getCurrentUser() {
@@ -364,92 +396,97 @@
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
 
-            // Загружаем статистику
-            const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
-            const { data: createdQuizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
-            
-            let totalScore = 0;
-            let totalQuizzes = results ? results.length : 0;
-            for (let r of results || []) {
-                totalScore += r.score || 0;
-            }
-            let avgScore = totalQuizzes ? (totalScore / totalQuizzes).toFixed(1) : 0;
+            try {
+                // Загружаем статистику
+                const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
+                const { data: createdQuizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
+                
+                let totalScore = 0;
+                let totalQuizzes = results ? results.length : 0;
+                for (let r of results || []) {
+                    totalScore += r.score || 0;
+                }
+                let avgScore = totalQuizzes ? (totalScore / totalQuizzes).toFixed(1) : 0;
 
-            const c = document.getElementById('content');
-            c.innerHTML = `
-                <div class="profile-container">
-                    <div class="profile-sidebar">
-                        <div class="profile-avatar">${userName.charAt(0).toUpperCase()}</div>
-                        <div class="profile-name">${userName}</div>
-                        <div class="profile-role">${userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик'}</div>
+                const c = document.getElementById('content');
+                c.innerHTML = `
+                    <div class="profile-container">
+                        <div class="profile-sidebar">
+                            <div class="profile-avatar">${userName.charAt(0).toUpperCase()}</div>
+                            <div class="profile-name">${userName}</div>
+                            <div class="profile-role">${userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик'}</div>
+                            
+                            <div class="profile-stats">
+                                <div class="stat-box">
+                                    <div class="stat-value">${totalQuizzes}</div>
+                                    <div>Пройдено</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-value">${totalScore}</div>
+                                    <div>Баллов</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-value">${avgScore}</div>
+                                    <div>Средний</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-value">${createdQuizzes?.length || 0}</div>
+                                    <div>Создано</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span><i class="fas fa-coins" style="color: #ffd700;"></i> Баланс:</span>
+                                    <span class="coins">${userCoins}</span>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <div class="profile-stats">
-                            <div class="stat-box">
-                                <div class="stat-value">${totalQuizzes}</div>
-                                <div>Пройдено</div>
+                        <div class="profile-main">
+                            <div class="settings-section">
+                                <h2 class="settings-title">⚙️ Настройки профиля</h2>
+                                
+                                <div class="setting-item">
+                                    <span>Имя пользователя</span>
+                                    <input type="text" id="userNameInput" class="setting-input" value="${userName}">
+                                </div>
+                                
+                                <button class="save-btn" onclick="saveName()">💾 Сохранить имя</button>
                             </div>
-                            <div class="stat-box">
-                                <div class="stat-value">${totalScore}</div>
-                                <div>Баллов</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-value">${avgScore}</div>
-                                <div>Средний</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-value">${createdQuizzes?.length || 0}</div>
-                                <div>Создано</div>
-                            </div>
-                        </div>
 
-                        <div style="margin-top: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span><i class="fas fa-coins" style="color: #ffd700;"></i> Баланс:</span>
-                                <span class="coins">${userCoins}</span>
+                            <div class="settings-section">
+                                <h2 class="settings-title">🔐 Безопасность</h2>
+                                
+                                <div class="setting-item">
+                                    <span>Новый пароль</span>
+                                    <input type="password" id="newPass" class="setting-input" placeholder="******">
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <span>Повторите пароль</span>
+                                    <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
+                                </div>
+                                
+                                <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
+                            </div>
+
+                            <div class="settings-section">
+                                <h2 class="settings-title">🎨 Мои темы</h2>
+                                <div class="themes-grid" id="themesContainer"></div>
+                                <a href="shop.html" style="display: block; text-align: center; margin-top: 15px; color: #f59e0b;">
+                                    <i class="fas fa-store"></i> В магазин за новыми темами
+                                </a>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="profile-main">
-                        <div class="settings-section">
-                            <h2 class="settings-title">⚙️ Настройки профиля</h2>
-                            
-                            <div class="setting-item">
-                                <span>Имя пользователя</span>
-                                <input type="text" id="userNameInput" class="setting-input" value="${userName}">
-                            </div>
-                            
-                            <button class="save-btn" onclick="saveName()">💾 Сохранить имя</button>
-                        </div>
+                `;
 
-                        <div class="settings-section">
-                            <h2 class="settings-title">🔐 Безопасность</h2>
-                            
-                            <div class="setting-item">
-                                <span>Новый пароль</span>
-                                <input type="password" id="newPass" class="setting-input" placeholder="******">
-                            </div>
-                            
-                            <div class="setting-item">
-                                <span>Повторите пароль</span>
-                                <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
-                            </div>
-                            
-                            <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
-                        </div>
-
-                        <div class="settings-section">
-                            <h2 class="settings-title">🎨 Мои темы</h2>
-                            <div class="themes-grid" id="themesContainer"></div>
-                            <a href="shop.html" style="display: block; text-align: center; margin-top: 15px; color: #f59e0b;">
-                                <i class="fas fa-store"></i> В магазин за новыми темами
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            renderThemes();
+                renderThemes();
+            } catch (error) {
+                console.error('Ошибка загрузки профиля:', error);
+                document.getElementById('content').innerHTML = '<div class="error-state">Ошибка загрузки профиля</div>';
+            }
         }
 
         function renderThemes() {
@@ -464,7 +501,7 @@
                 if (!owned) continue;
                 
                 html += `
-                    <div class="theme-item ${currentTheme === theme.id ? 'active' : ''}" onclick="applyTheme('${theme.id}')">
+                    <div class="theme-item ${currentTheme === theme.id ? 'active' : ''}" data-theme="${theme.id}" onclick="applyTheme('${theme.id}')">
                         <div class="theme-color" style="background: ${theme.color};"></div>
                         <div>${theme.name}</div>
                     </div>
@@ -477,19 +514,23 @@
             const newName = document.getElementById('userNameInput').value.trim();
             if (!newName) return alert('Введите имя');
             
-            const { data: existing } = await sb.from('users').select('*').eq('username', newName);
-            if (existing && existing.length > 0 && newName !== userName) {
-                return alert('Это имя уже занято');
-            }
+            try {
+                const { data: existing } = await sb.from('users').select('*').eq('username', newName);
+                if (existing && existing.length > 0 && newName !== userName) {
+                    return alert('Это имя уже занято');
+                }
 
-            await sb.from('users').update({ username: newName }).eq('id', currentUser.id);
-            
-            currentUser.username = newName;
-            userName = newName;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            alert('Имя сохранено!');
-            window.location.reload();
+                await sb.from('users').update({ username: newName }).eq('id', currentUser.id);
+                
+                currentUser.username = newName;
+                userName = newName;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                alert('Имя сохранено!');
+                window.location.reload();
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
         }
 
         async function changePassword() {
@@ -500,13 +541,31 @@
             if (newPass !== confirm) return alert('Пароли не совпадают');
             if (newPass.length < 3) return alert('Пароль должен быть минимум 3 символа');
 
-            await sb.from('users').update({ password: hashPassword(newPass) }).eq('id', currentUser.id);
-            alert('Пароль изменен!');
+            try {
+                await sb.from('users').update({ password: hashPassword(newPass) }).eq('id', currentUser.id);
+                alert('Пароль изменен!');
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
         }
 
+        // Глобальная функция для применения темы (без рекурсии)
         window.applyTheme = function(themeId) {
-            applyTheme(themeId);
-            renderThemes();
+            document.body.className = themeId + '-theme';
+            localStorage.setItem('currentTheme', themeId);
+            
+            // Обновляем подсветку
+            const container = document.getElementById('themesContainer');
+            if (container) {
+                const items = container.querySelectorAll('.theme-item');
+                items.forEach(item => {
+                    if (item.dataset.theme === themeId) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
         };
 
         loadProfile();
