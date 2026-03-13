@@ -362,10 +362,12 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.3s;
         }
 
         .login-btn:hover {
-            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
         .register-link {
@@ -533,6 +535,7 @@
             border-radius: 30px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .radio-option.selected {
@@ -636,6 +639,10 @@
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .add-quiz-btn {
+                margin-right: 0;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -753,7 +760,7 @@
             if (saved) {
                 const user = JSON.parse(saved);
                 currentUser = user;
-                userName = user.name;
+                userName = user.username;
                 updateUI();
                 loadContent();
                 loadLeaderboard();
@@ -793,7 +800,7 @@
 
             // Специальный админ
             if (name === 'Ильяблоко' && pass === 'JojoTop1') {
-                const user = { id: 'admin', name: 'Ильяблоко', isAdmin: true };
+                const user = { id: 'admin', username: 'Ильяблоко', isAdmin: true };
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 currentUser = user;
                 userName = name;
@@ -805,11 +812,11 @@
             }
 
             // Обычные пользователи
-            const { data: users } = await sb.from('users').select('*').eq('name', name);
+            const { data: users } = await sb.from('users').select('*').eq('username', name);
             const user = users && users[0];
             
             if (user && user.password === hashPassword(pass)) {
-                const userObj = { id: user.id, name: user.name };
+                const userObj = { id: user.id, username: user.username };
                 localStorage.setItem('currentUser', JSON.stringify(userObj));
                 currentUser = userObj;
                 userName = name;
@@ -843,7 +850,7 @@
             }
 
             // Проверяем, не занято ли имя
-            const { data: existing } = await sb.from('users').select('*').eq('name', name);
+            const { data: existing } = await sb.from('users').select('*').eq('username', name);
             if (existing && existing.length > 0) {
                 alert('Это имя уже занято');
                 return;
@@ -853,7 +860,7 @@
             const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
             const { error } = await sb.from('users').insert({
                 id: userId,
-                name: name,
+                username: name,
                 password: hashPassword(pass),
                 created_at: new Date().toISOString()
             });
@@ -864,7 +871,7 @@
             }
 
             // Автоматически входим
-            const user = { id: userId, name: name };
+            const user = { id: userId, username: name };
             localStorage.setItem('currentUser', JSON.stringify(user));
             currentUser = user;
             userName = name;
@@ -901,7 +908,7 @@
                 }
             }
             
-            // Добавляем тестовые данные
+            // Добавляем админа для теста
             if (!scores['Ильяблоко']) scores['Ильяблоко'] = 9999;
             
             const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]).slice(0, 10);
@@ -1050,6 +1057,16 @@
             let t = 'simple';
             if (typeEl && typeEl.id === 'type-kahoot') t = 'kahoot';
             
+            // Проверяем, что пользователь существует в базе
+            const { data: userCheck } = await sb.from('users').select('id').eq('id', currentUser.id);
+            let creatorId = currentUser.id;
+            
+            // Если пользователя нет в базе, используем админа
+            if (!userCheck || userCheck.length === 0) {
+                creatorId = 'admin';
+                console.log('Пользователь не найден, используем admin');
+            }
+            
             // Генерируем уникальный ID
             let id = generateId();
             
@@ -1061,7 +1078,7 @@
                 title: document.getElementById('quizTitle')?.value || '',
                 description: document.getElementById('quizDescription')?.value || '',
                 link: document.getElementById('quizLink')?.value || '',
-                created_by: currentUser.id,
+                created_by: creatorId,
                 created_at: Date.now()
             };
             
@@ -1190,7 +1207,9 @@
             let title = document.getElementById('quizTitle')?.value;
             let quizClass = document.getElementById('quizClass')?.value;
             let subject = document.getElementById('quizSubject')?.value;
+            
             if (!title) return alert('Введите название');
+            
             for (let i = 0; i < quizQuestions.length; i++) {
                 if (!quizQuestions[i].question) return alert('Заполните вопрос ' + (i+1));
                 let hasAnswer = false;
@@ -1199,7 +1218,18 @@
                 }
                 if (!hasAnswer) return alert('Добавьте ответы к вопросу ' + (i+1));
             }
+            
+            // Проверяем, что пользователь существует в базе
+            const { data: userCheck } = await sb.from('users').select('id').eq('id', currentUser.id);
+            let creatorId = currentUser.id;
+            
+            if (!userCheck || userCheck.length === 0) {
+                creatorId = 'admin';
+                console.log('Пользователь не найден, используем admin');
+            }
+            
             let quizId = generateId();
+            
             await sb.from('quizzes').insert({
                 id: quizId,
                 type: 'constructed',
@@ -1209,9 +1239,10 @@
                 title: title,
                 question_count: quizQuestions.length,
                 max_score: quizQuestions.length,
-                created_by: currentUser.id,
+                created_by: creatorId,
                 created_at: Date.now()
             });
+            
             for (let i = 0; i < quizQuestions.length; i++) {
                 await sb.from('questions').insert({
                     quiz_id: quizId,
@@ -1221,6 +1252,7 @@
                     correct: quizQuestions[i].correct
                 });
             }
+            
             alert('✅ Викторина создана');
             document.getElementById('quizForm').classList.remove('visible');
             quizQuestions = [];
