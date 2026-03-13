@@ -618,10 +618,23 @@
             margin-top: 10px;
         }
 
+        .profile-role.developer { background: #ef4444; }
+        .profile-role.moderator { background: #f59e0b; }
+
         .settings-section {
             margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid #6366f1;
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .settings-title {
+            font-size: 18px;
+            color: #6366f1;
+            margin-bottom: 15px;
         }
 
         .setting-item {
@@ -638,24 +651,6 @@
             background: rgba(0,0,0,0.2);
             color: white;
             width: 200px;
-        }
-
-        .danger-zone {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(239,68,68,0.1);
-            border: 1px solid #ef4444;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .clear-stats-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
         }
 
         .loading {
@@ -786,10 +781,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ===== SUPABASE КОНФИГ (ТОЛЬКО ОДИН РАЗ) =====
         const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substring(2);
         }
@@ -817,6 +814,7 @@
             return u ? JSON.parse(u) : null;
         }
 
+        // ===== ТЕМА =====
         function toggleTheme() {
             const b = document.body;
             const t = document.getElementById('themeToggle');
@@ -835,6 +833,7 @@
         document.body.className = savedTheme + '-theme';
         document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
 
+        // ===== МОДАЛКИ =====
         window.showLoginModal = function() {
             document.getElementById('simpleLoginModal').style.display = 'flex';
         }
@@ -869,6 +868,7 @@
             }
         });
 
+        // ===== ПЕРЕМЕННЫЕ =====
         let currentUser = null;
         let userRole = null;
         let userFullName = null;
@@ -882,12 +882,14 @@
         const DEFAULT_AVATAR = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#6366f1"/></svg>';
         const baseSubjects = ['Русский язык','Алгебра','Геометрия','Математика','Химия','Физика','Литература','Английский язык','История','Физкультура'];
 
+        // ===== ЗАГРУЗКА ПРЕДМЕТОВ =====
         async function loadAllSubjects() {
             const { data, error } = await supabase.from('subjects').select('name');
             if (error) console.error(error);
             allSubjects = data ? data.map(function(s) { return s.name; }) : baseSubjects;
         }
 
+        // ===== ОСНОВНАЯ ЛОГИКА =====
         (async function init() {
             await loadAllSubjects();
             
@@ -897,6 +899,9 @@
                 userRole = simple.role;
                 userFullName = simple.fullName || simple.username;
                 userIsModerator = simple.isModerator || false;
+                if (userRole === 'teacher' && simple.subjects) {
+                    teacherSubjects = simple.subjects;
+                }
                 updateUI();
                 const saved = localStorage.getItem('selectedSubject_'+currentUser.id);
                 if (saved && (saved==='all' || allSubjects.includes(saved))) {
@@ -1437,7 +1442,7 @@
                 h += '</div></div>';
             }
             if (userRole === 'developer') {
-                h += '<div class="danger-zone"><h3>⚠️ Опасная зона</h3><button class="clear-stats-btn" onclick="clearAllStats()">🗑️ ОЧИСТИТЬ</button></div>';
+                h += '<div class="danger-zone" style="margin-top:20px; padding:20px; background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:5px; text-align:center;"><h3 style="color:#ef4444;">⚠️ Опасная зона</h3><button class="clear-stats-btn" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:3px; cursor:pointer;" onclick="clearAllStats()">🗑️ ОЧИСТИТЬ</button></div>';
             }
             c.innerHTML = h;
         }
