@@ -9,11 +9,18 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --success: #10b981;
+            --danger: #ef4444;
         }
 
         body {
-            background: #1a1a2e;
+            background: linear-gradient(145deg, #0a0c14, #151823);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -29,12 +36,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
         }
 
         .title {
             font-size: 24px;
-            color: #6366f1;
+            color: var(--primary);
         }
 
         .stats {
@@ -45,29 +51,31 @@
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
+            background: rgba(21, 24, 35, 0.7);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
             padding: 15px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 24px;
-            color: #6366f1;
+            font-size: 28px;
+            color: var(--primary);
         }
 
         .question-card {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid #6366f1;
-            border-radius: 8px;
-            padding: 20px;
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 3px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 20px;
         }
 
         .question {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary);
         }
 
         .answers {
@@ -77,34 +85,37 @@
 
         .answer {
             background: rgba(255,255,255,0.05);
-            border: 1px solid #10b981;
-            border-radius: 5px;
+            border: 2px solid var(--success);
+            border-radius: 15px;
             padding: 12px;
             cursor: pointer;
+            text-align: center;
         }
 
         .students-list {
             background: rgba(0,0,0,0.3);
-            border-radius: 5px;
+            border: 2px solid var(--primary);
+            border-radius: 15px;
             padding: 15px;
-            margin-top: 20px;
         }
 
         .student-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #333;
+            padding: 8px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         .finish-btn {
-            background: #6366f1;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 40px;
             width: 100%;
             margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
         }
     </style>
@@ -127,7 +138,7 @@
         </div>
 
         <div class="students-list">
-            <h3 style="color:#6366f1;">👥 Подключились:</h3>
+            <h3 style="color:var(--primary); margin-bottom:10px;">👥 Подключились:</h3>
             <div id="studentsContainer"></div>
         </div>
 
@@ -136,9 +147,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session');
@@ -148,34 +159,29 @@
         let questions = [];
 
         async function loadQuiz() {
-            const { data: quiz } = await supabase.from('quizzes').select('title').eq('id', quizId).single();
-            if (quiz) document.getElementById('quizTitle').textContent = quiz.title;
+            const { data: quiz } = await sb.from('quizzes').select('title').eq('id', quizId).single();
+            document.getElementById('quizTitle').textContent = quiz?.title || 'Викторина';
 
-            const { data: qs } = await supabase.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
             questions = qs || [];
             
             loadSession();
         }
 
         function loadSession() {
-            const channel = supabase
-                .channel('session-changes')
-                .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'sessions', filter: 'id=eq.' + sessionId }, 
-                    function(payload) { 
-                        if (payload.new) updateUI(payload.new); 
-                    })
+            sb.channel('session-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` }, 
+                    payload => { if (payload.new) updateUI(payload.new); })
                 .subscribe();
 
-            supabase.from('sessions').select('*').eq('id', sessionId).then(function(res) {
-                if (res.data && res.data[0]) updateUI(res.data[0]);
+            sb.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                if (data?.[0]) updateUI(data[0]);
             });
         }
 
         function updateUI(session) {
             let students = session.students || {};
-            let count = 0;
-            for (let k in students) count++;
+            let count = Object.keys(students).length;
             document.getElementById('studentsCount').textContent = count;
 
             let answered = 0;
@@ -184,13 +190,13 @@
                 let s = students[id];
                 let hasAnswered = s.answers && s.answers[currentQuestion] !== undefined;
                 if (hasAnswered) answered++;
-                studentsHtml += '<div class="student-item"><span>' + s.name + '</span><span>' + (hasAnswered ? '✓' : '⏳') + '</span></div>';
+                studentsHtml += `<div class="student-item"><span>${s.name}</span><span>${hasAnswered ? '✓' : '⏳'}</span></div>`;
             }
             document.getElementById('answeredCount').textContent = answered;
             document.getElementById('studentsContainer').innerHTML = studentsHtml || '<p>Пока никого</p>';
 
             if (questions.length) {
-                document.getElementById('questionCounter').textContent = 'Вопрос ' + (currentQuestion+1) + '/' + questions.length;
+                document.getElementById('questionCounter').textContent = `Вопрос ${currentQuestion + 1}/${questions.length}`;
                 displayQuestion(questions[currentQuestion]);
             }
         }
@@ -199,7 +205,7 @@
             document.getElementById('questionText').textContent = q.question;
             let html = '';
             for (let i = 0; i < q.answers.length; i++) {
-                html += '<div class="answer" onclick="selectAnswer(' + i + ')">' + q.answers[i] + '</div>';
+                html += `<div class="answer" onclick="selectAnswer(${i})">${q.answers[i]}</div>`;
             }
             document.getElementById('answersList').innerHTML = html;
         }
@@ -210,8 +216,8 @@
         };
 
         window.finishQuiz = async function() {
-            if (confirm('Завершить?')) {
-                await supabase.from('sessions').update({ status: 'finished' }).eq('id', sessionId);
+            if (confirm('Завершить викторину?')) {
+                await sb.from('sessions').update({ status: 'finished' }).eq('id', sessionId);
                 window.close();
             }
         };
@@ -219,14 +225,14 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowRight' && currentQuestion < questions.length - 1) { 
                 currentQuestion++; 
-                supabase.from('sessions').select('*').eq('id', sessionId).then(function(res) {
-                    if (res.data && res.data[0]) updateUI(res.data[0]);
+                sb.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                    if (data?.[0]) updateUI(data[0]);
                 });
             }
             else if (e.key === 'ArrowLeft' && currentQuestion > 0) { 
                 currentQuestion--; 
-                supabase.from('sessions').select('*').eq('id', sessionId).then(function(res) {
-                    if (res.data && res.data[0]) updateUI(res.data[0]);
+                sb.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
+                    if (data?.[0]) updateUI(data[0]);
                 });
             }
         });
