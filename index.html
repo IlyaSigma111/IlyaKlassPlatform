@@ -6,6 +6,7 @@
     <title>ИЛЬЯКЛАСС</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -33,7 +34,6 @@
             padding: 20px;
         }
 
-        /* ЛОГИН */
         .login-screen {
             display: flex;
             justify-content: center;
@@ -134,7 +134,6 @@
             opacity: 0.8;
         }
 
-        /* ОСНОВНОЙ ИНТЕРФЕЙС */
         .main-screen {
             display: none;
         }
@@ -159,6 +158,24 @@
             font-size: 1.8rem;
             font-weight: 700;
             cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .user-menu {
@@ -208,7 +225,6 @@
             gap: 20px;
         }
 
-        /* МОИ ВИКТОРИНЫ */
         .quizzes-section {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
@@ -268,13 +284,6 @@
             margin-bottom: 10px;
         }
 
-        .quiz-theme-tag {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-
         .quiz-class {
             background: rgba(255, 255, 255, 0.3);
             padding: 3px 10px;
@@ -293,16 +302,10 @@
             margin-bottom: 15px;
         }
 
-        .quiz-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
         .quiz-actions {
             display: flex;
             gap: 10px;
+            margin-top: 15px;
         }
 
         .quiz-action-btn {
@@ -320,15 +323,6 @@
             background: #10b981;
         }
 
-        .quiz-action-btn.edit {
-            background: #6366f1;
-        }
-
-        .quiz-action-btn.publish {
-            background: #f59e0b;
-        }
-
-        /* МАГАЗИН ТЕМ */
         .shop-section {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
@@ -369,16 +363,6 @@
             margin: 0 auto 10px;
         }
 
-        .theme-name {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .theme-price {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
         .coins {
             color: #ffd700;
             font-weight: 600;
@@ -390,12 +374,6 @@
             opacity: 0.7;
         }
 
-        .empty-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        /* КОНСТРУКТОР */
         .constructor-overlay {
             position: fixed;
             top: 0;
@@ -451,19 +429,11 @@
             cursor: pointer;
         }
 
-        .constructor-form {
-            display: grid;
-            gap: 20px;
-        }
-
         .form-row {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
@@ -483,26 +453,6 @@
             border-radius: 20px;
             color: white;
             font-family: 'Comfortaa', cursive;
-        }
-
-        .themes-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .theme-option {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #6366f1;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .theme-option.selected {
-            background: #6366f1;
         }
 
         .question-card {
@@ -534,6 +484,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
+            margin-top: 10px;
         }
 
         .answer-option {
@@ -559,6 +510,7 @@
             width: 100%;
             cursor: pointer;
             font-weight: 600;
+            margin: 20px 0;
         }
 
         .save-quiz-btn {
@@ -570,7 +522,6 @@
             width: 100%;
             cursor: pointer;
             font-weight: 600;
-            margin-top: 20px;
         }
 
         @media (max-width: 768px) {
@@ -614,6 +565,11 @@
                 <div class="logo-small" onclick="window.location.reload()">
                     <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
                 </div>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link active">Главная</a>
+                    <a href="results.html" class="nav-link">Результаты</a>
+                    <a href="profile.html" class="nav-link">Профиль</a>
+                </nav>
                 <div class="user-menu">
                     <div class="user-info">
                         <div class="user-name" id="headerUserName">Загрузка...</div>
@@ -678,11 +634,11 @@
             <div class="constructor-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Название викторины</label>
-                        <input type="text" id="quizTitle" placeholder="Например: 8 Марта">
+                        <label>Название</label>
+                        <input type="text" id="quizTitle" placeholder="8 Марта">
                     </div>
                     <div class="form-group">
-                        <label>Класс / Уровень</label>
+                        <label>Класс</label>
                         <input type="text" id="quizClass" placeholder="5 класс">
                     </div>
                 </div>
@@ -693,9 +649,9 @@
                         <input type="text" id="quizSubject" placeholder="Математика">
                     </div>
                     <div class="form-group">
-                        <label>Тема викторины</label>
+                        <label>Тема оформления</label>
                         <select id="quizTheme">
-                            <option value="pink">🌸 Розовая (по умолчанию)</option>
+                            <option value="pink">🌸 Розовая</option>
                             <option value="blue">💙 Синяя</option>
                             <option value="green">💚 Зеленая</option>
                             <option value="purple">💜 Фиолетовая</option>
@@ -705,13 +661,11 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>Вопросы</label>
-                    <div id="questionsContainer"></div>
-                    <button class="add-question-btn" onclick="addQuestion()">
-                        <i class="fas fa-plus"></i> Добавить вопрос
-                    </button>
-                </div>
+                <div id="questionsContainer"></div>
+                
+                <button class="add-question-btn" onclick="addQuestion()">
+                    <i class="fas fa-plus"></i> Добавить вопрос
+                </button>
                 
                 <button class="save-quiz-btn" onclick="saveQuiz()">
                     <i class="fas fa-save"></i> Сохранить викторину
@@ -720,7 +674,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ===== SUPABASE КОНФИГ =====
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
@@ -730,7 +683,11 @@
         // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
         let currentUser = null;
         let selectedRole = 'teacher';
-        let allThemes = [
+        let userCoins = 100;
+        let userThemes = ['pink'];
+        let quizQuestions = [];
+
+        const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#fbc7d1' },
             { id: 'blue', name: '💙 Синяя', price: 50, color: '#6dd5ed' },
             { id: 'green', name: '💚 Зеленая', price: 50, color: '#a8e063' },
@@ -738,9 +695,6 @@
             { id: 'orange', name: '🧡 Оранжевая', price: 100, color: '#f9d423' },
             { id: 'dark', name: '🖤 Темная', price: 200, color: '#2c3e50' }
         ];
-        let userThemes = ['pink']; // По умолчанию есть розовая
-        let userCoins = 100;
-        let quizQuestions = [];
 
         // ===== ХЕШ ПАРОЛЯ =====
         function hashPassword(p) {
@@ -749,18 +703,13 @@
             return h.toString(16);
         }
 
-        // ===== ВЫБОР РОЛИ =====
+        // ===== ФУНКЦИИ ЛОГИНА =====
         window.selectRole = function(role) {
             selectedRole = role;
             document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
-            if (role === 'teacher') {
-                document.querySelector('.role-btn:first-child').classList.add('active');
-            } else {
-                document.querySelector('.role-btn:last-child').classList.add('active');
-            }
+            event.target.classList.add('active');
         };
 
-        // ===== РЕГИСТРАЦИЯ =====
         window.showRegister = function() {
             const name = prompt('Введите имя:');
             if (!name) return;
@@ -774,7 +723,6 @@
 
         async function registerUser(name, pass) {
             try {
-                // Проверяем, не занято ли имя
                 const { data: existing } = await sb.from('users').select('*').eq('username', name);
                 if (existing && existing.length > 0) {
                     document.getElementById('errorMsg').textContent = 'Это имя уже занято';
@@ -782,7 +730,7 @@
                 }
 
                 const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-                const { error } = await sb.from('users').insert({
+                await sb.from('users').insert({
                     id: userId,
                     username: name,
                     password: hashPassword(pass),
@@ -792,14 +740,8 @@
                     created_at: new Date().toISOString()
                 });
 
-                if (error) throw error;
-
-                // Автоматически входим
-                const user = { id: userId, username: name, role: selectedRole, coins: 100, themes: ['pink'] };
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                currentUser = user;
-                userCoins = 100;
-                userThemes = ['pink'];
+                currentUser = { id: userId, username: name, role: selectedRole, coins: 100, themes: ['pink'] };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainScreen').classList.add('active');
@@ -812,7 +754,6 @@
             }
         }
 
-        // ===== ЛОГИН =====
         window.doLogin = async function() {
             const name = document.getElementById('loginName').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
@@ -822,7 +763,6 @@
                 return;
             }
 
-            // Специальный админ
             if (name === 'Ильяблоко' && pass === 'JojoTop1') {
                 currentUser = { id: 'admin', username: 'Ильяблоко', role: 'teacher', coins: 9999, themes: allThemes.map(t => t.id) };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -836,7 +776,6 @@
                 return;
             }
 
-            // Обычные пользователи
             try {
                 const { data: users } = await sb.from('users').select('*').eq('username', name);
                 const user = users && users[0];
@@ -866,13 +805,11 @@
             }
         };
 
-        // ===== ВЫХОД =====
         window.logout = function() {
             localStorage.removeItem('currentUser');
             window.location.reload();
         };
 
-        // ===== ОБНОВЛЕНИЕ ИНТЕРФЕЙСА =====
         function updateUI() {
             if (!currentUser) return;
             document.getElementById('headerUserName').textContent = currentUser.username;
@@ -881,7 +818,7 @@
             document.getElementById('userCoins').textContent = userCoins;
         }
 
-        // ===== ЗАГРУЗКА МОИХ ВИКТОРИН =====
+        // ===== ЗАГРУЗКА ВИКТОРИН =====
         async function loadMyQuizzes() {
             if (!currentUser) return;
             
@@ -902,29 +839,19 @@
             let html = '';
             for (let q of quizzes) {
                 html += `
-                    <div class="quiz-card" style="border-color: var(--${q.theme || 'pink'});">
+                    <div class="quiz-card">
                         <div class="quiz-card-header">
-                            <div class="quiz-theme-tag" style="background: ${getThemeColor(q.theme)};"></div>
                             <div class="quiz-class">${q.class || ''}</div>
                         </div>
                         <div class="quiz-title">${q.title}</div>
                         <div class="quiz-subject">${q.subject || ''}</div>
-                        <div class="quiz-stats">
-                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
-                            <span><i class="far fa-star"></i> ${q.max_score || 0}</span>
-                        </div>
                         <div class="quiz-actions">
                             <div class="quiz-action-btn play" onclick="playQuiz('${q.id}')">
                                 <i class="fas fa-play"></i> Играть
                             </div>
-                            ${currentUser.role === 'teacher' ? `
-                                <div class="quiz-action-btn edit" onclick="editQuiz('${q.id}')">
-                                    <i class="fas fa-edit"></i>
-                                </div>
-                                <div class="quiz-action-btn publish" onclick="publishQuiz('${q.id}')">
-                                    <i class="fas fa-globe"></i>
-                                </div>
-                            ` : ''}
+                            <div class="quiz-action-btn" onclick="editQuiz('${q.id}')">
+                                <i class="fas fa-edit"></i>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -932,12 +859,7 @@
             container.innerHTML = html;
         }
 
-        function getThemeColor(themeId) {
-            const theme = allThemes.find(t => t.id === themeId);
-            return theme ? theme.color : '#fbc7d1';
-        }
-
-        // ===== ЗАГРУЗКА МАГАЗИНА ТЕМ =====
+        // ===== МАГАЗИН ТЕМ =====
         function loadThemesShop() {
             const container = document.getElementById('themesList');
             let html = '';
@@ -970,7 +892,6 @@
                 userCoins -= theme.price;
                 userThemes.push(themeId);
                 
-                // Обновляем в базе
                 await sb.from('users').update({ 
                     coins: userCoins, 
                     themes: userThemes 
@@ -1075,7 +996,6 @@
                 return;
             }
 
-            // Проверяем заполненность вопросов
             for (let i = 0; i < quizQuestions.length; i++) {
                 if (!quizQuestions[i].question) {
                     alert(`Заполните вопрос ${i+1}`);
@@ -1099,7 +1019,6 @@
                     question_count: quizQuestions.length,
                     max_score: quizQuestions.reduce((sum, q) => sum + (q.points || 1), 0),
                     created_by: currentUser.id,
-                    is_published: false,
                     created_at: Date.now()
                 });
 
@@ -1123,20 +1042,12 @@
             }
         };
 
-        // ===== ЗАПУСК ВИКТОРИНЫ =====
         window.playQuiz = function(quizId) {
-            window.location.href = `teacher-lobby.html?quiz=${quizId}`;
+            window.location.href = `teacher.html?quiz=${quizId}`;
         };
 
         window.editQuiz = function(quizId) {
-            alert('Редактирование пока в разработке');
-        };
-
-        window.publishQuiz = async function(quizId) {
-            if (confirm('Опубликовать викторину для всех?')) {
-                await sb.from('quizzes').update({ is_published: true }).eq('id', quizId);
-                alert('✅ Викторина опубликована! Теперь её могут видеть другие учителя');
-            }
+            alert('Редактирование будет доступно позже');
         };
 
         // ===== ПРОВЕРКА АВТОРИЗАЦИИ =====
