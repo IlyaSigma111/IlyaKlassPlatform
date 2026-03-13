@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👤 Ученик | ИЛЬЯКЛАСС</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .student-container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 60px;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 40px;
+        }
+
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .score {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        .join-card {
+            text-align: center;
+        }
+
+        .join-card h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Comfortaa', cursive;
+            text-align: center;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            margin: 30px 0;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 18px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .option.selected {
+            background: #10b981;
+        }
+
+        .option-letter {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 40px;
+            margin: 20px 0;
+        }
+
+        .status-correct {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+        }
+
+        .status-wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 20px;
+            display: none;
+        }
+
+        .results-screen {
+            text-align: center;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #10b981;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .student-container {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="student-container" id="mainContainer">
+        <!-- Контент будет подгружаться динамически -->
+    </div>
+
+    <script>
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+        let currentUser = null;
+        let currentLobby = null;
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let myScore = 0;
+        let playerName = null;
+        let hasAnswered = false;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lobbyId = urlParams.get('lobby');
+        const playerParam = urlParams.get('player');
+
+        // Проверка авторизации
+        function checkAuth() {
+            const saved = localStorage.getItem('currentUser');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                if (currentUser.role !== 'student') {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Определяем, что показывать
+        async function init() {
+            checkAuth();
+
+            if (lobbyId && playerParam) {
+                playerName = decodeURIComponent(playerParam);
+                await loadGame(lobbyId);
+            } else {
+                showJoinScreen();
+            }
+        }
+
+        function showJoinScreen() {
+            document.getElementById('mainContainer').innerHTML = `
+                <div class="join-card">
+                    <h1>🎮 Вход в игру</h1>
+                    
+                    <div class="input-group">
+                        <label>👤 Твоё имя</label>
+                        <input type="text" id="playerName" placeholder="Например: Иван" value="${currentUser.username}">
+                    </div>
+
+                    <div class="input-group">
+                        <label>🔑 Код игры</label>
+                        <input type="text" id="gameCode" placeholder="8 цифр" maxlength="8" inputmode="numeric">
+                    </div>
+
+                    <div id="errorMsg" class="error-msg"></div>
+
+                    <button class="join-btn" onclick="joinGame()">
+                        <i class="fas fa-sign-in-alt"></i> ПОДКЛЮЧИТЬСЯ
+                    </button>
+
+                    <a href="index.html" class="back-btn" style="display: inline-block; margin-top: 20px;">
+                        <i class="fas fa-arrow-left"></i> На главную
+                    </a>
+                </div>
+            `;
+
+            document.getElementById('gameCode').addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').substring(0, 8);
+            });
+        }
+
+        window.joinGame = async function() {
+            const name = document.getElementById('playerName').value.trim();
+            const code = document.getElementById('gameCode').value.trim();
+
+            if (!name || name.length < 2) {
+                showError('Введите имя (минимум 2 символа)');
+                return;
+            }
+
+            if (!code || code.length !== 8) {
+                showError('Введите 8-значный код');
+                return;
+            }
+
+            const { data: lobbies } = await sb.from('lobbies').select('*').eq('code', code).eq('status', 'waiting');
+            
+            if (!lobbies || lobbies.length === 0) {
+                showError('Игра с таким кодом не найдена');
+                return;
+            }
+
+            const lobby = lobbies[0];
+
+            if (lobby.players && lobby.players[name]) {
+                showError('Игрок с таким именем уже есть');
+                return;
+            }
+
+            const players = lobby.players || {};
+            players[name] = {
+                name: name,
+                joined_at: Date.now(),
+                score: 0
+            };
+
+            await sb.from('lobbies').update({ players: players }).eq('id', lobby.id);
+
+            window.location.href = `student.html?lobby=${lobby.id}&player=${encodeURIComponent(name)}`;
+        };
+
+        async function loadGame(lobbyId) {
+            const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
+            if (!lobby) {
+                showError('Игра не найдена');
+                return;
+            }
+
+            currentLobby = lobby;
+
+            const { data: questionsData } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
+            questions = questionsData || [];
+
+            // Получаем мой счет
+            if (lobby.players && lobby.players[playerName]) {
+                myScore = lobby.players[playerName].score || 0;
+            }
+
+            showGameUI();
+            listenToLobby(lobbyId);
+        }
+
+        function showGameUI() {
+            document.getElementById('mainContainer').innerHTML = `
+                <div class="game-header">
+                    <div class="player-info">
+                        <div class="player-avatar">${playerName.charAt(0).toUpperCase()}</div>
+                        <span>${playerName}</span>
+                    </div>
+                    <div class="score" id="playerScore">${myScore}</div>
+                </div>
+
+                <div id="waitingScreen" style="text-align: center; padding: 30px;">
+                    <div class="loader"></div>
+                    <h3>Ожидание начала...</h3>
+                </div>
+
+                <div id="questionScreen" style="display: none;">
+                    <div id="questionHeader" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <span id="questionCounter">Вопрос 1/0</span>
+                    </div>
+
+                    <div class="question-text" id="questionText"></div>
+
+                    <div class="options-grid" id="optionsContainer"></div>
+
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+
+                <div id="resultsScreen" style="display: none; text-align: center;">
+                    <h2>🎉 Викторина завершена!</h2>
+                    <div class="final-score" id="finalScore">${myScore}</div>
+                    <a href="index.html" class="back-btn" style="display: inline-block;">На главную</a>
+                </div>
+            `;
+        }
+
+        function listenToLobby(lobbyId) {
+            const channel = sb
+                .channel('lobby-student-' + lobbyId)
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` },
+                    payload => {
+                        if (payload.new) {
+                            handleLobbyUpdate(payload.new);
+                        }
+                    })
+                .subscribe();
+
+            sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
+                if (data && data[0]) {
+                    handleLobbyUpdate(data[0]);
+                }
+            });
+        }
+
+        function handleLobbyUpdate(lobby) {
+            currentLobby = lobby;
+
+            if (lobby.status === 'active') {
+                const qIndex = lobby.current_question || 0;
+                if (qIndex < questions.length) {
+                    showQuestion(questions[qIndex], qIndex);
+                }
+            } else if (lobby.status === 'waiting') {
+                document.getElementById('waitingScreen').style.display = 'block';
+                document.getElementById('questionScreen').style.display = 'none';
+                document.getElementById('resultsScreen').style.display = 'none';
+            } else if (lobby.status === 'finished') {
+                document.getElementById('waitingScreen').style.display = 'none';
+                document.getElementById('questionScreen').style.display = 'none';
+                document.getElementById('resultsScreen').style.display = 'block';
+            }
+        }
+
+        function showQuestion(question, index) {
+            document.getElementById('waitingScreen').style.display = 'none';
+            document.getElementById('questionScreen').style.display = 'block';
+            document.getElementById('resultsScreen').style.display = 'none';
+
+            currentQuestionIndex = index;
+            hasAnswered = false;
+
+            document.getElementById('questionCounter').textContent = `Вопрос ${index + 1}/${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+
+            // Перемешиваем варианты
+            const shuffled = shuffleOptions(question);
+            
+            let html = '';
+            shuffled.options.forEach((opt, i) => {
+                html += `
+                    <div class="option" onclick="selectAnswer(${i}, ${shuffled.correctIndex})">
+                        <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+                        <div>${opt}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('optionsContainer').innerHTML = html;
+
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.className = 'status-message';
+            statusEl.textContent = '⏳ Выберите ответ';
+        }
+
+        function shuffleOptions(question) {
+            const options = [...question.answers];
+            const correctIndex = question.correct;
+            const correctValue = options[correctIndex];
+            
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            const newCorrectIndex = options.indexOf(correctValue);
+            
+            return {
+                options: options,
+                correctIndex: newCorrectIndex
+            };
+        }
+
+        window.selectAnswer = async function(selectedIndex, correctIndex) {
+            if (hasAnswered) return;
+            hasAnswered = true;
+
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.option')[selectedIndex].classList.add('selected');
+
+            const isCorrect = (selectedIndex === correctIndex);
+
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.className = isCorrect ? 'status-message status-correct' : 'status-message status-wrong';
+            statusEl.textContent = isCorrect ? '✅ Правильно!' : '❌ Неправильно';
+
+            if (isCorrect) {
+                myScore += 1;
+                document.getElementById('playerScore').textContent = myScore;
+
+                // Обновляем счет в лобби
+                const players = currentLobby.players || {};
+                if (players[playerName]) {
+                    players[playerName].score = myScore;
+                    await sb.from('lobbies').update({ players: players }).eq('id', currentLobby.id);
+                }
+            }
+        };
+
+        function showError(msg) {
+            const errorEl = document.getElementById('errorMsg');
+            if (errorEl) {
+                errorEl.textContent = msg;
+                errorEl.style.display = 'block';
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
