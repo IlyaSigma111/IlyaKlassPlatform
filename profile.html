@@ -4,215 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ИЛЬЯКЛАСС - Профиль</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.5);
-            --accent: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --dark-bg: #0a0c14;
-            --dark-card: #151823;
-            --light-bg: #f3f4f6;
-            --light-card: #ffffff;
         }
 
         body {
-            background: var(--dark-bg);
+            font-family: 'Comfortaa', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
             transition: all 0.3s ease;
         }
 
-        body.light-theme {
-            background: var(--light-bg);
-            color: #1f2937;
-        }
+        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
+        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
+        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
 
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
-            50% { text-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b, 0 0 30px #f59e0b; }
-            100% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
-        }
-
-        .glow-name {
-            animation: glow 3s infinite;
-            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .header {
-            background: rgba(21, 24, 35, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--primary);
-            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        body.light-theme .header {
-            background: rgba(255, 255, 255, 0.8);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
+        .logo-small {
+            font-size: 1.8rem;
+            font-weight: 700;
             cursor: pointer;
-        }
-
-        .logo-il {
-            background: linear-gradient(135deg, #6366f1, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-yaclass {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .nav-menu {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .nav-link {
-            padding: 8px 18px;
-            border-radius: 30px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: inherit;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            color: white;
             text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link.active {
+            background: #6366f1;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .user-card {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 15px 5px 5px;
             border-radius: 40px;
-            border: 1px solid var(--primary);
         }
 
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
         }
 
-        .logout-btn, .theme-btn {
-            padding: 7px 16px;
+        .logout-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid var(--primary);
-            color: inherit;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover, .theme-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
         }
 
         .profile-container {
             display: grid;
             grid-template-columns: 300px 1fr;
             gap: 25px;
-            margin-top: 20px;
         }
 
         .profile-sidebar {
-            background: rgba(21, 24, 35, 0.7);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--primary);
-            border-radius: 20px;
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 30px;
             text-align: center;
-        }
-
-        body.light-theme .profile-sidebar {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .profile-main {
-            background: rgba(21, 24, 35, 0.7);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--primary);
-            border-radius: 20px;
-            padding: 25px;
-        }
-
-        body.light-theme .profile-main {
-            background: rgba(255, 255, 255, 0.9);
         }
 
         .profile-avatar {
             width: 100px;
             height: 100px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
             margin: 0 auto 15px;
+            border: 3px solid white;
         }
 
         .profile-name {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 5px;
         }
 
-        .profile-email {
-            opacity: 0.7;
-            margin-bottom: 15px;
-            font-size: 14px;
+        .profile-role {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #6366f1;
+            border-radius: 30px;
+            margin: 10px 0;
+            font-size: 0.9rem;
         }
 
         .profile-stats {
@@ -223,118 +160,132 @@
         }
 
         .stat-box {
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid var(--primary);
-            border-radius: 10px;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 24px;
-            color: var(--primary);
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #6366f1;
         }
 
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.7;
+        .profile-main {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 30px;
         }
 
         .settings-section {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .settings-title {
-            color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #6366f1;
+            margin-bottom: 20px;
         }
 
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .setting-item:last-child {
             border-bottom: none;
         }
 
-        .setting-label {
-            font-weight: 500;
-        }
-
         .setting-input {
-            padding: 8px 12px;
-            border-radius: 20px;
-            border: 2px solid var(--primary);
-            background: rgba(0,0,0,0.2);
-            color: inherit;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #6366f1;
+            border-radius: 30px;
+            color: white;
             width: 200px;
         }
 
-        body.light-theme .setting-input {
-            background: white;
-        }
-
         .save-btn {
-            background: var(--primary);
+            background: #6366f1;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 30px;
             cursor: pointer;
-            margin-top: 10px;
             width: 100%;
-            font-weight: bold;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .theme-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .theme-item.active {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .theme-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 0 auto 5px;
+        }
+
+        .coins {
+            color: #ffd700;
+            font-weight: 600;
         }
 
         .loading {
             text-align: center;
             padding: 50px;
-            color: var(--primary);
+            color: #6366f1;
         }
 
         @media (max-width: 768px) {
             .profile-container {
                 grid-template-columns: 1fr;
             }
-            .setting-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .setting-input {
-                width: 100%;
-            }
         }
     </style>
 </head>
-<body class="dark-theme">
+<body>
     <header class="header">
-        <div class="header-left">
-            <div class="logo" onclick="window.location='index.html'">
-                <span class="logo-il">ИЛЬ</span>
-                <span class="logo-yaclass">ЯКЛАСС</span>
-            </div>
-            <nav class="nav-menu">
-                <a href="index.html" class="nav-link">Главная</a>
-                <a href="results.html" class="nav-link">Результаты</a>
-                <a href="profile.html" class="nav-link active">Профиль</a>
-            </nav>
+        <div class="logo-small" onclick="window.location='index.html'">
+            <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
         </div>
-        <div class="header-right">
-            <button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️ Светлая</button>
-            <div id="userSection"></div>
-        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="results.html" class="nav-link">Результаты</a>
+            <a href="profile.html" class="nav-link active">Профиль</a>
+        </nav>
+        <div class="header-right" id="userSection"></div>
     </header>
 
-    <main class="main-container">
+    <main class="container">
         <div id="content" class="loading">Загрузка профиля...</div>
     </main>
 
@@ -346,24 +297,23 @@
 
         let currentUser = null;
         let userName = '';
+        let userRole = '';
+        let userCoins = 100;
+        let userThemes = ['pink'];
 
-        function toggleTheme() {
-            const b = document.body;
-            const t = document.getElementById('themeToggle');
-            if (b.classList.contains('dark-theme')) {
-                b.classList.replace('dark-theme', 'light-theme');
-                t.textContent = '🌙 Темная';
-                localStorage.setItem('theme', 'light');
-            } else {
-                b.classList.replace('light-theme', 'dark-theme');
-                t.textContent = '☀️ Светлая';
-                localStorage.setItem('theme', 'dark');
-            }
+        const allThemes = [
+            { id: 'pink', name: 'Розовая', color: '#fbc7d1' },
+            { id: 'blue', name: 'Синяя', color: '#6dd5ed' },
+            { id: 'green', name: 'Зеленая', color: '#a8e063' },
+            { id: 'purple', name: 'Фиолетовая', color: '#b993d6' },
+            { id: 'orange', name: 'Оранжевая', color: '#f9d423' },
+            { id: 'dark', name: 'Темная', color: '#2c3e50' }
+        ];
+
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+            localStorage.setItem('currentTheme', themeId);
         }
-
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.body.className = savedTheme + '-theme';
-        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
 
         function getCurrentUser() {
             const saved = localStorage.getItem('currentUser');
@@ -380,7 +330,14 @@
             const s = document.getElementById('userSection');
             if (!s) return;
             if (currentUser) {
-                s.innerHTML = '<div class="user-card"><div class="avatar"></div><span class="' + (userName === 'Ильяблоко' ? 'glow-name' : '') + '">' + userName + '</span><button onclick="logout()" class="logout-btn">Выйти</button></div>';
+                s.innerHTML = `
+                    <div class="user-card">
+                        <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
+                        <span>${userName}</span>
+                        <span style="color: #ffd700;"><i class="fas fa-coins"></i> ${userCoins}</span>
+                        <button onclick="logout()" class="logout-btn">Выйти</button>
+                    </div>
+                `;
             }
         }
 
@@ -395,12 +352,17 @@
                 window.location.href = 'index.html';
                 return;
             }
-            currentUser = user;
-            userName = user.name;
-            updateUI();
 
-            const c = document.getElementById('content');
-            
+            currentUser = user;
+            userName = user.username;
+            userRole = user.role;
+            userCoins = user.coins || 100;
+            userThemes = user.themes || ['pink'];
+
+            // Применяем сохраненную тему
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+
             // Загружаем статистику
             const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
             const { data: createdQuizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
@@ -412,29 +374,37 @@
             }
             let avgScore = totalQuizzes ? (totalScore / totalQuizzes).toFixed(1) : 0;
 
+            const c = document.getElementById('content');
             c.innerHTML = `
                 <div class="profile-container">
                     <div class="profile-sidebar">
-                        <div class="profile-avatar"></div>
-                        <div class="profile-name ${userName === 'Ильяблоко' ? 'glow-name' : ''}">${userName}</div>
-                        <div class="profile-email">ID: ${currentUser.id}</div>
+                        <div class="profile-avatar">${userName.charAt(0).toUpperCase()}</div>
+                        <div class="profile-name">${userName}</div>
+                        <div class="profile-role">${userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик'}</div>
                         
                         <div class="profile-stats">
                             <div class="stat-box">
                                 <div class="stat-value">${totalQuizzes}</div>
-                                <div class="stat-label">Пройдено</div>
+                                <div>Пройдено</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-value">${totalScore}</div>
-                                <div class="stat-label">Баллов</div>
+                                <div>Баллов</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-value">${avgScore}</div>
-                                <div class="stat-label">Средний</div>
+                                <div>Средний</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-value">${createdQuizzes?.length || 0}</div>
-                                <div class="stat-label">Создано</div>
+                                <div>Создано</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span><i class="fas fa-coins" style="color: #ffd700;"></i> Баланс:</span>
+                                <span class="coins">${userCoins}</span>
                             </div>
                         </div>
                     </div>
@@ -444,7 +414,7 @@
                             <h2 class="settings-title">⚙️ Настройки профиля</h2>
                             
                             <div class="setting-item">
-                                <span class="setting-label">Имя пользователя</span>
+                                <span>Имя пользователя</span>
                                 <input type="text" id="userNameInput" class="setting-input" value="${userName}">
                             </div>
                             
@@ -455,62 +425,62 @@
                             <h2 class="settings-title">🔐 Безопасность</h2>
                             
                             <div class="setting-item">
-                                <span class="setting-label">Новый пароль</span>
+                                <span>Новый пароль</span>
                                 <input type="password" id="newPass" class="setting-input" placeholder="******">
                             </div>
                             
                             <div class="setting-item">
-                                <span class="setting-label">Повторите пароль</span>
+                                <span>Повторите пароль</span>
                                 <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
                             </div>
                             
                             <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
                         </div>
 
-                        ${userName === 'Ильяблоко' ? `
                         <div class="settings-section">
-                            <h2 class="settings-title" style="color: var(--danger);">👑 Админ-панель</h2>
-                            
-                            <div class="setting-item">
-                                <span class="setting-label">Всего пользователей</span>
-                                <span class="stat-value" id="totalUsers">...</span>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <span class="setting-label">Всего викторин</span>
-                                <span class="stat-value" id="totalQuizzes">...</span>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <span class="setting-label">Всего результатов</span>
-                                <span class="stat-value" id="totalResults">...</span>
-                            </div>
-                            
-                            <button class="save-btn" style="background: var(--danger);" onclick="clearAllData()">⚠️ ОЧИСТИТЬ ВСЁ</button>
+                            <h2 class="settings-title">🎨 Мои темы</h2>
+                            <div class="themes-grid" id="themesContainer"></div>
                         </div>
-                        ` : ''}
                     </div>
                 </div>
             `;
 
-            if (userName === 'Ильяблоко') {
-                loadAdminStats();
+            renderThemes();
+        }
+
+        function renderThemes() {
+            const container = document.getElementById('themesContainer');
+            if (!container) return;
+
+            const currentTheme = localStorage.getItem('currentTheme') || 'pink';
+            
+            let html = '';
+            for (let theme of allThemes) {
+                const owned = userThemes.includes(theme.id);
+                if (!owned) continue;
+                
+                html += `
+                    <div class="theme-item ${currentTheme === theme.id ? 'active' : ''}" onclick="applyTheme('${theme.id}')">
+                        <div class="theme-color" style="background: ${theme.color};"></div>
+                        <div>${theme.name}</div>
+                    </div>
+                `;
             }
+            container.innerHTML = html;
         }
 
         async function saveName() {
             const newName = document.getElementById('userNameInput').value.trim();
             if (!newName) return alert('Введите имя');
             
-            // Проверяем, не занято ли имя
-            const { data: existing } = await sb.from('users').select('*').eq('name', newName);
+            const { data: existing } = await sb.from('users').select('*').eq('username', newName);
             if (existing && existing.length > 0 && newName !== userName) {
                 return alert('Это имя уже занято');
             }
 
-            await sb.from('users').update({ name: newName }).eq('id', currentUser.id);
+            await sb.from('users').update({ username: newName }).eq('id', currentUser.id);
             
-            currentUser.name = newName;
+            currentUser.username = newName;
             userName = newName;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             
@@ -530,32 +500,10 @@
             alert('Пароль изменен!');
         }
 
-        async function loadAdminStats() {
-            const { count: users } = await sb.from('users').select('*', { count: 'exact', head: true });
-            const { count: quizzes } = await sb.from('quizzes').select('*', { count: 'exact', head: true });
-            const { count: results } = await sb.from('results').select('*', { count: 'exact', head: true });
-            
-            document.getElementById('totalUsers').textContent = users || 0;
-            document.getElementById('totalQuizzes').textContent = quizzes || 0;
-            document.getElementById('totalResults').textContent = results || 0;
-        }
-
-        async function clearAllData() {
-            if (!confirm('⚠️ ТОЧНО УДАЛИТЬ ВСЁ?')) return;
-            if (!confirm('⚠️ ЭТО НЕОБРАТИМО!')) return;
-            
-            const password = prompt('Введите "УДАЛИТЬ ВСЁ" для подтверждения');
-            if (password !== 'УДАЛИТЬ ВСЁ') return alert('Отмена');
-            
-            await sb.from('results').delete().neq('id', '0');
-            await sb.from('sessions').delete().neq('id', '0');
-            await sb.from('teacher_sessions').delete().neq('id', '0');
-            await sb.from('questions').delete().neq('id', '0');
-            await sb.from('quizzes').delete().neq('id', '0');
-            
-            alert('✅ База данных очищена');
-            window.location.reload();
-        }
+        window.applyTheme = function(themeId) {
+            applyTheme(themeId);
+            renderThemes();
+        };
 
         loadProfile();
     </script>
