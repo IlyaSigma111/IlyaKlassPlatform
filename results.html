@@ -4,175 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ИЛЬЯКЛАСС - Результаты</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.5);
-            --accent: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --dark-bg: #0a0c14;
-            --dark-card: #151823;
-            --light-bg: #f3f4f6;
-            --light-card: #ffffff;
         }
 
         body {
-            background: var(--dark-bg);
+            font-family: 'Comfortaa', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
             transition: all 0.3s ease;
         }
 
-        body.light-theme {
-            background: var(--light-bg);
-            color: #1f2937;
-        }
+        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
+        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
+        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
 
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
-            50% { text-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b, 0 0 30px #f59e0b; }
-            100% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
-        }
-
-        .glow-name {
-            animation: glow 3s infinite;
-            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .header {
-            background: rgba(21, 24, 35, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--primary);
-            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        body.light-theme .header {
-            background: rgba(255, 255, 255, 0.8);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
+        .logo-small {
+            font-size: 1.8rem;
+            font-weight: 700;
             cursor: pointer;
-        }
-
-        .logo-il {
-            background: linear-gradient(135deg, #6366f1, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-yaclass {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .nav-menu {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .nav-link {
-            padding: 8px 18px;
-            border-radius: 30px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: inherit;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            color: white;
             text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link.active {
+            background: #6366f1;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .user-card {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 15px 5px 5px;
             border-radius: 40px;
-            border: 1px solid var(--primary);
         }
 
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
         }
 
-        .logout-btn, .theme-btn {
-            padding: 7px 16px;
+        .logout-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid var(--primary);
-            color: inherit;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover, .theme-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .main-container {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
         }
 
         .results-container {
-            background: rgba(21, 24, 35, 0.7);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--primary);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
             padding: 30px;
-        }
-
-        body.light-theme .results-container {
-            background: rgba(255, 255, 255, 0.9);
         }
 
         .stats-cards {
@@ -183,17 +125,17 @@
         }
 
         .stat-card {
-            background: rgba(99, 102, 241, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 15px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 25px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 36px;
-            font-weight: bold;
-            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #6366f1;
         }
 
         .results-table {
@@ -203,55 +145,43 @@
         }
 
         .results-table th {
-            background: var(--primary);
-            color: white;
-            padding: 12px;
+            background: rgba(99, 102, 241, 0.3);
+            padding: 15px;
             text-align: left;
+            border-radius: 20px 20px 0 0;
         }
 
         .results-table td {
             padding: 12px;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .score-cell {
-            color: var(--primary);
-            font-weight: bold;
+            color: #10b981;
+            font-weight: 700;
         }
 
         .loading {
             text-align: center;
             padding: 50px;
-            color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
+            color: #6366f1;
         }
     </style>
 </head>
-<body class="dark-theme">
+<body>
     <header class="header">
-        <div class="header-left">
-            <div class="logo" onclick="window.location='index.html'">
-                <span class="logo-il">ИЛЬ</span>
-                <span class="logo-yaclass">ЯКЛАСС</span>
-            </div>
-            <nav class="nav-menu">
-                <a href="index.html" class="nav-link">Главная</a>
-                <a href="results.html" class="nav-link active">Результаты</a>
-                <a href="profile.html" class="nav-link">Профиль</a>
-            </nav>
+        <div class="logo-small" onclick="window.location='index.html'">
+            <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
         </div>
-        <div class="header-right">
-            <button class="theme-btn" onclick="toggleTheme()" id="themeToggle">☀️ Светлая</button>
-            <div id="userSection"></div>
-        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="results.html" class="nav-link active">Результаты</a>
+            <a href="profile.html" class="nav-link">Профиль</a>
+        </nav>
+        <div class="header-right" id="userSection"></div>
     </header>
 
-    <main class="main-container">
+    <main class="container">
         <div id="content" class="loading">Загрузка результатов...</div>
     </main>
 
@@ -264,23 +194,9 @@
         let currentUser = null;
         let userName = '';
 
-        function toggleTheme() {
-            const b = document.body;
-            const t = document.getElementById('themeToggle');
-            if (b.classList.contains('dark-theme')) {
-                b.classList.replace('dark-theme', 'light-theme');
-                t.textContent = '🌙 Темная';
-                localStorage.setItem('theme', 'light');
-            } else {
-                b.classList.replace('light-theme', 'dark-theme');
-                t.textContent = '☀️ Светлая';
-                localStorage.setItem('theme', 'dark');
-            }
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
         }
-
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.body.className = savedTheme + '-theme';
-        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
 
         function getCurrentUser() {
             const saved = localStorage.getItem('currentUser');
@@ -291,7 +207,13 @@
             const s = document.getElementById('userSection');
             if (!s) return;
             if (currentUser) {
-                s.innerHTML = '<div class="user-card"><div class="avatar"></div><span class="' + (userName === 'Ильяблоко' ? 'glow-name' : '') + '">' + userName + '</span><button onclick="logout()" class="logout-btn">Выйти</button></div>';
+                s.innerHTML = `
+                    <div class="user-card">
+                        <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
+                        <span>${userName}</span>
+                        <button onclick="logout()" class="logout-btn">Выйти</button>
+                    </div>
+                `;
             }
         }
 
@@ -307,28 +229,35 @@
                 return;
             }
             currentUser = user;
-            userName = user.name;
+            userName = user.username;
+
+            // Применяем тему
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+
             updateUI();
 
-            const c = document.getElementById('content');
-            
             const { data: results } = await sb.from('results').select('*');
             const { data: users } = await sb.from('users').select('*');
             
+            const c = document.getElementById('content');
+
             if (!results || results.length === 0) {
-                c.innerHTML = '<div class="results-container"><h2 style="color:var(--primary);">📊 Результаты</h2><p style="margin-top:20px;">Пока нет результатов</p></div>';
+                c.innerHTML = `
+                    <div class="results-container">
+                        <h2 style="color: #6366f1;">📊 Результаты</h2>
+                        <p style="text-align: center; margin-top: 30px;">Пока нет результатов</p>
+                    </div>
+                `;
                 return;
             }
 
             // Общая статистика
             let totalScore = 0;
             let totalQuizzes = new Set();
-            let userMap = {};
-            
             for (let r of results) {
                 totalScore += r.score || 0;
                 totalQuizzes.add(r.quiz_id);
-                userMap[r.student_id] = r.student_name;
             }
             let avgScore = (totalScore / results.length).toFixed(1);
 
@@ -338,18 +267,24 @@
             for (let r of myResults) myTotal += r.score || 0;
             let myAvg = myResults.length ? (myTotal / myResults.length).toFixed(1) : 0;
 
-            // Таблица всех результатов
+            // Таблица результатов
             let tableRows = '';
             for (let r of results) {
                 let date = r.date ? new Date(r.date).toLocaleString() : '';
-                let isMe = r.student_id === currentUser.id;
-                let nameClass = r.student_name === 'Ильяблоко' ? 'glow-name' : (isMe ? 'highlight' : '');
-                tableRows += `<tr><td class="${nameClass}">${r.student_name}</td><td>${r.quiz_title || '?'}</td><td class="score-cell">${r.score || 0}/${r.max_score || 0}</td><td>${date}</td></tr>`;
+                let studentName = r.student_name || 'Неизвестно';
+                tableRows += `
+                    <tr>
+                        <td>${studentName}</td>
+                        <td>${r.quiz_title || '?'}</td>
+                        <td class="score-cell">${r.score || 0}/${r.max_score || 0}</td>
+                        <td>${date}</td>
+                    </tr>
+                `;
             }
 
             c.innerHTML = `
                 <div class="results-container">
-                    <h2 style="color:var(--primary); margin-bottom:30px;">📊 Статистика</h2>
+                    <h2 style="color: #6366f1; margin-bottom: 30px;">📊 Статистика</h2>
                     
                     <div class="stats-cards">
                         <div class="stat-card">
@@ -366,7 +301,7 @@
                         </div>
                     </div>
                     
-                    <h3 style="color:var(--primary); margin:30px 0 20px;">📋 Мои результаты</h3>
+                    <h3 style="color: #6366f1; margin: 30px 0 20px;">📋 Мои результаты</h3>
                     <div class="stats-cards">
                         <div class="stat-card">
                             <div class="stat-value">${myResults.length}</div>
@@ -382,8 +317,8 @@
                         </div>
                     </div>
 
-                    <h3 style="color:var(--primary); margin:30px 0 20px;">📋 Все результаты</h3>
-                    <div style="overflow-x:auto;">
+                    <h3 style="color: #6366f1; margin: 30px 0 20px;">📋 Все результаты</h3>
+                    <div style="overflow-x: auto;">
                         <table class="results-table">
                             <thead>
                                 <tr>
