@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ИЛЬЯКЛАСС - Участие в викторине</title>
+    <title>ИЛЬЯКЛАСС - Участие</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            background: #1a1a2e;
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -35,17 +35,16 @@
         }
 
         .question-card {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.05);
             border: 2px solid #6366f1;
-            border-radius: 25px;
-            padding: 25px;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
         .question {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #818cf8;
+            font-size: 18px;
+            margin-bottom: 15px;
         }
 
         .answers {
@@ -56,11 +55,10 @@
         .answer {
             background: rgba(255,255,255,0.05);
             border: 2px solid #10b981;
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 5px;
+            padding: 12px;
             cursor: pointer;
             text-align: center;
-            transition: 0.3s;
         }
 
         .answer:hover {
@@ -73,7 +71,7 @@
 
         .counter {
             text-align: center;
-            color: #818cf8;
+            color: #6366f1;
             margin-top: 20px;
         }
     </style>
@@ -94,7 +92,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ===== ТВОЙ SUPABASE КОНФИГ =====
         const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -121,42 +118,39 @@
         }
 
         function loadSession() {
-            // Подписка на изменения сессии
-            const subscription = supabase
+            const channel = supabase
                 .channel('session-changes')
                 .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` }, 
-                    payload => { 
+                    { event: '*', schema: 'public', table: 'sessions', filter: 'id=eq.' + sessionId }, 
+                    function(payload) { 
                         if (payload.new) updateQuestion(payload.new); 
                     })
                 .subscribe();
 
-            // Первая загрузка
-            supabase.from('sessions').select('*').eq('id', sessionId).then(({ data }) => {
-                if (data?.[0]) updateQuestion(data[0]);
+            supabase.from('sessions').select('*').eq('id', sessionId).then(function(res) {
+                if (res.data && res.data[0]) updateQuestion(res.data[0]);
             });
         }
 
         function updateQuestion(session) {
             if (!questions.length) return;
             
-            document.getElementById('counter').textContent = `Вопрос ${currentQuestion+1}/${questions.length}`;
+            document.getElementById('counter').textContent = 'Вопрос ' + (currentQuestion+1) + '/' + questions.length;
             
-            const q = questions[currentQuestion];
+            let q = questions[currentQuestion];
             document.getElementById('questionText').textContent = q.question;
             
-            let answersHtml = '';
-            q.answers.forEach((a, i) => {
-                const selected = myAnswers[currentQuestion] === i ? 'selected' : '';
-                answersHtml += `<div class="answer ${selected}" onclick="selectAnswer(${i})">${a}</div>`;
-            });
-            document.getElementById('answersList').innerHTML = answersHtml;
+            let html = '';
+            for (let i = 0; i < q.answers.length; i++) {
+                let selected = (myAnswers[currentQuestion] === i) ? 'selected' : '';
+                html += '<div class="answer ' + selected + '" onclick="selectAnswer(' + i + ')">' + q.answers[i] + '</div>';
+            }
+            document.getElementById('answersList').innerHTML = html;
         }
 
-        window.selectAnswer = async (index) => {
+        window.selectAnswer = async function(index) {
             myAnswers[currentQuestion] = index;
             
-            // Получаем текущую сессию
             const { data: session } = await supabase
                 .from('sessions')
                 .select('students')
@@ -164,7 +158,6 @@
                 .single();
             
             if (session) {
-                // Обновляем студента
                 if (!session.students[studentId]) {
                     session.students[studentId] = { name: studentName };
                 }
@@ -173,20 +166,18 @@
                 }
                 session.students[studentId].answers[currentQuestion] = index;
                 
-                // Сохраняем
                 await supabase
                     .from('sessions')
                     .update({ students: session.students })
                     .eq('id', sessionId);
             }
             
-            // Обновляем отображение
             updateQuestion(session);
         };
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key>='1' && e.key<='4') {
-                selectAnswer(parseInt(e.key)-1);
+        document.addEventListener('keydown', function(e) {
+            if (e.key >= '1' && e.key <= '4') {
+                selectAnswer(parseInt(e.key) - 1);
             }
         });
 
