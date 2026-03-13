@@ -104,6 +104,7 @@
             display: flex;
             gap: 15px;
             justify-content: center;
+            margin-top: 20px;
         }
 
         .nav-btn {
@@ -121,6 +122,12 @@
         .nav-btn:hover {
             background: var(--primary);
             color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary);
         }
     </style>
 </head>
@@ -162,6 +169,12 @@
 
             const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
             questions = qs || [];
+            
+            if (questions.length === 0) {
+                document.getElementById('questionText').textContent = 'Нет вопросов';
+                return;
+            }
+            
             updateCounter();
             displayQuestion();
         }
