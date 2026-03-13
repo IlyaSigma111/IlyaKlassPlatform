@@ -4,72 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ИЛЬЯКЛАСС - Профиль</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark-bg: #0a0c14;
+            --dark-card: #151823;
+            --light-bg: #f3f4f6;
+            --light-card: #ffffff;
         }
 
         body {
-            background: #1a1a2e;
+            background: var(--dark-bg);
             color: white;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         body.light-theme {
-            background: #f0f0f0;
-            color: #333;
+            background: var(--light-bg);
+            color: #1f2937;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
+            50% { text-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b, 0 0 30px #f59e0b; }
+            100% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
+        }
+
+        .glow-name {
+            animation: glow 3s infinite;
+            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
 
         .header {
-            background: #16213e;
-            padding: 15px 20px;
+            background: rgba(21, 24, 35, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--primary);
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         body.light-theme .header {
-            background: #fff;
-            border-bottom: 2px solid #6366f1;
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             cursor: pointer;
         }
 
-        .logo-il { color: #6366f1; }
-        .logo-yaclass { color: #f59e0b; }
+        .logo-il {
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-yaclass {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .nav-menu {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
-            padding: 8px 15px;
-            border-radius: 5px;
-            background: rgba(255,255,255,0.1);
-            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: inherit;
             text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        body.light-theme .nav-link {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .nav-link.active {
-            background: #6366f1;
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
         .header-right {
@@ -81,103 +128,127 @@
         .user-card {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 5px;
+            gap: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+            border: 1px solid var(--primary);
         }
 
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: #6366f1;
+            background: linear-gradient(135deg, #6366f1, #f59e0b);
         }
 
         .logout-btn, .theme-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            background: #6366f1;
-            color: white;
+            padding: 7px 16px;
+            border-radius: 30px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: inherit;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover, .theme-btn:hover {
+            background: var(--primary);
+            color: white;
         }
 
         .main-container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 0 15px;
+            padding: 0 20px;
         }
 
         .profile-container {
             display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
             margin-top: 20px;
         }
 
         .profile-sidebar {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 20px;
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
             text-align: center;
         }
 
-        .profile-main {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 20px;
+        body.light-theme .profile-sidebar {
+            background: rgba(255, 255, 255, 0.9);
         }
 
-        body.light-theme .profile-sidebar,
+        .profile-main {
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
         body.light-theme .profile-main {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .profile-avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: #6366f1;
+            background: linear-gradient(135deg, #6366f1, #f59e0b);
             margin: 0 auto 15px;
         }
 
         .profile-name {
-            font-size: 20px;
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 5px;
         }
 
         .profile-email {
             opacity: 0.7;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        .profile-role {
-            display: inline-block;
-            padding: 5px 15px;
-            background: #6366f1;
-            border-radius: 3px;
-            margin-bottom: 20px;
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
         }
 
-        .profile-role.developer { background: #ef4444; }
-        .profile-role.moderator { background: #f59e0b; }
+        .stat-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
 
         .settings-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #6366f1;
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         .settings-title {
-            font-size: 18px;
-            color: #6366f1;
+            color: var(--primary);
+            font-size: 20px;
             margin-bottom: 15px;
         }
 
@@ -186,13 +257,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid #333;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        body.light-theme .setting-item {
-            border-bottom-color: #ddd;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
         }
 
         .setting-item:last-child {
@@ -200,72 +265,38 @@
         }
 
         .setting-label {
-            font-weight: bold;
-        }
-
-        .setting-description {
-            font-size: 12px;
-            opacity: 0.6;
-            margin-top: 2px;
+            font-weight: 500;
         }
 
         .setting-input {
-            padding: 8px;
-            border-radius: 3px;
-            border: 1px solid #6366f1;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
             background: rgba(0,0,0,0.2);
-            color: white;
+            color: inherit;
             width: 200px;
         }
 
         body.light-theme .setting-input {
             background: white;
-            color: #333;
         }
 
-        .setting-value {
-            color: #6366f1;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .submit-btn {
-            background: #6366f1;
+        .save-btn {
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 3px;
-            width: 100%;
+            padding: 10px 20px;
+            border-radius: 30px;
             cursor: pointer;
             margin-top: 10px;
-        }
-
-        .subject-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        body.light-theme .subject-checkbox {
-            background: #f0f0f0;
-        }
-
-        .add-quiz-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 3px;
-            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
         }
 
         .loading {
             text-align: center;
             padding: 50px;
+            color: var(--primary);
         }
 
         @media (max-width: 768px) {
@@ -275,6 +306,7 @@
             .setting-item {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 10px;
             }
             .setting-input {
                 width: 100%;
@@ -290,7 +322,7 @@
                 <span class="logo-yaclass">ЯКЛАСС</span>
             </div>
             <nav class="nav-menu">
-                <a href="index.html" class="nav-link">Викторины</a>
+                <a href="index.html" class="nav-link">Главная</a>
                 <a href="results.html" class="nav-link">Результаты</a>
                 <a href="profile.html" class="nav-link active">Профиль</a>
             </nav>
@@ -307,31 +339,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substring(2);
-        }
-
-        function cleanDisplayName(name) {
-            return name ? name.replace(/\s*\(\d+\)$/, '') : name;
-        }
-
-        function getCurrentSimpleUser() {
-            const u = localStorage.getItem('currentSimpleUser');
-            return u ? JSON.parse(u) : null;
-        }
-
-        const DEFAULT_AVATAR = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#6366f1"/></svg>';
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
         let currentUser = null;
-        let userRole = null;
-        let userFullName = null;
-        let userIsModerator = false;
-        let teacherSubjects = [];
-        let profileSubjects = [];
+        let userName = '';
 
         function toggleTheme() {
             const b = document.body;
@@ -351,132 +364,197 @@
         document.body.className = savedTheme + '-theme';
         document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
 
-        const baseSubjects = ['Русский язык','Алгебра','Геометрия','Математика','Химия','Физика','Литература','Английский язык','История','Физкультура'];
-
-        async function loadProfileSubjects() {
-            const { data, error } = await supabase.from('subjects').select('name');
-            if (error) console.error(error);
-            profileSubjects = data ? data.map(s => s.name) : baseSubjects;
+        function getCurrentUser() {
+            const saved = localStorage.getItem('currentUser');
+            return saved ? JSON.parse(saved) : null;
         }
-
-        (async function init() {
-            await loadProfileSubjects();
-            const simple = getCurrentSimpleUser();
-            if (simple) {
-                currentUser = { id: simple.id, email: simple.username+'@local', username: simple.username };
-                userRole = simple.role;
-                userFullName = simple.fullName || simple.username;
-                userIsModerator = simple.isModerator || false;
-                if (userRole === 'teacher' && simple.subjects) {
-                    teacherSubjects = simple.subjects;
-                }
-                updateUI();
-                loadProfile(simple);
-            } else {
-                window.location.href = 'index.html';
-            }
-        })();
 
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s) return;
-            const dn = cleanDisplayName(userFullName || currentUser.username);
-            let rt = '';
-            if (userRole === 'developer') rt = '👑 Разработчик';
-            else if (userIsModerator) rt = '🛡️ Модератор';
-            else rt = userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
-            s.innerHTML = '<div class="user-card"><div class="avatar" style="background:#6366f1;"></div><span>' + dn + '</span><span>' + rt + '</span><button onclick="signOut()" class="logout-btn">Выйти</button></div>';
+            if (currentUser) {
+                s.innerHTML = '<div class="user-card"><div class="avatar"></div><span class="' + (userName === 'Ильяблоко' ? 'glow-name' : '') + '">' + userName + '</span><button onclick="logout()" class="logout-btn">Выйти</button></div>';
+            }
         }
 
-        function signOut() {
-            localStorage.removeItem('currentSimpleUser');
+        function logout() {
+            localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
 
-        function loadProfile(user) {
+        async function loadProfile() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            currentUser = user;
+            userName = user.name;
+            updateUI();
+
             const c = document.getElementById('content');
-            const isDev = userRole === 'developer';
-            let rt = '';
-            let rc = '';
-            if (isDev) { rt = '👑 Разработчик'; rc = 'developer'; }
-            else if (userIsModerator) { rt = '🛡️ Модератор'; rc = 'moderator'; }
-            else rt = userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
-
-            c.innerHTML = '<div class="profile-container"><div class="profile-sidebar"><div class="profile-avatar"></div><div class="profile-name">' + cleanDisplayName(userFullName) + '</div><div class="profile-email">' + currentUser.email + '</div><div class="profile-role ' + rc + '">' + rt + '</div>' + (userRole === 'teacher' || isDev || userIsModerator ? '<div style="margin-top:20px;"><h3 style="color:#6366f1;">➕ Управление</h3><button class="submit-btn" onclick="window.location.href=\'index.html#addQuiz\'">➕ Добавить викторину</button></div>' : '') + '</div><div class="profile-main"><h2 class="settings-title">⚙️ Настройки</h2><div class="settings-section"><div class="setting-item"><div><div class="setting-label">Имя</div><div class="setting-description">Как вас видят</div></div><input type="text" id="fullNameInput" class="setting-input" value="' + cleanDisplayName(userFullName) + '"></div><button class="submit-btn" onclick="saveFullName()">Сохранить</button></div>' + (userRole === 'teacher' ? '<div class="settings-section"><h3 class="settings-title">📚 Мои предметы</h3><div id="subjectsList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:15px;"></div><div style="display:flex;gap:10px;"><input type="text" id="newSubjectInput" placeholder="Новый предмет" class="setting-input" style="flex:1;"><button class="add-quiz-btn" onclick="addNewSubject()">➕</button></div><button class="submit-btn" onclick="saveTeacherSubjects()">💾 Сохранить</button></div>' : '') + (userRole === 'student' ? '<div class="settings-section"><h3 class="settings-title">📊 Статистика</h3><div class="setting-item"><span>Пройдено:</span><span class="setting-value" id="totalQuizzes">0</span></div><div class="setting-item"><span>Баллов:</span><span class="setting-value" id="totalScore">0</span></div><div class="setting-item"><span>Средний:</span><span class="setting-value" id="avgScore">0</span></div></div>' : '') + '</div></div>';
-
-            if (userRole === 'teacher') {
-                renderSubjectCheckboxes();
+            
+            // Загружаем статистику пользователя
+            const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
+            const { data: createdQuizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
+            
+            let totalScore = 0;
+            let totalQuizzes = results ? results.length : 0;
+            for (let r of results || []) {
+                totalScore += r.score || 0;
             }
-            if (userRole === 'student') {
-                loadStudentStats();
+            let avgScore = totalQuizzes ? (totalScore / totalQuizzes).toFixed(1) : 0;
+
+            c.innerHTML = `
+                <div class="profile-container">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar"></div>
+                        <div class="profile-name ${userName === 'Ильяблоко' ? 'glow-name' : ''}">${userName}</div>
+                        <div class="profile-email">ID: ${currentUser.id}</div>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">${totalQuizzes}</div>
+                                <div class="stat-label">Пройдено</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">${totalScore}</div>
+                                <div class="stat-label">Баллов</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">${avgScore}</div>
+                                <div class="stat-label">Средний</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">${createdQuizzes?.length || 0}</div>
+                                <div class="stat-label">Создано</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-main">
+                        <div class="settings-section">
+                            <h2 class="settings-title">⚙️ Настройки профиля</h2>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Имя пользователя</span>
+                                <input type="text" id="userNameInput" class="setting-input" value="${userName}">
+                            </div>
+                            
+                            <button class="save-btn" onclick="saveName()">💾 Сохранить имя</button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h2 class="settings-title">🔐 Безопасность</h2>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Новый пароль</span>
+                                <input type="password" id="newPass" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Повторите пароль</span>
+                                <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
+                        </div>
+
+                        ${userName === 'Ильяблоко' ? `
+                        <div class="settings-section">
+                            <h2 class="settings-title" style="color: var(--danger);">👑 Админ-панель</h2>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Всего пользователей</span>
+                                <span class="stat-value" id="totalUsers">...</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Всего викторин</span>
+                                <span class="stat-value" id="totalQuizzes">...</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span class="setting-label">Всего результатов</span>
+                                <span class="stat-value" id="totalResults">...</span>
+                            </div>
+                            
+                            <button class="save-btn" style="background: var(--danger);" onclick="clearAllData()">⚠️ ОЧИСТИТЬ ВСЁ</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            if (userName === 'Ильяблоко') {
+                loadAdminStats();
             }
         }
 
-        function renderSubjectCheckboxes() {
-            const container = document.getElementById('subjectsList');
-            if (!container) return;
-            let html = '';
-            for (let i = 0; i < profileSubjects.length; i++) {
-                let s = profileSubjects[i];
-                let checked = teacherSubjects.includes(s) ? 'checked' : '';
-                html += '<label class="subject-checkbox"><input type="checkbox" value="' + s + '" ' + checked + '> ' + s + '</label>';
+        async function saveName() {
+            const newName = document.getElementById('userNameInput').value.trim();
+            if (!newName) return alert('Введите имя');
+            
+            // Проверяем, не занято ли имя
+            const { data: existing } = await sb.from('users').select('*').eq('name', newName);
+            if (existing && existing.length > 0 && newName !== userName) {
+                return alert('Это имя уже занято');
             }
-            container.innerHTML = html;
-        }
 
-        async function addNewSubject() {
-            const n = document.getElementById('newSubjectInput') ? document.getElementById('newSubjectInput').value.trim() : '';
-            if (!n) return alert('Введите предмет');
-            const f = n[0].toUpperCase() + n.slice(1);
-            if (profileSubjects.includes(f)) return alert('Уже есть');
-            await supabase.from('subjects').insert({ name: f });
-            profileSubjects.push(f);
-            renderSubjectCheckboxes();
-            document.getElementById('newSubjectInput').value = '';
-        }
-
-        async function saveTeacherSubjects() {
-            const checkboxes = document.querySelectorAll('#subjectsList input:checked');
-            let subs = [];
-            for (let i = 0; i < checkboxes.length; i++) {
-                subs.push(checkboxes[i].value);
-            }
-            teacherSubjects = subs;
-            const simple = getCurrentSimpleUser();
-            if (simple) {
-                await supabase.from('simple_users').update({ subjects: subs }).eq('id', simple.id);
-            }
-            alert('Предметы сохранены');
-        }
-
-        async function loadStudentStats() {
-            const { data: results } = await supabase.from('results').select('*').eq('student_id', currentUser.id);
-            let t = 0, c = 0;
-            if (results) {
-                for (let i = 0; i < results.length; i++) {
-                    t += results[i].score || 0;
-                    c++;
-                }
-            }
-            let avg = c ? (t / c).toFixed(1) : 0;
-            document.getElementById('totalQuizzes').textContent = c;
-            document.getElementById('totalScore').textContent = t;
-            document.getElementById('avgScore').textContent = avg;
-        }
-
-        async function saveFullName() {
-            const n = document.getElementById('fullNameInput') ? document.getElementById('fullNameInput').value : '';
-            if (!n) return alert('Введите имя');
-            const simple = getCurrentSimpleUser();
-            if (simple) {
-                await supabase.from('simple_users').update({ full_name: n, username: n }).eq('id', simple.id);
-                simple.fullName = n;
-                simple.username = n;
-                localStorage.setItem('currentSimpleUser', JSON.stringify(simple));
-            }
-            alert('Сохранено');
+            await sb.from('users').update({ name: newName }).eq('id', currentUser.id);
+            
+            currentUser.name = newName;
+            userName = newName;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            alert('Имя сохранено!');
             window.location.reload();
         }
+
+        async function changePassword() {
+            const newPass = document.getElementById('newPass').value;
+            const confirm = document.getElementById('newPassConfirm').value;
+            
+            if (!newPass) return alert('Введите пароль');
+            if (newPass !== confirm) return alert('Пароли не совпадают');
+            if (newPass.length < 3) return alert('Пароль должен быть минимум 3 символа');
+            
+            function hashPassword(p) {
+                let h = 0;
+                for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
+                return h.toString(16);
+            }
+
+            await sb.from('users').update({ password: hashPassword(newPass) }).eq('id', currentUser.id);
+            alert('Пароль изменен!');
+        }
+
+        async function loadAdminStats() {
+            const { count: users } = await sb.from('users').select('*', { count: 'exact', head: true });
+            const { count: quizzes } = await sb.from('quizzes').select('*', { count: 'exact', head: true });
+            const { count: results } = await sb.from('results').select('*', { count: 'exact', head: true });
+            
+            document.getElementById('totalUsers').textContent = users || 0;
+            document.getElementById('totalQuizzes').textContent = quizzes || 0;
+            document.getElementById('totalResults').textContent = results || 0;
+        }
+
+        async function clearAllData() {
+            if (!confirm('⚠️ ТОЧНО УДАЛИТЬ ВСЁ?')) return;
+            if (!confirm('⚠️ ЭТО НЕОБРАТИМО!')) return;
+            
+            const password = prompt('Введите "УДАЛИТЬ ВСЁ" для подтверждения');
+            if (password !== 'УДАЛИТЬ ВСЁ') return alert('Отмена');
+            
+            await sb.from('results').delete().neq('id', '0');
+            await sb.from('sessions').delete().neq('id', '0');
+            await sb.from('quizzes').delete().neq('id', '0');
+            
+            alert('✅ База данных очищена');
+            window.location.reload();
+        }
+
+        loadProfile();
     </script>
 </body>
 </html>
