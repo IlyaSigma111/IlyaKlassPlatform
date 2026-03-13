@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИЛЬЯКЛАСС - Магазин</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
+        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
+        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-small {
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link.active {
+            background: #6366f1;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .coins {
+            color: #ffd700;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .themes-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 25px;
+        }
+
+        .store-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .theme-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-card.owned {
+            border-color: #10b981;
+        }
+
+        .theme-card.active {
+            border-color: #6366f1;
+            box-shadow: 0 0 20px #6366f1;
+        }
+
+        .theme-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+        }
+
+        .theme-name {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .theme-price {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .apply-theme-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #6366f1;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .store-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: #6366f1;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .store-quiz-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .store-quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .store-quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .store-quiz-author {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .store-quiz-likes {
+            color: #ff6b6b;
+            font-size: 1.1rem;
+        }
+
+        .store-quiz-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .store-quiz-stats {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .store-quiz-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .save-to-mine-btn {
+            flex: 1;
+            padding: 10px;
+            background: #10b981;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .like-btn {
+            width: 50px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #ff6b6b;
+            border-radius: 30px;
+            color: #ff6b6b;
+            cursor: pointer;
+        }
+
+        .like-btn.liked {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.7;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-small" onclick="window.location='index.html'">
+            <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="shop.html" class="nav-link active">Магазин</a>
+            <a href="results.html" class="nav-link">Результаты</a>
+            <a href="profile.html" class="nav-link">Профиль</a>
+        </nav>
+        <div class="header-right" id="userSection"></div>
+    </header>
+
+    <main class="container">
+        <div class="shop-grid">
+            <!-- ЛЕВАЯ КОЛОНКА - ТЕМЫ -->
+            <div class="themes-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-palette" style="color: #f59e0b;"></i>
+                        Магазин тем
+                    </h2>
+                    <div id="userCoins" class="coins">0</div>
+                </div>
+                
+                <div id="themesList" class="themes-grid">
+                    <!-- Сюда загрузятся темы -->
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 30px;">
+                    <h3 style="color: #6366f1; margin-bottom: 10px;">🎨 Текущая тема</h3>
+                    <div id="currentTheme" style="display: flex; align-items: center; gap: 10px;">
+                        <div id="currentThemeColor" style="width: 30px; height: 30px; border-radius: 50%; background: #fbc7d1;"></div>
+                        <span id="currentThemeName">Розовая</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА - ВИКТОРИНЫ -->
+            <div class="store-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-store" style="color: #10b981;"></i>
+                        Магазин викторин
+                    </h2>
+                    <div class="store-filters">
+                        <button class="filter-btn active" onclick="filterStore('popular')">🔥 Популярные</button>
+                        <button class="filter-btn" onclick="filterStore('new')">🆕 Новые</button>
+                        <button class="filter-btn" onclick="filterStore('liked')">❤️ Мои лайки</button>
+                    </div>
+                </div>
+                
+                <div id="storeQuizzesList" class="store-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">🛒</div>
+                        <p>Загрузка викторин...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+        let currentUser = null;
+        let userCoins = 100;
+        let userThemes = ['pink'];
+        let storeFilter = 'popular';
+
+        const allThemes = [
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#fbc7d1' },
+            { id: 'blue', name: '💙 Синяя', price: 50, color: '#6dd5ed' },
+            { id: 'green', name: '💚 Зеленая', price: 50, color: '#a8e063' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 100, color: '#b993d6' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 100, color: '#f9d423' },
+            { id: 'dark', name: '🖤 Темная', price: 200, color: '#2c3e50' }
+        ];
+
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+            localStorage.setItem('currentTheme', themeId);
+            
+            const theme = allThemes.find(t => t.id === themeId);
+            if (theme) {
+                document.getElementById('currentThemeColor').style.background = theme.color;
+                document.getElementById('currentThemeName').textContent = theme.name;
+            }
+        }
+
+        function getCurrentUser() {
+            const saved = localStorage.getItem('currentUser');
+            return saved ? JSON.parse(saved) : null;
+        }
+
+        function updateUI() {
+            const s = document.getElementById('userSection');
+            if (!s) return;
+            if (currentUser) {
+                s.innerHTML = `
+                    <div class="user-card">
+                        <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
+                        <span>${currentUser.username}</span>
+                        <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
+                        <button onclick="logout()" class="logout-btn">Выйти</button>
+                    </div>
+                `;
+            }
+            document.getElementById('userCoins').textContent = currentUser?.coins || 0;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        async function loadUser() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            currentUser = user;
+            userCoins = user.coins || 100;
+            userThemes = user.themes || ['pink'];
+            
+            updateUI();
+            loadThemesShop();
+            loadStoreQuizzes();
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+        }
+
+        function loadThemesShop() {
+            const container = document.getElementById('themesList');
+            const currentTheme = localStorage.getItem('currentTheme') || 'pink';
+            
+            let html = '';
+            for (let theme of allThemes) {
+                const owned = userThemes.includes(theme.id);
+                html += `
+                    <div class="theme-card ${owned ? 'owned' : ''} ${currentTheme === theme.id ? 'active' : ''}">
+                        <div class="theme-color" style="background: ${theme.color};"></div>
+                        <div class="theme-name">${theme.name}</div>
+                        <div class="theme-price">
+                            ${owned ? '✓ В наличии' : `<span class="coins">${theme.price}</span> монет`}
+                        </div>
+                        ${owned ? `<button class="apply-theme-btn" onclick="applyTheme('${theme.id}')">Применить</button>` : ''}
+                        ${!owned ? `<button class="apply-theme-btn" onclick="buyTheme('${theme.id}')">Купить</button>` : ''}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        window.buyTheme = async function(themeId) {
+            const theme = allThemes.find(t => t.id === themeId);
+            if (!theme) return;
+            
+            if (userCoins < theme.price) {
+                alert('Недостаточно монет!');
+                return;
+            }
+            
+            if (confirm(`Купить тему ${theme.name} за ${theme.price} монет?`)) {
+                userCoins -= theme.price;
+                userThemes.push(themeId);
+                
+                await sb.from('users').update({ 
+                    coins: userCoins, 
+                    themes: userThemes 
+                }).eq('id', currentUser.id);
+                
+                currentUser.coins = userCoins;
+                currentUser.themes = userThemes;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                updateUI();
+                loadThemesShop();
+            }
+        };
+
+        async function loadStoreQuizzes() {
+            const { data: quizzes } = await sb.from('quizzes').select(`
+                *,
+                users!quizzes_created_by_fkey (username)
+            `).eq('is_published', true);
+            
+            const container = document.getElementById('storeQuizzesList');
+            
+            if (!quizzes || quizzes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🛒</div>
+                        <p>В магазине пока нет викторин</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Сортируем по фильтру
+            let sortedQuizzes = [...quizzes];
+            if (storeFilter === 'popular') {
+                sortedQuizzes.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+            } else if (storeFilter === 'new') {
+                sortedQuizzes.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+            } else if (storeFilter === 'liked') {
+                const likedIds = currentUser?.liked_quizzes || [];
+                sortedQuizzes = sortedQuizzes.filter(q => likedIds.includes(q.id));
+            }
+
+            let html = '';
+            for (let q of sortedQuizzes) {
+                const isLiked = currentUser?.liked_quizzes?.includes(q.id);
+                html += `
+                    <div class="store-quiz-card">
+                        <div class="store-quiz-header">
+                            <span class="store-quiz-author">👤 ${q.users?.username || 'Неизвестно'}</span>
+                            <span class="store-quiz-likes">
+                                <i class="fas fa-heart"></i> ${q.likes || 0}
+                            </span>
+                        </div>
+                        <div class="store-quiz-title">${q.title}</div>
+                        <div class="store-quiz-stats">
+                            <span>${q.subject || ''} • ${q.class || ''} класс</span>
+                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                        </div>
+                        <div class="store-quiz-actions">
+                            <button class="save-to-mine-btn" onclick="saveQuizToMine('${q.id}')">
+                                <i class="fas fa-save"></i> Сохранить
+                            </button>
+                            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="likeQuiz('${q.id}')">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        window.filterStore = function(filter) {
+            storeFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadStoreQuizzes();
+        };
+
+        window.likeQuiz = async function(quizId) {
+            if (!currentUser) return;
+            
+            const liked = currentUser.liked_quizzes || [];
+            const isLiked = liked.includes(quizId);
+            
+            // Обновляем лайки в викторине
+            const { data: quiz } = await sb.from('quizzes').select('likes').eq('id', quizId).single();
+            const newLikes = (quiz.likes || 0) + (isLiked ? -1 : 1);
+            
+            await sb.from('quizzes').update({ likes: newLikes }).eq('id', quizId);
+            
+            // Обновляем лайки пользователя
+            const newLiked = isLiked 
+                ? liked.filter(id => id !== quizId)
+                : [...liked, quizId];
+            
+            await sb.from('users').update({ liked_quizzes: newLiked }).eq('id', currentUser.id);
+            
+            currentUser.liked_quizzes = newLiked;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            loadStoreQuizzes();
+        };
+
+        window.saveQuizToMine = async function(quizId) {
+            if (!currentUser || currentUser.role !== 'teacher') {
+                alert('Только учителя могут сохранять викторины');
+                return;
+            }
+
+            // Копируем викторину
+            const { data: original } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+            const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId);
+
+            const newQuizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            
+            await sb.from('quizzes').insert({
+                id: newQuizId,
+                title: original.title,
+                class: original.class,
+                subject: original.subject,
+                theme: original.theme,
+                question_count: original.question_count,
+                max_score: original.max_score,
+                created_by: currentUser.id,
+                is_published: false,
+                likes: 0,
+                created_at: Date.now()
+            });
+
+            for (let q of questions) {
+                await sb.from('questions').insert({
+                    quiz_id: newQuizId,
+                    question_index: q.question_index,
+                    question: q.question,
+                    answers: q.answers,
+                    correct: q.correct,
+                    points: q.points || 1
+                });
+            }
+
+            alert('✅ Викторина сохранена в вашу коллекцию!');
+        };
+
+        loadUser();
+    </script>
+</body>
+</html>
