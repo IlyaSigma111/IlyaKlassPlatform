@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Стили как в предыдущей версии */
         * {
             margin: 0;
             padding: 0;
@@ -19,7 +20,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
         body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
@@ -56,6 +57,7 @@
         .nav-menu {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
@@ -421,6 +423,9 @@
                 document.getElementById('currentThemeColor').style.background = theme.color;
                 document.getElementById('currentThemeName').textContent = theme.name;
             }
+            
+            // Обновляем подсветку в магазине
+            loadThemesShop();
         }
 
         function getCurrentUser() {
@@ -517,62 +522,69 @@
         };
 
         async function loadStoreQuizzes() {
-            const { data: quizzes } = await sb.from('quizzes').select(`
-                *,
-                users!quizzes_created_by_fkey (username)
-            `).eq('is_published', true);
-            
-            const container = document.getElementById('storeQuizzesList');
-            
-            if (!quizzes || quizzes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🛒</div>
-                        <p>В магазине пока нет викторин</p>
-                    </div>
-                `;
-                return;
-            }
+            try {
+                const { data: quizzes } = await sb.from('quizzes').select(`
+                    *,
+                    users!quizzes_created_by_fkey (username)
+                `).eq('is_published', true);
+                
+                const container = document.getElementById('storeQuizzesList');
+                
+                if (!quizzes || quizzes.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🛒</div>
+                            <p>В магазине пока нет викторин</p>
+                        </div>
+                    `;
+                    return;
+                }
 
-            // Сортируем по фильтру
-            let sortedQuizzes = [...quizzes];
-            if (storeFilter === 'popular') {
-                sortedQuizzes.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-            } else if (storeFilter === 'new') {
-                sortedQuizzes.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-            } else if (storeFilter === 'liked') {
-                const likedIds = currentUser?.liked_quizzes || [];
-                sortedQuizzes = sortedQuizzes.filter(q => likedIds.includes(q.id));
-            }
+                console.log('Загружено викторин:', quizzes.length); // Для отладки
 
-            let html = '';
-            for (let q of sortedQuizzes) {
-                const isLiked = currentUser?.liked_quizzes?.includes(q.id);
-                html += `
-                    <div class="store-quiz-card">
-                        <div class="store-quiz-header">
-                            <span class="store-quiz-author">👤 ${q.users?.username || 'Неизвестно'}</span>
-                            <span class="store-quiz-likes">
-                                <i class="fas fa-heart"></i> ${q.likes || 0}
-                            </span>
+                // Сортируем по фильтру
+                let sortedQuizzes = [...quizzes];
+                if (storeFilter === 'popular') {
+                    sortedQuizzes.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                } else if (storeFilter === 'new') {
+                    sortedQuizzes.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+                } else if (storeFilter === 'liked') {
+                    const likedIds = currentUser?.liked_quizzes || [];
+                    sortedQuizzes = sortedQuizzes.filter(q => likedIds.includes(q.id));
+                }
+
+                let html = '';
+                for (let q of sortedQuizzes) {
+                    const isLiked = currentUser?.liked_quizzes?.includes(q.id);
+                    html += `
+                        <div class="store-quiz-card">
+                            <div class="store-quiz-header">
+                                <span class="store-quiz-author">👤 ${q.users?.username || 'Неизвестно'}</span>
+                                <span class="store-quiz-likes">
+                                    <i class="fas fa-heart"></i> ${q.likes || 0}
+                                </span>
+                            </div>
+                            <div class="store-quiz-title">${q.title}</div>
+                            <div class="store-quiz-stats">
+                                <span>${q.subject || ''} • ${q.class || ''} класс</span>
+                                <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                            </div>
+                            <div class="store-quiz-actions">
+                                <button class="save-to-mine-btn" onclick="saveQuizToMine('${q.id}')">
+                                    <i class="fas fa-save"></i> Сохранить
+                                </button>
+                                <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="likeQuiz('${q.id}')">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="store-quiz-title">${q.title}</div>
-                        <div class="store-quiz-stats">
-                            <span>${q.subject || ''} • ${q.class || ''} класс</span>
-                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
-                        </div>
-                        <div class="store-quiz-actions">
-                            <button class="save-to-mine-btn" onclick="saveQuizToMine('${q.id}')">
-                                <i class="fas fa-save"></i> Сохранить
-                            </button>
-                            <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="likeQuiz('${q.id}')">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки магазина:', error);
+                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
             }
-            container.innerHTML = html;
         }
 
         window.filterStore = function(filter) {
@@ -588,23 +600,27 @@
             const liked = currentUser.liked_quizzes || [];
             const isLiked = liked.includes(quizId);
             
-            // Обновляем лайки в викторине
-            const { data: quiz } = await sb.from('quizzes').select('likes').eq('id', quizId).single();
-            const newLikes = (quiz.likes || 0) + (isLiked ? -1 : 1);
-            
-            await sb.from('quizzes').update({ likes: newLikes }).eq('id', quizId);
-            
-            // Обновляем лайки пользователя
-            const newLiked = isLiked 
-                ? liked.filter(id => id !== quizId)
-                : [...liked, quizId];
-            
-            await sb.from('users').update({ liked_quizzes: newLiked }).eq('id', currentUser.id);
-            
-            currentUser.liked_quizzes = newLiked;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            loadStoreQuizzes();
+            try {
+                // Обновляем лайки в викторине
+                const { data: quiz } = await sb.from('quizzes').select('likes').eq('id', quizId).single();
+                const newLikes = (quiz.likes || 0) + (isLiked ? -1 : 1);
+                
+                await sb.from('quizzes').update({ likes: newLikes }).eq('id', quizId);
+                
+                // Обновляем лайки пользователя
+                const newLiked = isLiked 
+                    ? liked.filter(id => id !== quizId)
+                    : [...liked, quizId];
+                
+                await sb.from('users').update({ liked_quizzes: newLiked }).eq('id', currentUser.id);
+                
+                currentUser.liked_quizzes = newLiked;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                loadStoreQuizzes();
+            } catch (error) {
+                console.error('Ошибка лайка:', error);
+            }
         };
 
         window.saveQuizToMine = async function(quizId) {
@@ -613,38 +629,43 @@
                 return;
             }
 
-            // Копируем викторину
-            const { data: original } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-            const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId);
+            try {
+                // Копируем викторину
+                const { data: original } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+                const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId);
 
-            const newQuizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-            
-            await sb.from('quizzes').insert({
-                id: newQuizId,
-                title: original.title,
-                class: original.class,
-                subject: original.subject,
-                theme: original.theme,
-                question_count: original.question_count,
-                max_score: original.max_score,
-                created_by: currentUser.id,
-                is_published: false,
-                likes: 0,
-                created_at: Date.now()
-            });
-
-            for (let q of questions) {
-                await sb.from('questions').insert({
-                    quiz_id: newQuizId,
-                    question_index: q.question_index,
-                    question: q.question,
-                    answers: q.answers,
-                    correct: q.correct,
-                    points: q.points || 1
+                const newQuizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+                
+                await sb.from('quizzes').insert({
+                    id: newQuizId,
+                    title: original.title,
+                    class: original.class,
+                    subject: original.subject,
+                    theme: original.theme,
+                    question_count: original.question_count,
+                    max_score: original.max_score,
+                    created_by: currentUser.id,
+                    is_published: false,
+                    likes: 0,
+                    created_at: Date.now()
                 });
-            }
 
-            alert('✅ Викторина сохранена в вашу коллекцию!');
+                for (let q of questions) {
+                    await sb.from('questions').insert({
+                        quiz_id: newQuizId,
+                        question_index: q.question_index,
+                        question: q.question,
+                        answers: q.answers,
+                        correct: q.correct,
+                        points: q.points || 1
+                    });
+                }
+
+                alert('✅ Викторина сохранена в вашу коллекцию!');
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                alert('Ошибка: ' + error.message);
+            }
         };
 
         loadUser();
