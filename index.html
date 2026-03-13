@@ -379,11 +379,43 @@
             opacity: 0.8;
         }
 
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .add-quiz-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .add-quiz-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
         .quiz-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            margin: 20px 0;
         }
 
         .quiz-card {
@@ -445,6 +477,11 @@
             margin-bottom: 5px;
         }
 
+        .quiz-subject {
+            color: #a5b4fc;
+            margin-bottom: 10px;
+        }
+
         .quiz-actions {
             display: flex;
             gap: 8px;
@@ -503,6 +540,35 @@
             color: white;
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            border: 2px solid var(--primary);
+            background: rgba(0,0,0,0.2);
+            color: inherit;
+            font-size: 14px;
+        }
+
+        body.light-theme .form-group input,
+        body.light-theme .form-group select,
+        body.light-theme .form-group textarea {
+            background: white;
+            color: #333;
+        }
+
         .question-card {
             background: rgba(0,0,0,0.2);
             border: 2px solid var(--primary);
@@ -514,7 +580,9 @@
         .question-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+            color: var(--primary);
         }
 
         .remove-question {
@@ -535,6 +603,10 @@
             border-radius: 10px;
         }
 
+        .answer-option input[type="radio"] {
+            accent-color: var(--primary);
+        }
+
         .add-question-btn {
             background: transparent;
             border: 2px dashed var(--primary);
@@ -544,6 +616,7 @@
             border-radius: 15px;
             margin: 15px 0;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .loading {
@@ -560,6 +633,10 @@
                 position: static;
                 margin-top: 20px;
             }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -573,6 +650,7 @@
             <nav class="nav-menu">
                 <a href="index.html" class="nav-link active">Главная</a>
                 <a href="results.html" class="nav-link">Результаты</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
         </div>
         <div class="header-right">
@@ -586,19 +664,21 @@
             <div id="content" class="loading">Загрузка...</div>
         </div>
         
-        <div class="leaderboard" id="leaderboard">
-            <h2>🏆 ЛИДЕРБОРД</h2>
-            <div class="leaderboard-list" id="leaderboardList">
-                <div class="loading" style="padding:20px;">Загрузка...</div>
+        <div>
+            <div class="leaderboard" id="leaderboard">
+                <h2>🏆 ЛИДЕРБОРД</h2>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <div class="loading" style="padding:20px;">Загрузка...</div>
+                </div>
             </div>
-        </div>
 
-        <div class="chat" id="chat">
-            <h3 style="color:var(--primary); margin-bottom:10px;">💬 Чат</h3>
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button class="chat-send" onclick="sendMessage()">→</button>
+            <div class="chat" id="chat">
+                <h3 style="color:var(--primary); margin-bottom:10px;">💬 Чат</h3>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button class="chat-send" onclick="sendMessage()">→</button>
+                </div>
             </div>
         </div>
     </main>
@@ -650,6 +730,11 @@
             let h = 0;
             for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
             return h.toString(16);
+        }
+
+        // ===== ГЕНЕРАЦИЯ ID =====
+        function generateId() {
+            return 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
         }
 
         // ===== МОДАЛКИ =====
@@ -765,19 +850,21 @@
             }
 
             // Создаем пользователя
-            const { data, error } = await sb.from('users').insert({
+            const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            const { error } = await sb.from('users').insert({
+                id: userId,
                 name: name,
                 password: hashPassword(pass),
                 created_at: new Date().toISOString()
-            }).select();
+            });
 
             if (error) {
-                alert('Ошибка регистрации');
+                alert('Ошибка регистрации: ' + error.message);
                 return;
             }
 
             // Автоматически входим
-            const user = { id: data[0].id, name: name };
+            const user = { id: userId, name: name };
             localStorage.setItem('currentUser', JSON.stringify(user));
             currentUser = user;
             userName = name;
@@ -874,7 +961,7 @@
             c.innerHTML = `
                 <div class="quizzes-section">
                     <div class="section-header">
-                        <h2 style="color:var(--primary);">📚 Все викторины</h2>
+                        <h2 class="section-title">📚 Все викторины</h2>
                         <div>
                             <button class="add-quiz-btn" onclick="toggleForm()">➕ По ссылке</button>
                             <button class="add-quiz-btn" onclick="showConstructor()">🛠️ Конструктор</button>
@@ -893,7 +980,7 @@
             if (!container) return;
             
             if (!quizzes || quizzes.length === 0) {
-                container.innerHTML = '<p>Нет викторин</p>';
+                container.innerHTML = '<p style="text-align:center; color:var(--primary);">Нет викторин. Создайте первую!</p>';
                 return;
             }
 
@@ -939,20 +1026,16 @@
         }
 
         window.deleteQuiz = async function(id) {
-            if (confirm('Удалить?')) {
+            if (confirm('Удалить викторину?')) {
                 await sb.from('quizzes').delete().eq('id', id);
                 loadAllQuizzes();
             }
         };
 
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substring(2);
-        }
-
         window.toggleForm = function() {
             const f = document.getElementById('quizForm');
             if (!f) return;
-            f.innerHTML = '<h3 style="color:var(--primary);">➕ По ссылке</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectQuizType(\'kahoot\')" id="type-kahoot">🎮 Kahoot</div><div class="radio-option" onclick="selectQuizType(\'simple\')" id="type-simple">📝 Простая</div></div></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Описание</label><textarea id="quizDescription" rows="2"></textarea></div><div class="form-group"><label>Ссылка</label><input id="quizLink" placeholder="https://..."></div><div class="form-group" id="maxScoreGroup"><label>Макс. балл</label><input type="number" id="quizMaxScore" value="15"></div><button class="login-btn" onclick="saveQuiz()">💾 Сохранить</button>';
+            f.innerHTML = '<h3 style="color:var(--primary); margin-bottom:20px;">➕ Добавить по ссылке</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectQuizType(\'kahoot\')" id="type-kahoot">🎮 Kahoot</div><div class="radio-option" onclick="selectQuizType(\'simple\')" id="type-simple">📝 Простая</div></div></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Описание</label><textarea id="quizDescription" rows="2"></textarea></div><div class="form-group"><label>Ссылка</label><input id="quizLink" placeholder="https://..."></div><div class="form-group" id="maxScoreGroup"><label>Макс. балл</label><input type="number" id="quizMaxScore" value="15"></div><button class="login-btn" onclick="saveQuiz()">💾 Сохранить</button>';
             f.classList.toggle('visible');
         };
 
@@ -963,8 +1046,13 @@
         };
 
         window.saveQuiz = async function() {
-            let t = document.querySelector('.radio-option.selected')?.id === 'type-kahoot' ? 'kahoot' : 'simple';
+            let typeEl = document.querySelector('.radio-option.selected');
+            let t = 'simple';
+            if (typeEl && typeEl.id === 'type-kahoot') t = 'kahoot';
+            
+            // Генерируем уникальный ID
             let id = generateId();
+            
             let data = {
                 id: id,
                 type: t,
@@ -976,19 +1064,26 @@
                 created_by: currentUser.id,
                 created_at: Date.now()
             };
+            
             if (!data.title || !data.link) return alert('Заполните название и ссылку');
             if (t === 'kahoot') data.max_score = parseInt(document.getElementById('quizMaxScore')?.value) || 15;
-            await sb.from('quizzes').insert(data);
-            document.getElementById('quizTitle').value = '';
-            document.getElementById('quizDescription').value = '';
-            document.getElementById('quizLink').value = '';
-            document.getElementById('quizMaxScore').value = '15';
-            document.getElementById('quizForm')?.classList.remove('visible');
-            loadAllQuizzes();
+            
+            const { error } = await sb.from('quizzes').insert(data);
+            if (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка сохранения: ' + error.message);
+            } else {
+                document.getElementById('quizTitle').value = '';
+                document.getElementById('quizDescription').value = '';
+                document.getElementById('quizLink').value = '';
+                document.getElementById('quizMaxScore').value = '15';
+                document.getElementById('quizForm')?.classList.remove('visible');
+                loadAllQuizzes();
+            }
         };
 
         window.startQuiz = async function(id,link) {
-            let sessionId = generateId();
+            let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
             await sb.from('sessions').insert({
                 id: sessionId,
                 quiz_id: id,
@@ -1026,7 +1121,7 @@
         window.showConstructor = function() {
             const f = document.getElementById('quizForm');
             if (!f) return;
-            f.innerHTML = '<h3 style="color:var(--primary);">🛠️ Конструктор</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectConstructorType(\'classic\')" id="type-classic">📱 С телефонами</div><div class="radio-option" onclick="selectConstructorType(\'board\')" id="type-board">📝 С доски</div></div></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Вопросов</label><div><input type="number" id="questionCount" value="5" min="1"><button class="add-quiz-btn" onclick="generateQuestions()">Создать</button></div></div><div id="questionsContainer"></div><button class="add-question-btn" id="addQuestionBtn" style="display:none" onclick="addQuestion()">➕ Добавить вопрос</button><button class="login-btn" id="saveQuizBtn" style="display:none" onclick="saveQuizWithQuestions()">💾 Сохранить</button>';
+            f.innerHTML = '<h3 style="color:var(--primary); margin-bottom:20px;">🛠️ Конструктор</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectConstructorType(\'classic\')" id="type-classic">📱 С телефонами</div><div class="radio-option" onclick="selectConstructorType(\'board\')" id="type-board">📝 С доски</div></div></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Вопросов</label><div><input type="number" id="questionCount" value="5" min="1"><button class="add-quiz-btn" style="margin-top:10px;" onclick="generateQuestions()">Создать вопросы</button></div></div><div id="questionsContainer"></div><button class="add-question-btn" id="addQuestionBtn" style="display:none" onclick="addQuestion()">➕ Добавить вопрос</button><button class="login-btn" id="saveQuizBtn" style="display:none; margin-top:20px;" onclick="saveQuizWithQuestions()">💾 Сохранить викторину</button>';
             f.classList.add('visible');
         };
 
@@ -1081,7 +1176,7 @@
             let h = '';
             for (let i = 0; i < quizQuestions.length; i++) {
                 let q = quizQuestions[i];
-                h += '<div class="question-card"><div class="question-header"><span>Вопрос ' + (i+1) + '</span><button class="remove-question" onclick="removeQuestion(' + i + ')">×</button></div><div class="form-group"><input value="' + q.question + '" onchange="updateQuestion(' + i + ',\'question\',this.value)" placeholder="Вопрос"></div>';
+                h += '<div class="question-card"><div class="question-header"><span>Вопрос ' + (i+1) + '</span><button class="remove-question" onclick="removeQuestion(' + i + ')">×</button></div><div class="form-group"><input value="' + q.question + '" onchange="updateQuestion(' + i + ',\'question\',this.value)" placeholder="Введите вопрос"></div>';
                 for (let j = 0; j < 4; j++) {
                     h += '<div class="answer-option"><input type="radio" name="correct-' + q.id + '" value="' + j + '" ' + (q.correct === j ? 'checked' : '') + ' onchange="updateQuestion(' + i + ',\'correct\',this.value)"><input type="text" value="' + q.answers[j] + '" placeholder="Ответ ' + (j+1) + '" onchange="updateQuestion(' + i + ',\'answer' + j + '\',this.value)">' + (q.correct === j ? '✓' : '') + '</div>';
                 }
@@ -1134,12 +1229,12 @@
 
         window.startConstructedQuiz = async function(id, type) {
             let { data: questions } = await sb.from('questions').select('*').eq('quiz_id', id);
-            if (!questions || !questions.length) return alert('Ошибка');
+            if (!questions || !questions.length) return alert('Ошибка: вопросы не найдены');
             if (type === 'board') {
                 window.open('teacher-board.html?quiz=' + id, '_blank');
                 return;
             }
-            let sessionId = generateId();
+            let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
             await sb.from('sessions').insert({
                 id: sessionId,
                 quiz_id: id,
@@ -1157,7 +1252,7 @@
             if (!currentUser) return;
             let { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', id);
             let active = sessions?.find(s => s.status === 'active');
-            if (!active) return alert('Нет активной');
+            if (!active) return alert('Нет активной викторины');
             if (!active.students) active.students = {};
             active.students[currentUser.id] = { name: userName, joined_at: Date.now() };
             await sb.from('sessions').update({ students: active.students }).eq('id', active.id);
