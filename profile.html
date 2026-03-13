@@ -212,6 +212,7 @@
         .profile-email {
             opacity: 0.7;
             margin-bottom: 15px;
+            font-size: 14px;
         }
 
         .profile-stats {
@@ -369,6 +370,12 @@
             return saved ? JSON.parse(saved) : null;
         }
 
+        function hashPassword(p) {
+            let h = 0;
+            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
+            return h.toString(16);
+        }
+
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s) return;
@@ -394,7 +401,7 @@
 
             const c = document.getElementById('content');
             
-            // Загружаем статистику пользователя
+            // Загружаем статистику
             const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
             const { data: createdQuizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
             
@@ -518,12 +525,6 @@
             if (!newPass) return alert('Введите пароль');
             if (newPass !== confirm) return alert('Пароли не совпадают');
             if (newPass.length < 3) return alert('Пароль должен быть минимум 3 символа');
-            
-            function hashPassword(p) {
-                let h = 0;
-                for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
-                return h.toString(16);
-            }
 
             await sb.from('users').update({ password: hashPassword(newPass) }).eq('id', currentUser.id);
             alert('Пароль изменен!');
@@ -548,6 +549,8 @@
             
             await sb.from('results').delete().neq('id', '0');
             await sb.from('sessions').delete().neq('id', '0');
+            await sb.from('teacher_sessions').delete().neq('id', '0');
+            await sb.from('questions').delete().neq('id', '0');
             await sb.from('quizzes').delete().neq('id', '0');
             
             alert('✅ База данных очищена');
