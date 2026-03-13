@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Стили такие же как были */
+        /* Стили как в предыдущей версии */
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +20,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
 
         body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
@@ -840,46 +840,50 @@
         async function loadMyQuizzes() {
             if (!currentUser) return;
             
-            const { data: quizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
-            const container = document.getElementById('myQuizzesList');
-            
-            if (!quizzes || quizzes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🎮</div>
-                        <p>У вас пока нет викторин</p>
-                        <button class="create-btn" style="margin-top: 15px;" onclick="openConstructor()">Создать первую</button>
-                    </div>
-                `;
-                return;
-            }
+            try {
+                const { data: quizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
+                const container = document.getElementById('myQuizzesList');
+                
+                if (!quizzes || quizzes.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🎮</div>
+                            <p>У вас пока нет викторин</p>
+                            <button class="create-btn" style="margin-top: 15px;" onclick="openConstructor()">Создать первую</button>
+                        </div>
+                    `;
+                    return;
+                }
 
-            let html = '';
-            for (let q of quizzes) {
-                const theme = allThemes.find(t => t.id === q.theme) || allThemes[0];
-                html += `
-                    <div class="quiz-card">
-                        <div class="quiz-card-header">
-                            <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
-                            <div class="quiz-class">${q.class || ''}</div>
-                        </div>
-                        <div class="quiz-title">${q.title}</div>
-                        <div class="quiz-subject">${q.subject || ''}</div>
-                        <div class="quiz-stats">
-                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
-                        </div>
-                        <div class="quiz-actions">
-                            <div class="quiz-action-btn play" onclick="playQuiz('${q.id}')">
-                                <i class="fas fa-play"></i> Играть
+                let html = '';
+                for (let q of quizzes) {
+                    const theme = allThemes.find(t => t.id === q.theme) || allThemes[0];
+                    html += `
+                        <div class="quiz-card">
+                            <div class="quiz-card-header">
+                                <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
+                                <div class="quiz-class">${q.class || ''}</div>
                             </div>
-                            <div class="quiz-action-btn" onclick="editQuiz('${q.id}')">
-                                <i class="fas fa-edit"></i>
+                            <div class="quiz-title">${q.title}</div>
+                            <div class="quiz-subject">${q.subject || ''}</div>
+                            <div class="quiz-stats">
+                                <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                            </div>
+                            <div class="quiz-actions">
+                                <div class="quiz-action-btn play" onclick="playQuiz('${q.id}')">
+                                    <i class="fas fa-play"></i> Играть
+                                </div>
+                                <div class="quiz-action-btn" onclick="editQuiz('${q.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки викторин:', error);
             }
-            container.innerHTML = html;
         }
 
         // ===== КОНСТРУКТОР =====
