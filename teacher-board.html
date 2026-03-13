@@ -9,11 +9,19 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
         }
 
         body {
-            background: #1a1a2e;
+            background: linear-gradient(145deg, #0a0c14, #151823);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -30,58 +38,65 @@
         }
 
         .title {
-            font-size: 28px;
-            color: #6366f1;
+            font-size: 32px;
+            color: var(--primary);
             margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--primary-glow);
         }
 
         .counter {
             text-align: center;
-            color: #6366f1;
+            color: var(--primary);
+            font-size: 18px;
             margin-bottom: 20px;
         }
 
         .question-card {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid #6366f1;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 20px;
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 30px;
         }
 
         .question-text {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--primary);
             text-align: center;
         }
 
         .answers-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 20px;
         }
 
         .answer-card {
             background: rgba(255,255,255,0.05);
-            border: 2px solid #10b981;
-            border-radius: 8px;
-            padding: 20px;
+            border: 2px solid var(--success);
+            border-radius: 20px;
+            padding: 25px;
             text-align: center;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             transition: 0.3s;
         }
 
         .answer-card:hover {
-            background: rgba(16,185,129,0.1);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--success);
         }
 
         .answer-card.correct {
-            background: #10b981;
+            background: var(--success);
+            border-color: var(--primary);
         }
 
         .answer-card.incorrect {
-            background: #ef4444;
+            background: var(--danger);
+            border-color: var(--primary);
             opacity: 0.7;
         }
 
@@ -89,20 +104,23 @@
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 20px;
         }
 
         .nav-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid var(--primary);
+            color: var(--primary);
             padding: 12px 30px;
-            border-radius: 5px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         .nav-btn:hover {
-            opacity: 0.9;
+            background: var(--primary);
+            color: white;
         }
     </style>
 </head>
@@ -110,7 +128,7 @@
     <div class="container">
         <div class="header">
             <h1 class="title" id="quizTitle">Загрузка...</h1>
-            <div>Викторина с доски</div>
+            <div>Викторина с доски - ученики отвечают устно</div>
         </div>
 
         <div class="counter" id="counter">Вопрос 1/0</div>
@@ -128,9 +146,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
         const urlParams = new URLSearchParams(window.location.search);
         const quizId = urlParams.get('quiz');
@@ -139,17 +157,17 @@
         let currentQuestion = 0;
 
         async function loadQuiz() {
-            const { data: quiz } = await supabase.from('quizzes').select('title').eq('id', quizId).single();
-            if (quiz) document.getElementById('quizTitle').textContent = quiz.title;
+            const { data: quiz } = await sb.from('quizzes').select('title').eq('id', quizId).single();
+            document.getElementById('quizTitle').textContent = quiz?.title || 'Викторина';
 
-            const { data: qs } = await supabase.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
             questions = qs || [];
             updateCounter();
             displayQuestion();
         }
 
         function updateCounter() {
-            document.getElementById('counter').textContent = 'Вопрос ' + (currentQuestion+1) + '/' + questions.length;
+            document.getElementById('counter').textContent = `Вопрос ${currentQuestion + 1}/${questions.length}`;
         }
 
         function displayQuestion() {
@@ -159,7 +177,7 @@
             
             let html = '';
             for (let i = 0; i < q.answers.length; i++) {
-                html += '<div class="answer-card" onclick="showAnswer(' + i + ')" id="answer-' + i + '">' + q.answers[i] + '</div>';
+                html += `<div class="answer-card" onclick="showAnswer(${i})" id="answer-${i}">${q.answers[i]}</div>`;
             }
             document.getElementById('answersGrid').innerHTML = html;
         }
@@ -168,9 +186,7 @@
             let correct = questions[currentQuestion].correct;
             for (let i = 0; i < 4; i++) {
                 let el = document.getElementById('answer-' + i);
-                if (el) {
-                    el.classList.remove('correct', 'incorrect');
-                }
+                if (el) el.classList.remove('correct', 'incorrect');
             }
             document.getElementById('answer-' + correct).classList.add('correct');
             if (index !== correct) {
