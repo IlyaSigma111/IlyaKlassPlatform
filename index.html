@@ -2,74 +2,121 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ИЛЬЯКЛАСС</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark-bg: #0a0c14;
+            --dark-card: #151823;
+            --light-bg: #f3f4f6;
+            --light-card: #ffffff;
         }
 
         body {
-            background: #1a1a2e;
+            background: var(--dark-bg);
             color: white;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         body.light-theme {
-            background: #f0f0f0;
-            color: #333;
+            background: var(--light-bg);
+            color: #1f2937;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
+            50% { text-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b, 0 0 30px #f59e0b; }
+            100% { text-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1, 0 0 15px #6366f1; }
+        }
+
+        .glow-name {
+            animation: glow 3s infinite;
+            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
 
         .header {
-            background: #16213e;
-            padding: 15px 20px;
+            background: rgba(21, 24, 35, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--primary);
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         body.light-theme .header {
-            background: #fff;
-            border-bottom: 2px solid #6366f1;
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             cursor: pointer;
         }
 
-        .logo-il { color: #6366f1; }
-        .logo-yaclass { color: #f59e0b; }
+        .logo-il {
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-yaclass {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .nav-menu {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
-            padding: 8px 15px;
-            border-radius: 5px;
-            background: rgba(255,255,255,0.1);
-            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: inherit;
             text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        body.light-theme .nav-link {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .nav-link.active {
-            background: #6366f1;
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
         .header-right {
@@ -81,32 +128,181 @@
         .user-card {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 5px;
+            gap: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+            border: 1px solid var(--primary);
         }
 
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: #6366f1;
+            background: linear-gradient(135deg, #6366f1, #f59e0b);
         }
 
         .logout-btn, .theme-btn {
-            padding: 5px 10px;
+            padding: 7px 16px;
+            border-radius: 30px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover, .theme-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .leaderboard {
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        body.light-theme .leaderboard {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .leaderboard h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .leaderboard-rank {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .leaderboard-score {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .chat {
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.light-theme .chat {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-message {
+            padding: 8px 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+            max-width: 80%;
+        }
+
+        .chat-message.own {
+            align-self: flex-end;
+            background: var(--primary);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message .author {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 3px;
+        }
+
+        .chat-message .text {
+            word-break: break-word;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            background: rgba(0,0,0,0.2);
+            color: inherit;
+        }
+
+        .chat-send {
+            padding: 10px 20px;
+            border-radius: 20px;
             border: none;
-            border-radius: 3px;
-            background: #6366f1;
+            background: var(--primary);
             color: white;
             cursor: pointer;
         }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
+        .content-area {
+            min-height: 500px;
         }
 
         .login-container {
@@ -117,357 +313,170 @@
         }
 
         .login-card {
-            background: #16213e;
+            background: rgba(21, 24, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
             padding: 40px;
-            border-radius: 10px;
             width: 400px;
+            text-align: center;
         }
 
         body.light-theme .login-card {
             background: white;
-            border: 2px solid #6366f1;
         }
 
         .login-title {
-            font-size: 32px;
-            text-align: center;
-            margin-bottom: 20px;
+            font-size: 48px;
+            margin-bottom: 30px;
         }
 
-        .login-big-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
+        .login-subtitle {
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .login-input {
             width: 100%;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .login-options {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .login-option-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            background: #2a2a4a;
-            color: white;
-            cursor: pointer;
-        }
-
-        body.light-theme .login-option-btn {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .login-option-btn.active {
-            background: #6366f1;
-            color: white;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: #16213e;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        body.light-theme .modal-content {
-            background: white;
-            border: 2px solid #6366f1;
-        }
-
-        .modal-content h2 {
-            margin-bottom: 20px;
-            color: #6366f1;
-        }
-
-        .form-group {
+            padding: 15px;
             margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #6366f1;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 3px;
-            border: 1px solid #6366f1;
+            border-radius: 30px;
+            border: 2px solid var(--primary);
             background: rgba(0,0,0,0.2);
-            color: white;
+            color: inherit;
+            font-size: 16px;
         }
 
-        body.light-theme .form-group input,
-        body.light-theme .form-group select {
+        body.light-theme .login-input {
             background: white;
-            color: #333;
         }
 
-        .submit-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 3px;
+        .login-btn {
             width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-        }
-
-        .close-btn {
             margin-top: 10px;
-            background: transparent;
-            border: 1px solid #6366f1;
-            color: #6366f1;
-            padding: 10px;
-            border-radius: 3px;
-            width: 100%;
-            cursor: pointer;
         }
 
-        .test-accounts {
+        .login-btn:hover {
+            opacity: 0.9;
+        }
+
+        .register-link {
             margin-top: 20px;
-            padding: 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .subject-card {
-            background: rgba(99,102,241,0.1);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 15px;
-            text-align: center;
+            color: var(--primary);
             cursor: pointer;
+            text-decoration: underline;
         }
 
-        .subject-card.selected {
-            background: #6366f1;
-            color: white;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
-
-        .add-quiz-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
+        .register-link:hover {
+            opacity: 0.8;
         }
 
         .quiz-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
+            gap: 20px;
+            margin: 20px 0;
         }
 
         .quiz-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 15px;
+            background: rgba(21, 24, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.3s;
         }
 
         body.light-theme .quiz-card {
-            background: #f9f9f9;
+            background: white;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--primary-glow);
         }
 
         .quiz-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
 
         .quiz-badge {
-            padding: 3px 8px;
-            border-radius: 3px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 11px;
+            font-weight: bold;
         }
 
         .badge-kahoot { background: #f59e0b; }
         .badge-simple { background: #10b981; }
         .badge-constructed { background: #6366f1; }
-        .badge-board { background: #ef4444; }
 
         .delete-btn {
             background: none;
             border: none;
-            color: #ef4444;
-            font-size: 16px;
+            color: var(--danger);
+            font-size: 18px;
             cursor: pointer;
         }
 
         .quiz-class {
-            background: #6366f1;
+            background: var(--primary);
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 3px;
+            padding: 3px 10px;
+            border-radius: 15px;
             font-size: 11px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .quiz-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 5px;
         }
 
         .quiz-actions {
             display: flex;
-            gap: 5px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 15px;
         }
 
         .btn {
-            padding: 5px 10px;
+            padding: 8px 12px;
             border: none;
-            border-radius: 3px;
-            font-size: 12px;
+            border-radius: 20px;
+            font-weight: 600;
             cursor: pointer;
             flex: 1;
             text-align: center;
             text-decoration: none;
-            color: white;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            color: inherit;
         }
 
-        .btn-teacher { background: #6366f1; }
-        .btn-student { background: #10b981; }
-        .btn-external { background: #f59e0b; }
-
-        .sessions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .session-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 15px;
-        }
-
-        .session-preview {
-            cursor: pointer;
-        }
-
-        .session-title {
-            font-weight: bold;
-            color: #6366f1;
-            margin-bottom: 5px;
-        }
-
-        .session-meta {
-            display: flex;
-            gap: 10px;
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 5px;
-        }
-
-        .session-status {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 10px;
-        }
-
-        .status-active {
-            background: #10b981;
-            color: white;
-        }
-
-        .status-finished {
-            background: #6366f1;
-            color: white;
-        }
-
-        .session-details {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #6366f1;
-        }
-
-        .student-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .score-input {
-            width: 60px;
-            padding: 3px;
-            border-radius: 3px;
-            border: 1px solid #6366f1;
-            background: rgba(0,0,0,0.2);
-            color: white;
-            text-align: center;
-        }
-
-        .finish-quiz-btn, .save-scores-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 3px;
-            width: 100%;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+        .btn-teacher { background: var(--primary); color: white; }
+        .btn-student { background: #10b981; color: white; }
+        .btn-external { background: #f59e0b; color: white; }
 
         .quiz-form {
-            background: #16213e;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background: rgba(21, 24, 35, 0.9);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
             display: none;
-        }
-
-        body.light-theme .quiz-form {
-            background: #f9f9f9;
         }
 
         .quiz-form.visible {
@@ -476,43 +485,43 @@
 
         .radio-group {
             display: flex;
-            gap: 10px;
-            margin: 10px 0;
+            gap: 15px;
+            margin: 15px 0;
         }
 
         .radio-option {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #6366f1;
-            border-radius: 3px;
+            padding: 12px;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
             text-align: center;
             cursor: pointer;
         }
 
         .radio-option.selected {
-            background: #6366f1;
+            background: var(--primary);
             color: white;
         }
 
         .question-card {
             background: rgba(0,0,0,0.2);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
 
         .question-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .remove-question {
             background: none;
             border: none;
-            color: #ef4444;
-            font-size: 18px;
+            color: var(--danger);
+            font-size: 20px;
             cursor: pointer;
         }
 
@@ -520,158 +529,36 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 5px 0;
-            padding: 5px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 3px;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
         }
 
         .add-question-btn {
             background: transparent;
-            border: 2px dashed #6366f1;
-            color: #6366f1;
-            padding: 10px;
+            border: 2px dashed var(--primary);
+            color: var(--primary);
+            padding: 12px;
             width: 100%;
-            margin: 10px 0;
+            border-radius: 15px;
+            margin: 15px 0;
             cursor: pointer;
-        }
-
-        .results-container {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 20px;
-        }
-
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .stat-card {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            color: #6366f1;
-        }
-
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .results-table th {
-            background: rgba(99,102,241,0.1);
-            padding: 10px;
-            text-align: left;
-        }
-
-        .results-table td {
-            padding: 10px;
-            border-bottom: 1px solid #333;
-        }
-
-        .profile-container {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-        }
-
-        .profile-sidebar, .profile-main {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #6366f1;
-            border-radius: 5px;
-            padding: 20px;
-        }
-
-        .profile-sidebar {
-            text-align: center;
-        }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #6366f1;
-            margin: 0 auto 15px;
-        }
-
-        .profile-name {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .profile-role {
-            display: inline-block;
-            padding: 5px 15px;
-            background: #6366f1;
-            border-radius: 3px;
-            margin-top: 10px;
-        }
-
-        .profile-role.developer { background: #ef4444; }
-        .profile-role.moderator { background: #f59e0b; }
-
-        .settings-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #6366f1;
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
-        }
-
-        .settings-title {
-            font-size: 18px;
-            color: #6366f1;
-            margin-bottom: 15px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .setting-input {
-            padding: 5px;
-            border-radius: 3px;
-            border: 1px solid #6366f1;
-            background: rgba(0,0,0,0.2);
-            color: white;
-            width: 200px;
         }
 
         .loading {
             text-align: center;
             padding: 50px;
+            color: var(--primary);
         }
 
         @media (max-width: 768px) {
-            .profile-container {
+            .main-container {
                 grid-template-columns: 1fr;
             }
-            .quiz-actions {
-                flex-direction: column;
-            }
-            .setting-item {
-                flex-direction: column;
-                align-items: start;
-                gap: 10px;
-            }
-            .setting-input {
-                width: 100%;
+            .leaderboard {
+                position: static;
+                margin-top: 20px;
             }
         }
     </style>
@@ -684,9 +571,8 @@
                 <span class="logo-yaclass">ЯКЛАСС</span>
             </div>
             <nav class="nav-menu">
-                <a href="index.html" class="nav-link active">Викторины</a>
+                <a href="index.html" class="nav-link active">Главная</a>
                 <a href="results.html" class="nav-link">Результаты</a>
-                <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
         </div>
         <div class="header-right">
@@ -696,123 +582,49 @@
     </header>
 
     <main class="main-container">
-        <div id="content" class="loading">Загрузка...</div>
+        <div class="content-area">
+            <div id="content" class="loading">Загрузка...</div>
+        </div>
+        
+        <div class="leaderboard" id="leaderboard">
+            <h2>🏆 ЛИДЕРБОРД</h2>
+            <div class="leaderboard-list" id="leaderboardList">
+                <div class="loading" style="padding:20px;">Загрузка...</div>
+            </div>
+        </div>
+
+        <div class="chat" id="chat">
+            <h3 style="color:var(--primary); margin-bottom:10px;">💬 Чат</h3>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="chat-send" onclick="sendMessage()">→</button>
+            </div>
+        </div>
     </main>
 
-    <!-- Модальные окна -->
-    <div id="simpleLoginModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content" style="max-width: 400px;">
-            <h2>🔑 Вход</h2>
-            <div class="login-options">
-                <button class="login-option-btn active" onclick="showSimpleLogin()">👤 По нику</button>
-                <button class="login-option-btn" onclick="showGoogleLogin()">G Google</button>
-            </div>
-            <div id="googleLoginSection" style="display: none;">
-                <button class="login-big-btn" onclick="signIn()">Войти через Google</button>
-            </div>
-            <div id="simpleLoginSection">
-                <div class="form-group">
-                    <input type="text" id="simpleUsername" placeholder="Никнейм">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="simplePassword" placeholder="Пароль">
-                </div>
-                <button class="submit-btn" onclick="simpleLogin()">Войти</button>
-                <button class="close-btn" onclick="showRegisterModal()">Регистрация</button>
-            </div>
-            <div class="test-accounts">
-                Тестовые: teacher/123, student/123, moderator/123, Илья/123
-            </div>
-            <button class="close-btn" onclick="closeLoginModal()">Закрыть</button>
-        </div>
-    </div>
-
-    <div id="registerModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content" style="max-width: 450px;">
-            <h2>📝 Регистрация</h2>
-            <div class="form-group">
-                <input type="text" id="regUsername" placeholder="Никнейм">
-            </div>
-            <div class="form-group">
-                <input type="password" id="regPassword" placeholder="Пароль">
-            </div>
-            <div class="form-group">
-                <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль">
-            </div>
-            <div class="form-group">
-                <select id="regRole">
-                    <option value="student">Ученик</option>
-                    <option value="teacher">Учитель</option>
-                </select>
-            </div>
-            <button class="submit-btn" onclick="registerUser()">Зарегистрироваться</button>
-            <button class="close-btn" onclick="closeRegisterModal()">Назад</button>
-        </div>
-    </div>
-
-    <div id="roleModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h2>Выберите роль</h2>
-            <div style="display: flex; gap: 20px;">
-                <div style="flex:1; padding:20px; border:1px solid #6366f1; text-align:center; cursor:pointer;" onclick="selectRole('teacher')">
-                    <div style="font-size:32px;">👨‍🏫</div>
-                    <h3>Учитель</h3>
-                </div>
-                <div style="flex:1; padding:20px; border:1px solid #6366f1; text-align:center; cursor:pointer;" onclick="selectRole('student')">
-                    <div style="font-size:32px;">👨‍🎓</div>
-                    <h3>Ученик</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="subjectModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h2>Ваши предметы</h2>
-            <div id="subjectsCheckboxList" style="display: grid; grid-template-columns: repeat(2,1fr); gap:10px;"></div>
-            <div style="display: flex; gap: 10px; margin: 20px 0;">
-                <input type="text" id="newSubjectInput" placeholder="Новый предмет" style="flex:1;">
-                <button class="add-quiz-btn" onclick="addNewSubject()">➕</button>
-            </div>
-            <button class="submit-btn" onclick="saveTeacherSubjects()">Сохранить</button>
-            <button class="close-btn" onclick="skipSubjectSelection()">Пропустить</button>
+    <!-- Модальное окно регистрации -->
+    <div id="registerModal" class="modal-overlay" style="display: none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(5px); justify-content:center; align-items:center; z-index:2000;">
+        <div style="background:var(--dark-card); border:3px solid var(--primary); border-radius:30px; padding:30px; width:400px; max-width:90%;">
+            <h2 style="color:var(--primary); margin-bottom:20px; text-align:center;">📝 Регистрация</h2>
+            <input type="text" id="regName" class="login-input" placeholder="Имя">
+            <input type="password" id="regPass" class="login-input" placeholder="Пароль">
+            <input type="password" id="regPassConfirm" class="login-input" placeholder="Повторите пароль">
+            <button class="login-btn" onclick="registerUser()">Зарегистрироваться</button>
+            <div class="register-link" onclick="closeRegisterModal()" style="text-align:center; margin-top:15px;">Уже есть аккаунт? Войти</div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ===== SUPABASE КОНФИГ (переименовал в sb, чтобы избежать конфликтов) =====
+        // ===== SUPABASE КОНФИГ =====
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
-        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substring(2);
-        }
-
-        function cleanDisplayName(name) {
-            return name ? name.replace(/\s*\(\d+\)$/, '') : name;
-        }
-
-        function getBaseName(name) {
-            return name ? name.replace(/\s*\(\d+\)$/, '').trim() : name;
-        }
-
-        function checkIfModerator(name) {
-            return name ? /\s*\(\d+\)$/.test(name) : false;
-        }
-
-        function hashPassword(p) {
-            let h = 0;
-            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
-            return h.toString(16);
-        }
-
-        function getCurrentSimpleUser() {
-            const u = localStorage.getItem('currentSimpleUser');
-            return u ? JSON.parse(u) : null;
-        }
+        // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+        let currentUser = null;
+        let userName = '';
 
         // ===== ТЕМА =====
         function toggleTheme() {
@@ -833,368 +645,355 @@
         document.body.className = savedTheme + '-theme';
         document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ Светлая' : '🌙 Темная';
 
+        // ===== ХЕШ ПАРОЛЯ =====
+        function hashPassword(p) {
+            let h = 0;
+            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
+            return h.toString(16);
+        }
+
         // ===== МОДАЛКИ =====
-        window.showLoginModal = function() {
-            document.getElementById('simpleLoginModal').style.display = 'flex';
-        }
-
-        window.closeLoginModal = function() {
-            document.getElementById('simpleLoginModal').style.display = 'none';
-        }
-
-        window.showGoogleLogin = function() {
-            document.getElementById('googleLoginSection').style.display = 'block';
-            document.getElementById('simpleLoginSection').style.display = 'none';
-        }
-
-        window.showSimpleLogin = function() {
-            document.getElementById('googleLoginSection').style.display = 'none';
-            document.getElementById('simpleLoginSection').style.display = 'block';
-        }
-
-        window.showRegisterModal = function() {
-            closeLoginModal();
+        function showRegisterModal() {
             document.getElementById('registerModal').style.display = 'flex';
         }
 
-        window.closeRegisterModal = function() {
+        function closeRegisterModal() {
             document.getElementById('registerModal').style.display = 'none';
-            showLoginModal();
+            showLoginForm();
         }
 
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
-                e.target.style.display = 'none';
-            }
-        });
-
-        // ===== ПЕРЕМЕННЫЕ =====
-        let currentUser = null;
-        let userRole = null;
-        let userFullName = null;
-        let userIsModerator = false;
-        let teacherSubjects = [];
-        let selectedSubject = 'all';
-        let allSubjects = [];
-        let quizQuestions = [];
-        let constructorType = 'classic';
-
-        const DEFAULT_AVATAR = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#6366f1"/></svg>';
-        const baseSubjects = ['Русский язык','Алгебра','Геометрия','Математика','Химия','Физика','Литература','Английский язык','История','Физкультура'];
-
-        // ===== ЗАГРУЗКА ПРЕДМЕТОВ =====
-        async function loadAllSubjects() {
-            const { data, error } = await sb.from('subjects').select('name');
-            if (error) console.error(error);
-            allSubjects = data ? data.map(function(s) { return s.name; }) : baseSubjects;
-        }
-
-        // ===== ОСНОВНАЯ ЛОГИКА =====
-        (async function init() {
-            await loadAllSubjects();
-            
-            const simple = getCurrentSimpleUser();
-            if (simple) {
-                currentUser = { id: simple.id, email: simple.username+'@local', username: simple.username };
-                userRole = simple.role;
-                userFullName = simple.fullName || simple.username;
-                userIsModerator = simple.isModerator || false;
-                if (userRole === 'teacher' && simple.subjects) {
-                    teacherSubjects = simple.subjects;
-                }
+        // ===== ЛОГИН =====
+        function checkLogin() {
+            const saved = localStorage.getItem('currentUser');
+            if (saved) {
+                const user = JSON.parse(saved);
+                currentUser = user;
+                userName = user.name;
                 updateUI();
-                const saved = localStorage.getItem('selectedSubject_'+currentUser.id);
-                if (saved && (saved==='all' || allSubjects.includes(saved))) {
-                    selectedSubject = saved;
-                } else {
-                    selectedSubject = 'all';
-                }
                 loadContent();
+                loadLeaderboard();
+                loadChat();
             } else {
-                currentUser = null;
+                showLoginForm();
+            }
+        }
+
+        function showLoginForm() {
+            const c = document.getElementById('content');
+            c.innerHTML = `
+                <div class="login-container">
+                    <div class="login-card">
+                        <div class="login-title">
+                            <span class="logo-il">ИЛЬ</span>
+                            <span class="logo-yaclass">ЯКЛАСС</span>
+                        </div>
+                        <div class="login-subtitle">Войдите или зарегистрируйтесь</div>
+                        <input type="text" class="login-input" id="loginName" placeholder="Имя">
+                        <input type="password" class="login-input" id="loginPass" placeholder="Пароль">
+                        <button class="login-btn" onclick="doLogin()">⚡ Войти</button>
+                        <div class="register-link" onclick="showRegisterModal()">Нет аккаунта? Зарегистрироваться</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function doLogin() {
+            const name = document.getElementById('loginName').value.trim();
+            const pass = document.getElementById('loginPass').value;
+            
+            if (!name || !pass) {
+                alert('Введите имя и пароль');
+                return;
+            }
+
+            // Специальный админ
+            if (name === 'Ильяблоко' && pass === 'JojoTop1') {
+                const user = { id: 'admin', name: 'Ильяблоко', isAdmin: true };
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                currentUser = user;
+                userName = name;
                 updateUI();
                 loadContent();
+                loadLeaderboard();
+                loadChat();
+                return;
             }
-        })();
+
+            // Обычные пользователи
+            const { data: users } = await sb.from('users').select('*').eq('name', name);
+            const user = users && users[0];
+            
+            if (user && user.password === hashPassword(pass)) {
+                const userObj = { id: user.id, name: user.name };
+                localStorage.setItem('currentUser', JSON.stringify(userObj));
+                currentUser = userObj;
+                userName = name;
+                updateUI();
+                loadContent();
+                loadLeaderboard();
+                loadChat();
+            } else {
+                alert('Неверное имя или пароль');
+            }
+        }
+
+        async function registerUser() {
+            const name = document.getElementById('regName').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const confirm = document.getElementById('regPassConfirm').value;
+
+            if (!name || !pass) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            if (pass !== confirm) {
+                alert('Пароли не совпадают');
+                return;
+            }
+
+            if (pass.length < 3) {
+                alert('Пароль должен быть минимум 3 символа');
+                return;
+            }
+
+            // Проверяем, не занято ли имя
+            const { data: existing } = await sb.from('users').select('*').eq('name', name);
+            if (existing && existing.length > 0) {
+                alert('Это имя уже занято');
+                return;
+            }
+
+            // Создаем пользователя
+            const { data, error } = await sb.from('users').insert({
+                name: name,
+                password: hashPassword(pass),
+                created_at: new Date().toISOString()
+            }).select();
+
+            if (error) {
+                alert('Ошибка регистрации');
+                return;
+            }
+
+            // Автоматически входим
+            const user = { id: data[0].id, name: name };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            currentUser = user;
+            userName = name;
+            closeRegisterModal();
+            updateUI();
+            loadContent();
+            loadLeaderboard();
+            loadChat();
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
 
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s) return;
             if (currentUser) {
-                const dn = cleanDisplayName(userFullName || currentUser.username);
-                let rt = '';
-                if (userRole === 'developer') rt = '👑 Разработчик';
-                else if (userIsModerator) rt = '🛡️ Модератор';
-                else rt = userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик';
-                s.innerHTML = '<div class="user-card"><div class="avatar" style="background:#6366f1;"></div><span>' + dn + '</span><span>' + rt + '</span><button onclick="signOut()" class="logout-btn">Выйти</button></div>';
+                s.innerHTML = '<div class="user-card"><div class="avatar"></div><span class="' + (userName === 'Ильяблоко' ? 'glow-name' : '') + '">' + userName + '</span><button onclick="logout()" class="logout-btn">Выйти</button></div>';
             } else {
                 s.innerHTML = '';
             }
         }
 
-        function signOut() {
-            localStorage.removeItem('currentSimpleUser');
-            window.location.reload();
+        // ===== ЛИДЕРБОРД =====
+        async function loadLeaderboard() {
+            const { data: results } = await sb.from('results').select('*');
+            const scores = {};
+            if (results) {
+                for (let r of results) {
+                    if (!scores[r.student_name]) scores[r.student_name] = 0;
+                    scores[r.student_name] += r.score || 0;
+                }
+            }
+            
+            // Добавляем тестовые данные
+            if (!scores['Ильяблоко']) scores['Ильяблоко'] = 9999;
+            
+            const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]).slice(0, 10);
+            
+            let html = '';
+            for (let i = 0; i < sorted.length; i++) {
+                let isMe = sorted[i][0] === userName;
+                html += '<div class="leaderboard-item"><div class="leaderboard-rank">' + (i+1) + '</div><div class="leaderboard-name" ' + (isMe ? 'style="color:var(--primary);font-weight:bold;"' : '') + '>' + sorted[i][0] + '</div><div class="leaderboard-score">' + sorted[i][1] + '</div></div>';
+            }
+            document.getElementById('leaderboardList').innerHTML = html;
         }
 
-        function loadContent() {
-            const c = document.getElementById('content');
-            if (!c) return;
-            if (!currentUser) {
-                c.innerHTML = '<div class="login-container"><div class="login-card"><div class="login-title"><span class="logo-il">ИЛЬ</span><span class="logo-yaclass">ЯКЛАСС</span></div><div class="login-subtitle">Войдите</div><button class="login-big-btn" onclick="showLoginModal()">🔑 Войти</button></div></div>';
-                return;
+        // ===== ЧАТ =====
+        async function loadChat() {
+            const { data: messages } = await sb.from('chat').select('*').order('created_at', { ascending: false }).limit(50);
+            const container = document.getElementById('chatMessages');
+            if (!container) return;
+            
+            let html = '';
+            if (messages) {
+                for (let i = messages.length - 1; i >= 0; i--) {
+                    let m = messages[i];
+                    let isMe = m.user_name === userName;
+                    html += '<div class="chat-message' + (isMe ? ' own' : '') + '"><div class="author">' + (m.user_name === 'Ильяблоко' ? '<span class="glow-name">' + m.user_name + '</span>' : m.user_name) + '</div><div class="text">' + m.text + '</div></div>';
+                }
             }
-
-            let subs = [];
-            if (userRole === 'teacher') {
-                subs = teacherSubjects.filter(function(s) { return allSubjects.includes(s); });
-            } else {
-                subs = allSubjects.slice();
-            }
-
-            let subjectsHtml = '';
-            if (userRole === 'student') {
-                subjectsHtml += '<div class="subject-card' + (selectedSubject === 'all' ? ' selected' : '') + '" onclick="selectSubject(\'all\')"><div>📚</div><div>Все</div><div id="count-all">0</div></div>';
-            }
-            for (let i = 0; i < subs.length; i++) {
-                let s = subs[i];
-                subjectsHtml += '<div class="subject-card' + (selectedSubject === s ? ' selected' : '') + '" onclick="selectSubject(\'' + s + '\')" id="subject-' + s.replace(/\s/g,'') + '"><div>📖</div><div>' + s + '</div><div id="count-' + s.replace(/\s/g,'') + '">0</div></div>';
-            }
-
-            let buttonsHtml = '';
-            if (userRole === 'teacher' || userRole === 'developer' || userIsModerator) {
-                buttonsHtml = '<div><button class="add-quiz-btn" onclick="toggleForm()">➕ По ссылке</button><button class="add-quiz-btn" onclick="showConstructor()">🛠️ Конструктор</button></div>';
-            }
-
-            let bottomSection = '';
-            if (userRole === 'teacher' || userRole === 'developer' || userIsModerator) {
-                bottomSection = '<div><h2>📋 Проведенные</h2><div id="myQuizzesList" class="sessions-grid"></div></div>';
-            } else {
-                bottomSection = '<div><h2>📊 Мои результаты</h2><div id="myResults" class="results-grid"></div></div>';
-            }
-
-            c.innerHTML = '<div class="subjects-grid" id="subjectsGrid">' + subjectsHtml + '</div><div class="quizzes-section"><div class="section-header"><h2 id="selectedSubjectTitle">' + (selectedSubject === 'all' ? 'Все предметы' : selectedSubject) + '</h2>' + buttonsHtml + '</div><div id="quizForm" class="quiz-form"></div><div id="quizzesList" class="quiz-grid"></div></div>' + bottomSection;
-
-            loadAllQuizzes();
-            if (userRole === 'teacher' || userRole === 'developer' || userIsModerator) {
-                loadTeacherSessions();
-            } else {
-                loadStudentResults();
-            }
+            container.innerHTML = html || '<div style="text-align:center;opacity:0.5;">Нет сообщений</div>';
+            container.scrollTop = container.scrollHeight;
         }
 
-        window.selectSubject = function(s) {
-            selectedSubject = s;
-            if (currentUser) localStorage.setItem('selectedSubject_' + currentUser.id, s);
-            var cards = document.querySelectorAll('.subject-card');
-            for (var i = 0; i < cards.length; i++) {
-                cards[i].classList.remove('selected');
-            }
-            if (s === 'all') {
-                var allCard = document.querySelector('.subject-card');
-                if (allCard) allCard.classList.add('selected');
-            } else {
-                var el = document.getElementById('subject-' + s.replace(/\s/g,''));
-                if (el) el.classList.add('selected');
-            }
-            document.getElementById('selectedSubjectTitle').innerHTML = s === 'all' ? 'Все предметы' : s;
-            loadQuizzesBySubject(s);
+        window.sendMessage = async function() {
+            if (!currentUser) return;
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            await sb.from('chat').insert({
+                user_name: userName,
+                text: text,
+                created_at: new Date().toISOString()
+            });
+            
+            input.value = '';
+            loadChat();
         };
 
-        async function loadAllQuizzes() {
-            const { data: quizzes, error } = await sb.from('quizzes').select('*');
-            if (error || !quizzes) return;
-            var cnt = {};
-            for (var i = 0; i < allSubjects.length; i++) {
-                cnt[allSubjects[i]] = 0;
-            }
-            for (var i = 0; i < quizzes.length; i++) {
-                var q = quizzes[i];
-                if (cnt.hasOwnProperty(q.subject)) {
-                    cnt[q.subject]++;
-                }
-            }
-            for (var i = 0; i < allSubjects.length; i++) {
-                var s = allSubjects[i];
-                var el = document.getElementById('count-' + s.replace(/\s/g,''));
-                if (el) el.textContent = cnt[s];
-            }
-            if (userRole === 'student') {
-                var el = document.getElementById('count-all');
-                if (el) el.textContent = quizzes.length;
-            }
-            loadQuizzesBySubject(selectedSubject);
+        // Подписка на новые сообщения
+        sb.channel('chat-room')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, () => loadChat())
+            .subscribe();
+
+        // ===== КОНТЕНТ =====
+        function loadContent() {
+            const c = document.getElementById('content');
+            if (!c || !currentUser) return;
+
+            c.innerHTML = `
+                <div class="quizzes-section">
+                    <div class="section-header">
+                        <h2 style="color:var(--primary);">📚 Все викторины</h2>
+                        <div>
+                            <button class="add-quiz-btn" onclick="toggleForm()">➕ По ссылке</button>
+                            <button class="add-quiz-btn" onclick="showConstructor()">🛠️ Конструктор</button>
+                        </div>
+                    </div>
+                    <div id="quizForm" class="quiz-form"></div>
+                    <div id="quizzesList" class="quiz-grid">Загрузка...</div>
+                </div>
+            `;
+            loadAllQuizzes();
         }
 
-        async function loadQuizzesBySubject(subject) {
-            let query = sb.from('quizzes').select('*');
-            if (subject !== 'all') {
-                query = query.eq('subject', subject);
-            }
-            const { data: quizzes, error } = await query;
-            const cont = document.getElementById('quizzesList');
-            if (!cont) return;
+        async function loadAllQuizzes() {
+            const { data: quizzes } = await sb.from('quizzes').select('*');
+            const container = document.getElementById('quizzesList');
+            if (!container) return;
+            
             if (!quizzes || quizzes.length === 0) {
-                cont.innerHTML = '<p>Нет викторин</p>';
+                container.innerHTML = '<p>Нет викторин</p>';
                 return;
             }
+
             let html = '';
-            let filt = quizzes;
-            if (userRole === 'teacher' && teacherSubjects.length && subject === 'all') {
-                filt = [];
-                for (var i = 0; i < quizzes.length; i++) {
-                    if (teacherSubjects.includes(quizzes[i].subject)) {
-                        filt.push(quizzes[i]);
-                    }
-                }
-            }
-            for (var i = 0; i < filt.length; i++) {
-                var q = filt[i];
-                if (userRole === 'student' && q.type === 'kahoot') {
-                    const { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', q.id);
-                    var active = false;
-                    if (sessions) {
-                        for (var j = 0; j < sessions.length; j++) {
-                            if (sessions[j].status === 'active') {
-                                active = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!active) continue;
-                }
-                var badge = 'badge-simple';
-                var btext = '📝';
+            for (let q of quizzes) {
+                let badge = 'badge-simple';
+                let btext = '📝';
                 if (q.type === 'kahoot') {
                     badge = 'badge-kahoot';
                     btext = '🎮';
                 } else if (q.type === 'constructed') {
-                    if (q.constructor_type === 'board') {
-                        badge = 'badge-board';
-                        btext = '📝';
-                    } else {
-                        badge = 'badge-constructed';
-                        btext = '🛠️';
-                    }
+                    badge = 'badge-constructed';
+                    btext = '🛠️';
                 }
+
                 html += '<div class="quiz-card"><div class="quiz-header"><span class="quiz-badge ' + badge + '">' + btext + '</span>';
-                if (userRole === 'teacher' || userRole === 'developer' || userIsModerator) {
+                if (userName === 'Ильяблоко') {
                     html += '<button class="delete-btn" onclick="deleteQuiz(\'' + q.id + '\')">🗑️</button>';
                 }
-                html += '</div><div class="quiz-class">' + q.class + 'кл</div><div class="quiz-title">' + q.title + '</div><div class="quiz-subject">' + q.subject + '</div><div class="quiz-actions">';
-                if (userRole === 'teacher' || userRole === 'developer' || userIsModerator) {
+                html += '</div><div class="quiz-class">' + (q.class || '') + 'кл</div><div class="quiz-title">' + q.title + '</div><div class="quiz-subject">' + (q.subject || '') + '</div><div class="quiz-actions">';
+                if (userName === 'Ильяблоко') {
                     if (q.type === 'kahoot') {
-                        html += '<button class="btn btn-teacher" onclick="startQuiz(\'' + q.id + '\',\'' + q.link + '\',\'' + q.subject + '\',\'' + q.title + '\',' + (q.max_score || 0) + ')">▶️</button>';
+                        html += '<button class="btn btn-teacher" onclick="startQuiz(\'' + q.id + '\',\'' + q.link + '\')">▶️ Запустить</button>';
                     } else if (q.type === 'constructed') {
-                        html += '<button class="btn btn-teacher" onclick="startConstructedQuiz(\'' + q.id + '\',\'' + q.constructor_type + '\')">▶️</button>';
+                        html += '<button class="btn btn-teacher" onclick="startConstructedQuiz(\'' + q.id + '\',\'' + q.constructor_type + '\')">▶️ Провести</button>';
                     } else {
-                        html += '<a href="' + q.link + '" target="_blank" class="btn btn-external">🌐</a>';
+                        html += '<a href="' + q.link + '" target="_blank" class="btn btn-external">🌐 Перейти</a>';
                     }
                 } else {
                     if (q.type === 'kahoot') {
-                        html += '<button class="btn btn-student" onclick="joinQuiz(\'' + q.id + '\',\'' + q.link + '\',\'' + q.subject + '\',\'' + q.title + '\',' + (q.max_score || 0) + ')">🎮</button>';
+                        html += '<button class="btn btn-student" onclick="joinQuiz(\'' + q.id + '\',\'' + q.link + '\')">🎮 Играть</button>';
                     } else if (q.type === 'constructed' && q.constructor_type !== 'board') {
-                        html += '<button class="btn btn-student" onclick="joinConstructedQuiz(\'' + q.id + '\')">🛠️</button>';
+                        html += '<button class="btn btn-student" onclick="joinConstructedQuiz(\'' + q.id + '\')">🛠️ Играть</button>';
                     } else if (q.type === 'constructed' && q.constructor_type === 'board') {
                         html += '<span class="btn" style="background:#f59e0b;">👥</span>';
                     } else {
-                        html += '<a href="' + q.link + '" target="_blank" class="btn btn-external">🌐</a>';
+                        html += '<a href="' + q.link + '" target="_blank" class="btn btn-external">🌐 Перейти</a>';
                     }
                 }
                 html += '</div></div>';
             }
-            cont.innerHTML = html || '<p>Нет викторин</p>';
+            container.innerHTML = html;
         }
 
         window.deleteQuiz = async function(id) {
             if (confirm('Удалить?')) {
                 await sb.from('quizzes').delete().eq('id', id);
+                loadAllQuizzes();
             }
         };
 
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2);
+        }
+
         window.toggleForm = function() {
-            var f = document.getElementById('quizForm');
+            const f = document.getElementById('quizForm');
             if (!f) return;
-            var options = '';
-            for (var i = 5; i <= 11; i++) {
-                options += '<option value="' + i + '">' + i + ' класс</option>';
-            }
-            var subjectOptions = '';
-            for (var i = 0; i < allSubjects.length; i++) {
-                subjectOptions += '<option value="' + allSubjects[i] + '">' + allSubjects[i] + '</option>';
-            }
-            f.innerHTML = '<h3>➕ По ссылке</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectQuizType(\'kahoot\')" id="type-kahoot">🎮 Kahoot</div><div class="radio-option" onclick="selectQuizType(\'simple\')" id="type-simple">📝 Простая</div></div></div><div class="form-group"><label>Класс</label><select id="quizClass">' + options + '</select></div><div class="form-group"><label>Предмет</label><select id="quizSubject">' + subjectOptions + '</select></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Описание</label><textarea id="quizDescription" rows="2"></textarea></div><div class="form-group"><label>Ссылка</label><input id="quizLink" placeholder="https://..."></div><div class="form-group" id="maxScoreGroup"><label>Макс. балл</label><input type="number" id="quizMaxScore" value="15"></div><button class="submit-btn" onclick="saveQuiz()">💾 Сохранить</button>';
+            f.innerHTML = '<h3 style="color:var(--primary);">➕ По ссылке</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectQuizType(\'kahoot\')" id="type-kahoot">🎮 Kahoot</div><div class="radio-option" onclick="selectQuizType(\'simple\')" id="type-simple">📝 Простая</div></div></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Описание</label><textarea id="quizDescription" rows="2"></textarea></div><div class="form-group"><label>Ссылка</label><input id="quizLink" placeholder="https://..."></div><div class="form-group" id="maxScoreGroup"><label>Макс. балл</label><input type="number" id="quizMaxScore" value="15"></div><button class="login-btn" onclick="saveQuiz()">💾 Сохранить</button>';
             f.classList.toggle('visible');
         };
 
         window.selectQuizType = function(t) {
-            var k = document.getElementById('type-kahoot');
-            var s = document.getElementById('type-simple');
-            if (k) {
-                if (t === 'kahoot') {
-                    k.classList.add('selected');
-                    if (s) s.classList.remove('selected');
-                } else {
-                    k.classList.remove('selected');
-                    if (s) s.classList.add('selected');
-                }
-            }
-            var g = document.getElementById('maxScoreGroup');
-            if (g) g.style.display = t === 'kahoot' ? 'block' : 'none';
+            document.getElementById('type-kahoot')?.classList.toggle('selected', t==='kahoot');
+            document.getElementById('type-simple')?.classList.toggle('selected', t==='simple');
+            document.getElementById('maxScoreGroup').style.display = t==='kahoot' ? 'block' : 'none';
         };
 
         window.saveQuiz = async function() {
-            var typeEl = document.querySelector('.radio-option.selected');
-            var t = 'simple';
-            if (typeEl && typeEl.id === 'type-kahoot') t = 'kahoot';
-            var id = generateId();
-            var data = {
+            let t = document.querySelector('.radio-option.selected')?.id === 'type-kahoot' ? 'kahoot' : 'simple';
+            let id = generateId();
+            let data = {
                 id: id,
                 type: t,
-                class: document.getElementById('quizClass') ? document.getElementById('quizClass').value : '5',
-                subject: document.getElementById('quizSubject') ? document.getElementById('quizSubject').value : '',
-                title: document.getElementById('quizTitle') ? document.getElementById('quizTitle').value : '',
-                description: document.getElementById('quizDescription') ? document.getElementById('quizDescription').value : '',
-                link: document.getElementById('quizLink') ? document.getElementById('quizLink').value : '',
+                class: document.getElementById('quizClass')?.value || '',
+                subject: document.getElementById('quizSubject')?.value || '',
+                title: document.getElementById('quizTitle')?.value || '',
+                description: document.getElementById('quizDescription')?.value || '',
+                link: document.getElementById('quizLink')?.value || '',
                 created_by: currentUser.id,
                 created_at: Date.now()
             };
             if (!data.title || !data.link) return alert('Заполните название и ссылку');
-            if (t === 'kahoot') data.max_score = parseInt(document.getElementById('quizMaxScore') ? document.getElementById('quizMaxScore').value : 15) || 0;
-            const { error } = await sb.from('quizzes').insert(data);
-            if (error) console.error(error);
-            var title = document.getElementById('quizTitle');
-            if (title) title.value = '';
-            var desc = document.getElementById('quizDescription');
-            if (desc) desc.value = '';
-            var link = document.getElementById('quizLink');
-            if (link) link.value = '';
-            var score = document.getElementById('quizMaxScore');
-            if (score) score.value = '15';
-            var form = document.getElementById('quizForm');
-            if (form) form.classList.remove('visible');
+            if (t === 'kahoot') data.max_score = parseInt(document.getElementById('quizMaxScore')?.value) || 15;
+            await sb.from('quizzes').insert(data);
+            document.getElementById('quizTitle').value = '';
+            document.getElementById('quizDescription').value = '';
+            document.getElementById('quizLink').value = '';
+            document.getElementById('quizMaxScore').value = '15';
+            document.getElementById('quizForm')?.classList.remove('visible');
+            loadAllQuizzes();
         };
 
-        window.startQuiz = async function(id,link,sub,title,ms) {
-            var sessionId = generateId();
+        window.startQuiz = async function(id,link) {
+            let sessionId = generateId();
             await sb.from('sessions').insert({
                 id: sessionId,
                 quiz_id: id,
-                quiz_subject: sub,
-                quiz_title: title,
-                max_score: ms || 0,
                 teacher_id: currentUser.id,
-                teacher_name: userFullName || 'Учитель',
-                status: 'active',
-                started_at: Date.now(),
-                students: {}
-            });
-            await sb.from('teacher_sessions').insert({
-                teacher_id: currentUser.id,
-                session_id: sessionId,
-                quiz_subject: sub,
-                quiz_title: title,
-                max_score: ms || 0,
+                teacher_name: userName,
                 status: 'active',
                 started_at: Date.now(),
                 students: {}
@@ -1202,73 +1001,48 @@
             window.open(link, '_blank');
         };
 
-        window.joinQuiz = async function(id,link,sub,title,ms) {
-            var n = userFullName || currentUser.username || 'Ученик';
-            if (!n) return;
-            const { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', id);
-            var act = null;
-            var actId = null;
-            if (sessions) {
-                for (var i = 0; i < sessions.length; i++) {
-                    if (sessions[i].status === 'active') {
-                        act = sessions[i];
-                        actId = sessions[i].id;
-                        break;
-                    }
-                }
-            }
-            if (!act) return alert('Нет активной викторины');
-            var studentData = { name: n, email: currentUser.email, joined_at: Date.now() };
-            if (!act.students) act.students = {};
-            act.students[currentUser.id] = studentData;
-            await sb.from('sessions').update({ students: act.students }).eq('id', actId);
-            await sb.from('teacher_sessions').update({ students: act.students }).eq('session_id', actId);
+        window.joinQuiz = async function(id,link) {
+            if (!currentUser) return;
+            let { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', id);
+            let active = sessions?.find(s => s.status === 'active');
+            if (!active) return alert('Нет активной викторины');
+            
+            if (!active.students) active.students = {};
+            active.students[currentUser.id] = { name: userName, joined_at: Date.now() };
+            await sb.from('sessions').update({ students: active.students }).eq('id', active.id);
+            
             try { 
-                var u = new URL(link); 
-                u.searchParams.append('session', actId); 
+                let u = new URL(link); 
+                u.searchParams.append('session', active.id); 
                 u.searchParams.append('student', currentUser.id); 
-                u.searchParams.append('name', n); 
+                u.searchParams.append('name', userName); 
                 window.open(u, '_blank'); 
             } catch(e) { 
-                var sep = link.includes('?') ? '&' : '?';
-                window.open(link + sep + 'session=' + actId + '&student=' + currentUser.id + '&name=' + encodeURIComponent(n), '_blank'); 
+                let sep = link.includes('?') ? '&' : '?';
+                window.open(link + sep + 'session=' + active.id + '&student=' + currentUser.id + '&name=' + encodeURIComponent(userName), '_blank'); 
             }
         };
 
         window.showConstructor = function() {
-            var f = document.getElementById('quizForm');
+            const f = document.getElementById('quizForm');
             if (!f) return;
-            var options = '';
-            for (var i = 5; i <= 11; i++) {
-                options += '<option value="' + i + '">' + i + ' класс</option>';
-            }
-            var subjectOptions = '';
-            for (var i = 0; i < allSubjects.length; i++) {
-                subjectOptions += '<option value="' + allSubjects[i] + '">' + allSubjects[i] + '</option>';
-            }
-            f.innerHTML = '<h3>🛠️ Конструктор</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectConstructorType(\'classic\')" id="type-classic">📱 С телефонами</div><div class="radio-option" onclick="selectConstructorType(\'board\')" id="type-board">📝 С доски</div></div></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Класс</label><select id="quizClass">' + options + '</select></div><div class="form-group"><label>Предмет</label><select id="quizSubject">' + subjectOptions + '</select></div><div class="form-group"><label>Вопросов</label><div><input type="number" id="questionCount" value="5" min="1"><button class="add-quiz-btn" onclick="generateQuestions()">Создать</button></div></div><div id="questionsContainer"></div><button class="add-question-btn" id="addQuestionBtn" style="display:none" onclick="addQuestion()">➕ Добавить вопрос</button><button class="submit-btn" id="saveQuizBtn" style="display:none" onclick="saveQuizWithQuestions()">💾 Сохранить</button>';
+            f.innerHTML = '<h3 style="color:var(--primary);">🛠️ Конструктор</h3><div class="form-group"><label>Тип</label><div class="radio-group"><div class="radio-option selected" onclick="selectConstructorType(\'classic\')" id="type-classic">📱 С телефонами</div><div class="radio-option" onclick="selectConstructorType(\'board\')" id="type-board">📝 С доски</div></div></div><div class="form-group"><label>Название</label><input id="quizTitle" placeholder="Conditionals"></div><div class="form-group"><label>Класс</label><input id="quizClass" placeholder="5 класс"></div><div class="form-group"><label>Предмет</label><input id="quizSubject" placeholder="Математика"></div><div class="form-group"><label>Вопросов</label><div><input type="number" id="questionCount" value="5" min="1"><button class="add-quiz-btn" onclick="generateQuestions()">Создать</button></div></div><div id="questionsContainer"></div><button class="add-question-btn" id="addQuestionBtn" style="display:none" onclick="addQuestion()">➕ Добавить вопрос</button><button class="login-btn" id="saveQuizBtn" style="display:none" onclick="saveQuizWithQuestions()">💾 Сохранить</button>';
             f.classList.add('visible');
         };
 
+        let quizQuestions = [];
+        let constructorType = 'classic';
+
         window.selectConstructorType = function(t) {
-            var c = document.getElementById('type-classic');
-            var b = document.getElementById('type-board');
-            if (c) {
-                if (t === 'classic') {
-                    c.classList.add('selected');
-                    if (b) b.classList.remove('selected');
-                } else {
-                    c.classList.remove('selected');
-                    if (b) b.classList.add('selected');
-                }
-            }
+            document.getElementById('type-classic')?.classList.toggle('selected', t==='classic');
+            document.getElementById('type-board')?.classList.toggle('selected', t==='board');
             constructorType = t;
         };
 
         window.generateQuestions = function() {
-            var cnt = parseInt(document.getElementById('questionCount') ? document.getElementById('questionCount').value : 5) || 5;
+            let cnt = parseInt(document.getElementById('questionCount')?.value) || 5;
             quizQuestions = [];
-            for (var i = 0; i < cnt; i++) {
+            for (let i = 0; i < cnt; i++) {
                 quizQuestions.push({ id: Date.now() + i, question: '', answers: ['','','',''], correct: 0 });
             }
             renderQuestions();
@@ -1293,8 +1067,8 @@
         window.updateQuestion = function(idx, f, v) {
             if (f === 'question') {
                 quizQuestions[idx].question = v;
-            } else if (f.indexOf('answer') === 0) {
-                var ai = parseInt(f.replace('answer',''));
+            } else if (f.startsWith('answer')) {
+                let ai = parseInt(f.replace('answer',''));
                 quizQuestions[idx].answers[ai] = v;
             } else if (f === 'correct') {
                 quizQuestions[idx].correct = parseInt(v);
@@ -1302,13 +1076,13 @@
         };
 
         function renderQuestions() {
-            var c = document.getElementById('questionsContainer');
+            let c = document.getElementById('questionsContainer');
             if (!c) return;
-            var h = '';
-            for (var i = 0; i < quizQuestions.length; i++) {
-                var q = quizQuestions[i];
+            let h = '';
+            for (let i = 0; i < quizQuestions.length; i++) {
+                let q = quizQuestions[i];
                 h += '<div class="question-card"><div class="question-header"><span>Вопрос ' + (i+1) + '</span><button class="remove-question" onclick="removeQuestion(' + i + ')">×</button></div><div class="form-group"><input value="' + q.question + '" onchange="updateQuestion(' + i + ',\'question\',this.value)" placeholder="Вопрос"></div>';
-                for (var j = 0; j < 4; j++) {
+                for (let j = 0; j < 4; j++) {
                     h += '<div class="answer-option"><input type="radio" name="correct-' + q.id + '" value="' + j + '" ' + (q.correct === j ? 'checked' : '') + ' onchange="updateQuestion(' + i + ',\'correct\',this.value)"><input type="text" value="' + q.answers[j] + '" placeholder="Ответ ' + (j+1) + '" onchange="updateQuestion(' + i + ',\'answer' + j + '\',this.value)">' + (q.correct === j ? '✓' : '') + '</div>';
                 }
                 h += '</div>';
@@ -1317,26 +1091,20 @@
         }
 
         window.saveQuizWithQuestions = async function() {
-            var t = 'classic';
-            var classic = document.getElementById('type-classic');
-            if (classic && classic.classList.contains('selected')) {
-                t = 'classic';
-            } else {
-                t = 'board';
-            }
-            var title = document.getElementById('quizTitle') ? document.getElementById('quizTitle').value : '';
-            var quizClass = document.getElementById('quizClass') ? document.getElementById('quizClass').value : '5';
-            var subject = document.getElementById('quizSubject') ? document.getElementById('quizSubject').value : '';
+            let t = document.getElementById('type-classic')?.classList.contains('selected') ? 'classic' : 'board';
+            let title = document.getElementById('quizTitle')?.value;
+            let quizClass = document.getElementById('quizClass')?.value;
+            let subject = document.getElementById('quizSubject')?.value;
             if (!title) return alert('Введите название');
-            for (var i = 0; i < quizQuestions.length; i++) {
+            for (let i = 0; i < quizQuestions.length; i++) {
                 if (!quizQuestions[i].question) return alert('Заполните вопрос ' + (i+1));
-                var hasAnswer = false;
-                for (var j = 0; j < quizQuestions[i].answers.length; j++) {
+                let hasAnswer = false;
+                for (let j = 0; j < quizQuestions[i].answers.length; j++) {
                     if (quizQuestions[i].answers[j]) hasAnswer = true;
                 }
                 if (!hasAnswer) return alert('Добавьте ответы к вопросу ' + (i+1));
             }
-            var quizId = generateId();
+            let quizId = generateId();
             await sb.from('quizzes').insert({
                 id: quizId,
                 type: 'constructed',
@@ -1349,7 +1117,7 @@
                 created_by: currentUser.id,
                 created_at: Date.now()
             });
-            for (var i = 0; i < quizQuestions.length; i++) {
+            for (let i = 0; i < quizQuestions.length; i++) {
                 await sb.from('questions').insert({
                     quiz_id: quizId,
                     question_index: i,
@@ -1361,30 +1129,23 @@
             alert('✅ Викторина создана');
             document.getElementById('quizForm').classList.remove('visible');
             quizQuestions = [];
+            loadAllQuizzes();
         };
 
         window.startConstructedQuiz = async function(id, type) {
-            const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', id);
+            let { data: questions } = await sb.from('questions').select('*').eq('quiz_id', id);
             if (!questions || !questions.length) return alert('Ошибка');
             if (type === 'board') {
                 window.open('teacher-board.html?quiz=' + id, '_blank');
                 return;
             }
-            var sessionId = generateId();
+            let sessionId = generateId();
             await sb.from('sessions').insert({
                 id: sessionId,
                 quiz_id: id,
-                quiz_type: 'constructed',
                 max_score: questions.length,
                 teacher_id: currentUser.id,
-                teacher_name: userFullName || 'Учитель',
-                status: 'active',
-                started_at: Date.now(),
-                students: {}
-            });
-            await sb.from('teacher_sessions').insert({
-                teacher_id: currentUser.id,
-                session_id: sessionId,
+                teacher_name: userName,
                 status: 'active',
                 started_at: Date.now(),
                 students: {}
@@ -1393,228 +1154,21 @@
         };
 
         window.joinConstructedQuiz = async function(id) {
-            var n = userFullName || currentUser.username || 'Ученик';
-            if (!n) return;
-            const { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', id);
-            var act = null;
-            var actId = null;
-            if (sessions) {
-                for (var i = 0; i < sessions.length; i++) {
-                    if (sessions[i].status === 'active') {
-                        act = sessions[i];
-                        actId = sessions[i].id;
-                        break;
-                    }
-                }
-            }
-            if (!act) return alert('Нет активной');
-            if (!act.students) act.students = {};
-            act.students[currentUser.id] = { name: n, email: currentUser.email, joined_at: Date.now() };
-            await sb.from('sessions').update({ students: act.students }).eq('id', actId);
-            await sb.from('teacher_sessions').update({ students: act.students }).eq('session_id', actId);
-            window.open('student-constructed.html?session=' + actId + '&quiz=' + id + '&student=' + currentUser.id + '&name=' + encodeURIComponent(n), '_blank');
+            if (!currentUser) return;
+            let { data: sessions } = await sb.from('sessions').select('*').eq('quiz_id', id);
+            let active = sessions?.find(s => s.status === 'active');
+            if (!active) return alert('Нет активной');
+            if (!active.students) active.students = {};
+            active.students[currentUser.id] = { name: userName, joined_at: Date.now() };
+            await sb.from('sessions').update({ students: active.students }).eq('id', active.id);
+            window.open('student-constructed.html?session=' + active.id + '&quiz=' + id + '&student=' + currentUser.id + '&name=' + encodeURIComponent(userName), '_blank');
         };
 
-        async function loadTeacherSessions() {
-            const { data: sessions } = await sb.from('teacher_sessions').select('*').eq('teacher_id', currentUser.id);
-            var c = document.getElementById('myQuizzesList');
-            if (!c) return;
-            if (!sessions || !sessions.length) {
-                c.innerHTML = '<p>Нет</p>';
-                return;
-            }
-            sessions.sort(function(a,b) { return (b.started_at || 0) - (a.started_at || 0); });
-            var h = '';
-            for (var i = 0; i < sessions.length; i++) {
-                var s = sessions[i];
-                var d = s.started_at ? new Date(s.started_at).toLocaleString() : '?';
-                var studentsCount = 0;
-                if (s.students) {
-                    for (var k in s.students) studentsCount++;
-                }
-                h += '<div class="session-card"><div class="session-preview" onclick="toggleSessionDetails(\'sess-' + s.session_id + '\')"><div><div class="session-title">' + (s.quiz_subject || '?') + ' - ' + (s.quiz_title || '?') + '</div><div class="session-meta">📅 ' + d + ' 👥 ' + studentsCount + '</div></div><div><span class="session-status ' + (s.status === 'active' ? 'status-active' : 'status-finished') + '">' + (s.status === 'active' ? '🟢' : '🔵') + '</span>▼</div></div><div id="sess-' + s.session_id + '" class="session-details" style="display:none;">' + renderStudents(s.students, s.max_score, s.session_id, s.status);
-                if (s.status === 'active') {
-                    h += '<button class="finish-quiz-btn" onclick="finishQuiz(\'' + s.session_id + '\')">🏁 Завершить</button>';
-                }
-                if (s.status === 'finished') {
-                    h += '<button class="save-scores-btn" onclick="saveScores(\'' + s.session_id + '\')">💾 Сохранить</button>';
-                }
-                h += '</div></div>';
-            }
-            if (userRole === 'developer') {
-                h += '<div class="danger-zone" style="margin-top:20px; padding:20px; background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:5px; text-align:center;"><h3 style="color:#ef4444;">⚠️ Опасная зона</h3><button class="clear-stats-btn" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:3px; cursor:pointer;" onclick="clearAllStats()">🗑️ ОЧИСТИТЬ</button></div>';
-            }
-            c.innerHTML = h;
-        }
+        // ===== ЗАПУСК =====
+        checkLogin();
 
-        window.toggleSessionDetails = function(id) {
-            var d = document.getElementById(id);
-            if (!d) return;
-            if (d.style.display === 'none') {
-                d.style.display = 'block';
-            } else {
-                d.style.display = 'none';
-            }
-        };
-
-        function renderStudents(st, ms, sid, stat) {
-            if (!st) return '<p>👥 Пока нет</p>';
-            var keys = Object.keys(st);
-            if (!keys.length) return '<p>👥 Пока нет</p>';
-            var h = '';
-            for (var i = 0; i < keys.length; i++) {
-                var id = keys[i];
-                var student = st[id];
-                h += '<div class="student-item"><span>' + student.name + '</span>';
-                if (stat === 'finished') {
-                    h += '<input type="number" class="score-input" id="score-' + sid + '-' + id + '" max="' + ms + '" min="0" value="' + (student.score || 0) + '">';
-                } else {
-                    h += '✓';
-                }
-                h += '</div>';
-            }
-            return h;
-        }
-
-        window.finishQuiz = async function(id) {
-            await sb.from('sessions').update({ status: 'finished' }).eq('id', id);
-            await sb.from('teacher_sessions').update({ status: 'finished' }).eq('session_id', id);
-        };
-
-        window.saveScores = async function(sid) {
-            const { data: session } = await sb.from('sessions').select('*').eq('id', sid).single();
-            if (!session || !session.students) return alert('Нет учеников');
-            var cnt = 0;
-            var keys = Object.keys(session.students);
-            for (var i = 0; i < keys.length; i++) {
-                var uid = keys[i];
-                var inp = document.getElementById('score-' + sid + '-' + uid);
-                if (!inp) continue;
-                var sc = parseInt(inp.value);
-                if (isNaN(sc)) continue;
-                await sb.from('results').insert({
-                    id: sid + '_' + uid,
-                    student_id: uid,
-                    student_name: session.students[uid].name,
-                    quiz_subject: session.quiz_subject,
-                    quiz_title: session.quiz_title,
-                    score: sc,
-                    max_score: session.max_score,
-                    teacher_id: currentUser.id,
-                    session_id: sid,
-                    date: Date.now()
-                });
-                if (!session.students[uid].score) session.students[uid].score = 0;
-                session.students[uid].score = sc;
-                cnt++;
-            }
-            await sb.from('teacher_sessions').update({ students: session.students }).eq('session_id', sid);
-            alert('✅ Сохранено ' + cnt);
-        };
-
-        window.clearAllStats = async function() {
-            if (!confirm('⚠️ Удалить ВСЕ?')) return;
-            var p = prompt('Введите "УДАЛИТЬ ВСЁ"');
-            if (p !== 'УДАЛИТЬ ВСЁ') return alert('Отмена');
-            const { data: results } = await sb.from('results').select('id');
-            if (!results || !results.length) return alert('Нет результатов');
-            for (var i = 0; i < results.length; i++) {
-                await sb.from('results').delete().eq('id', results[i].id);
-            }
-            alert('✅ Удалено ' + results.length);
-            window.location.reload();
-        };
-
-        function loadStudentResults() {
-            sb.from('results').select('*').eq('student_id', currentUser.id).then(function(res) {
-                var results = res.data;
-                var c = document.getElementById('myResults');
-                if (!c) return;
-                if (!results || !results.length) {
-                    c.innerHTML = '<p>Нет результатов</p>';
-                    return;
-                }
-                results.sort(function(a,b) { return (b.date || 0) - (a.date || 0); });
-                var h = '';
-                for (var i = 0; i < results.length; i++) {
-                    var r = results[i];
-                    var d = r.date ? new Date(r.date).toLocaleString() : '';
-                    h += '<div class="result-card"><div>' + (r.quiz_subject || '?') + '</div><div><b>' + (r.quiz_title || '?') + '</b></div><div>' + (r.score || 0) + '/' + (r.max_score || 0) + '</div><div>' + d + '</div></div>';
-                }
-                c.innerHTML = h;
-            });
-        }
-
-        window.registerUser = async function() {
-            var u = document.getElementById('regUsername') ? document.getElementById('regUsername').value.trim() : '';
-            var p = document.getElementById('regPassword') ? document.getElementById('regPassword').value : '';
-            var c = document.getElementById('regPasswordConfirm') ? document.getElementById('regPasswordConfirm').value : '';
-            var r = document.getElementById('regRole') ? document.getElementById('regRole').value : 'student';
-            if (!u || !p) return alert('Заполните поля');
-            if (p !== c) return alert('Пароли не совпадают');
-            if (p.length < 3) return alert('Пароль минимум 3 символа');
-            const { data: existing } = await sb.from('simple_users').select('username').ilike('username', u);
-            if (existing && existing.length) return alert('Ник занят');
-            var isMod = /\s*\(\d+\)$/.test(u);
-            var isDev = u.toLowerCase() === 'илья' || u.toLowerCase() === 'ilya';
-            var id = generateId();
-            await sb.from('simple_users').insert({
-                id: id,
-                username: u,
-                password: hashPassword(p),
-                role: isDev ? 'developer' : r,
-                is_moderator: isMod,
-                full_name: u,
-                created_at: Date.now()
-            });
-            localStorage.setItem('currentSimpleUser', JSON.stringify({ id: id, username: u, role: isDev ? 'developer' : r, isModerator: isMod, fullName: u }));
-            closeRegisterModal();
-            window.location.reload();
-        };
-
-        window.simpleLogin = async function() {
-            var u = document.getElementById('simpleUsername') ? document.getElementById('simpleUsername').value.trim() : '';
-            var p = document.getElementById('simplePassword') ? document.getElementById('simplePassword').value : '';
-            if (!u || !p) return alert('Введите данные');
-            const { data: users } = await sb.from('simple_users').select('*').ilike('username', u);
-            var user = users && users[0] ? users[0] : null;
-            if (!user) return alert('Пользователь не найден');
-            if (user.password !== hashPassword(p)) return alert('Неверный пароль');
-            localStorage.setItem('currentSimpleUser', JSON.stringify({
-                id: user.id,
-                username: user.username,
-                role: user.role,
-                isModerator: user.is_moderator,
-                fullName: user.full_name
-            }));
-            closeLoginModal();
-            window.location.reload();
-        };
-
-        setTimeout(async function() {
-            var test = [
-                { username: 'teacher', password: '123', role: 'teacher' },
-                { username: 'student', password: '123', role: 'student' },
-                { username: 'moderator', password: '123', role: 'student', isMod: true },
-                { username: 'Илья', password: '123', role: 'developer' }
-            ];
-            for (var i = 0; i < test.length; i++) {
-                var t = test[i];
-                const { data: existing } = await sb.from('simple_users').select('username').ilike('username', t.username);
-                if (!existing || !existing.length) {
-                    await sb.from('simple_users').insert({
-                        id: generateId(),
-                        username: t.username,
-                        password: hashPassword(t.password),
-                        role: t.role,
-                        is_moderator: t.isMod || false,
-                        full_name: t.username,
-                        created_at: Date.now()
-                    });
-                }
-            }
-            console.log('✅ Тестовые аккаунты готовы');
-        }, 2000);
+        // Обновление лидерборда каждые 30 секунд
+        setInterval(loadLeaderboard, 30000);
     </script>
 </body>
 </html>
