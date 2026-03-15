@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Стили как в предыдущей версии */
         * {
             margin: 0;
             padding: 0;
@@ -23,17 +22,168 @@
             transition: background 0.3s ease;
         }
 
-        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
-        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
-        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
-        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
-        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
-        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+        /* ТЕМЫ - теперь с нормальными цветами кнопок */
+        body.pink-theme { 
+            background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); 
+            color: #4a4a4a; 
+        }
+        body.pink-theme .nav-link,
+        body.pink-theme .quiz-card,
+        body.pink-theme .create-btn,
+        body.pink-theme .shop-btn { 
+            color: #4a4a4a; 
+            text-shadow: none;
+        }
+        
+        body.blue-theme { 
+            background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); 
+            color: white; 
+        }
+        body.green-theme { 
+            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); 
+            color: #2d4a1e; 
+        }
+        body.green-theme .nav-link,
+        body.green-theme .quiz-card { 
+            color: #2d4a1e; 
+        }
+        
+        body.purple-theme { 
+            background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); 
+            color: #2d2d5a; 
+        }
+        body.orange-theme { 
+            background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); 
+            color: #4a2a1a; 
+        }
+        body.dark-theme { 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
+            color: white; 
+        }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        /* АДАПТИВ ДЛЯ МОБИЛОК */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .user-card {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .quizzes-grid {
+                grid-template-columns: 1fr;
+                max-height: none;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .section-header div {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .create-btn, .shop-btn {
+                flex: 1;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .login-title {
+                font-size: 2rem;
+            }
+            
+            .role-selector {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .answers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .constructor-window {
+                padding: 15px;
+                max-height: 95vh;
+            }
+            
+            .quiz-card {
+                padding: 15px;
+            }
+            
+            .quiz-stats {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* ЕЩЕ БОЛЕЕ МЕЛКИЕ ЭКРАНЫ */
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-wrap: wrap;
+            }
+            
+            .nav-link {
+                width: calc(50% - 8px);
+                text-align: center;
+            }
+            
+            .user-card {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            
+            .avatar {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .quiz-actions {
+                flex-direction: column;
+            }
+            
+            .quiz-action-btn {
+                width: 100%;
+            }
         }
 
         .login-screen {
@@ -356,6 +506,10 @@
             background: #10b981;
         }
 
+        .quiz-action-btn.edit {
+            background: #f59e0b;
+        }
+
         .constructor-overlay {
             position: fixed;
             top: 0;
@@ -523,15 +677,6 @@
             font-size: 60px;
             margin-bottom: 20px;
         }
-
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .answers-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -552,6 +697,11 @@
             <button class="login-btn" onclick="doLogin()">🚀 Войти</button>
             <div class="register-link" onclick="showRegister()">Нет аккаунта? Зарегистрироваться</div>
             <div id="errorMsg" style="color: #ff6b6b; margin-top: 15px;"></div>
+            
+            <!-- СЕКРЕТНАЯ ССЫЛКА ДЛЯ РЕФЕРАЛОВ -->
+            <div style="margin-top: 20px; font-size: 0.8rem; opacity: 0.5;">
+                <span id="referralHint"></span>
+            </div>
         </div>
     </div>
 
@@ -575,25 +725,15 @@
                 <div class="section-header">
                     <h2 class="section-title">
                         <i class="fas fa-gamepad" style="color: #6366f1;"></i>
-                        Мои викторины
+                        <span id="quizzesTitle">Мои викторины</span>
                     </h2>
-                    <div>
-                        <a href="shop.html">
-                            <button class="shop-btn">
-                                <i class="fas fa-store"></i> Магазин
-                            </button>
-                        </a>
-                        <button class="create-btn" onclick="openConstructor()">
-                            <i class="fas fa-plus"></i> Создать
-                        </button>
-                    </div>
+                    <div id="actionButtons"></div>
                 </div>
                 
                 <div id="myQuizzesList" class="quizzes-grid">
                     <div class="empty-state">
                         <div class="empty-icon">🎮</div>
-                        <p>У вас пока нет викторин</p>
-                        <button class="create-btn" style="margin-top: 15px;" onclick="openConstructor()">Создать первую</button>
+                        <p>Загрузка...</p>
                     </div>
                 </div>
             </div>
@@ -604,7 +744,7 @@
     <div class="constructor-overlay" id="constructorOverlay">
         <div class="constructor-window">
             <div class="constructor-header">
-                <h2 class="constructor-title">🛠️ Создание викторины</h2>
+                <h2 class="constructor-title" id="constructorTitle">🛠️ Создание викторины</h2>
                 <div class="close-btn" onclick="closeConstructor()">✕</div>
             </div>
             
@@ -669,6 +809,8 @@
         let userCoins = 100;
         let userThemes = ['pink'];
         let quizQuestions = [];
+        let editingQuizId = null;
+        let isModerator = false;
 
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#fbc7d1' },
@@ -678,6 +820,28 @@
             { id: 'orange', name: '🧡 Оранжевая', price: 100, color: '#f9d423' },
             { id: 'dark', name: '🖤 Темная', price: 200, color: '#2c3e50' }
         ];
+
+        // ===== ПРОВЕРКА РЕФЕРАЛЬНОЙ ССЫЛКИ =====
+        (function checkReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            
+            if (ref) {
+                // Проверяем, есть ли такая реферальная ссылка в localStorage (одноразовая)
+                const usedRefs = JSON.parse(localStorage.getItem('usedRefs') || '[]');
+                
+                if (!usedRefs.includes(ref)) {
+                    document.getElementById('referralHint').innerHTML = '🎁 Вас пригласили! После регистрации вы получите статус модератора';
+                    
+                    // Сохраняем, что эту ссылку использовали
+                    usedRefs.push(ref);
+                    localStorage.setItem('usedRefs', JSON.stringify(usedRefs));
+                    
+                    // Запоминаем, что юзер с этой рефкой должен стать модером
+                    sessionStorage.setItem('pendingModer', 'true');
+                }
+            }
+        })();
 
         // ===== ХЕШ ПАРОЛЯ =====
         function hashPassword(p) {
@@ -719,6 +883,10 @@
                 }
 
                 const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+                
+                // Проверяем, должен ли стать модером
+                const isModer = sessionStorage.getItem('pendingModer') === 'true';
+                
                 await sb.from('users').insert({
                     id: userId,
                     username: name,
@@ -727,8 +895,14 @@
                     coins: 100,
                     themes: ['pink'],
                     liked_quizzes: [],
+                    is_moderator: isModer || false,
                     created_at: new Date().toISOString()
                 });
+
+                if (isModer) {
+                    sessionStorage.removeItem('pendingModer');
+                    alert('🎉 Вы получили статус МОДЕРАТОРА! Вам доступны секретные ответы в магазине.');
+                }
 
                 currentUser = { 
                     id: userId, 
@@ -736,7 +910,8 @@
                     role: selectedRole, 
                     coins: 100, 
                     themes: ['pink'],
-                    liked_quizzes: []
+                    liked_quizzes: [],
+                    is_moderator: isModer || false
                 };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
@@ -769,11 +944,14 @@
                     role: 'teacher', 
                     coins: 9999, 
                     themes: allThemes.map(t => t.id),
-                    liked_quizzes: []
+                    liked_quizzes: [],
+                    is_moderator: true
                 };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 userCoins = 9999;
                 userThemes = allThemes.map(t => t.id);
+                isModerator = true;
+                
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainScreen').classList.add('active');
                 updateUI();
@@ -795,11 +973,13 @@
                         role: user.role,
                         coins: user.coins || 100,
                         themes: user.themes || ['pink'],
-                        liked_quizzes: user.liked_quizzes || []
+                        liked_quizzes: user.liked_quizzes || [],
+                        is_moderator: user.is_moderator || false
                     };
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     userCoins = currentUser.coins;
                     userThemes = currentUser.themes;
+                    isModerator = currentUser.is_moderator;
                     
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainScreen').classList.add('active');
@@ -823,16 +1003,44 @@
 
         function updateUI() {
             const s = document.getElementById('userSection');
+            const actionDiv = document.getElementById('actionButtons');
+            
             if (!s) return;
+            
             if (currentUser) {
                 s.innerHTML = `
                     <div class="user-card">
                         <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
                         <span>${currentUser.username}</span>
+                        ${currentUser.is_moderator ? '<span style="color: #ffd700;">👑</span>' : ''}
                         <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
                         <button onclick="logout()" class="logout-btn">Выйти</button>
                     </div>
                 `;
+                
+                // Разные кнопки для учителя и ученика
+                if (currentUser.role === 'teacher') {
+                    document.getElementById('quizzesTitle').textContent = 'Мои викторины';
+                    actionDiv.innerHTML = `
+                        <a href="shop.html">
+                            <button class="shop-btn">
+                                <i class="fas fa-store"></i> Магазин
+                            </button>
+                        </a>
+                        <button class="create-btn" onclick="openConstructor()">
+                            <i class="fas fa-plus"></i> Создать
+                        </button>
+                    `;
+                } else {
+                    document.getElementById('quizzesTitle').textContent = 'Доступные викторины';
+                    actionDiv.innerHTML = `
+                        <a href="shop.html">
+                            <button class="shop-btn">
+                                <i class="fas fa-store"></i> Магазин тем
+                            </button>
+                        </a>
+                    `;
+                }
             }
         }
 
@@ -841,44 +1049,89 @@
             if (!currentUser) return;
             
             try {
-                const { data: quizzes } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
+                let quizzes;
+                
+                if (currentUser.role === 'teacher') {
+                    // Учитель видит свои созданные викторины
+                    const { data } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id);
+                    quizzes = data;
+                } else {
+                    // Ученик видит опубликованные викторины
+                    const { data } = await sb.from('quizzes').select('*').eq('is_published', true);
+                    quizzes = data;
+                }
+                
                 const container = document.getElementById('myQuizzesList');
                 
                 if (!quizzes || quizzes.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">🎮</div>
-                            <p>У вас пока нет викторин</p>
-                            <button class="create-btn" style="margin-top: 15px;" onclick="openConstructor()">Создать первую</button>
-                        </div>
-                    `;
+                    if (currentUser.role === 'teacher') {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">🎮</div>
+                                <p>У вас пока нет викторин</p>
+                                <button class="create-btn" style="margin-top: 15px;" onclick="openConstructor()">Создать первую</button>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">🎮</div>
+                                <p>В магазине пока нет викторин</p>
+                                <a href="shop.html"><button class="shop-btn">Перейти в магазин</button></a>
+                            </div>
+                        `;
+                    }
                     return;
                 }
 
                 let html = '';
                 for (let q of quizzes) {
                     const theme = allThemes.find(t => t.id === q.theme) || allThemes[0];
-                    html += `
-                        <div class="quiz-card">
-                            <div class="quiz-card-header">
-                                <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
-                                <div class="quiz-class">${q.class || ''}</div>
+                    
+                    if (currentUser.role === 'teacher') {
+                        // Карточка для учителя (с редактированием)
+                        html += `
+                            <div class="quiz-card">
+                                <div class="quiz-card-header">
+                                    <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
+                                    <div class="quiz-class">${q.class || ''}</div>
+                                </div>
+                                <div class="quiz-title">${q.title}</div>
+                                <div class="quiz-subject">${q.subject || ''}</div>
+                                <div class="quiz-stats">
+                                    <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                                    <span><i class="fas fa-heart" style="color: #ff6b6b;"></i> ${q.likes || 0}</span>
+                                </div>
+                                <div class="quiz-actions">
+                                    <div class="quiz-action-btn play" onclick="playQuiz('${q.id}')">
+                                        <i class="fas fa-play"></i> Играть
+                                    </div>
+                                    <div class="quiz-action-btn edit" onclick="editQuiz('${q.id}')">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="quiz-title">${q.title}</div>
-                            <div class="quiz-subject">${q.subject || ''}</div>
-                            <div class="quiz-stats">
-                                <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
-                            </div>
-                            <div class="quiz-actions">
-                                <div class="quiz-action-btn play" onclick="playQuiz('${q.id}')">
+                        `;
+                    } else {
+                        // Карточка для ученика (только играть)
+                        html += `
+                            <div class="quiz-card" onclick="playQuiz('${q.id}')">
+                                <div class="quiz-card-header">
+                                    <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
+                                    <div class="quiz-class">${q.class || ''}</div>
+                                </div>
+                                <div class="quiz-title">${q.title}</div>
+                                <div class="quiz-subject">${q.subject || ''}</div>
+                                <div class="quiz-stats">
+                                    <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                                    <span><i class="fas fa-heart" style="color: #ff6b6b;"></i> ${q.likes || 0}</span>
+                                </div>
+                                <div class="quiz-action-btn play" style="margin-top: 10px;">
                                     <i class="fas fa-play"></i> Играть
                                 </div>
-                                <div class="quiz-action-btn" onclick="editQuiz('${q.id}')">
-                                    <i class="fas fa-edit"></i>
-                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    }
                 }
                 container.innerHTML = html;
             } catch (error) {
@@ -887,7 +1140,7 @@
         }
 
         // ===== КОНСТРУКТОР =====
-        window.openConstructor = function() {
+        window.openConstructor = function(editId = null) {
             if (!currentUser) {
                 alert('Сначала войдите в систему');
                 return;
@@ -896,13 +1149,57 @@
                 alert('Только учителя могут создавать викторины');
                 return;
             }
-            quizQuestions = [];
+            
+            editingQuizId = editId;
+            
+            if (editId) {
+                document.getElementById('constructorTitle').textContent = '✏️ Редактирование викторины';
+                loadQuizForEdit(editId);
+            } else {
+                document.getElementById('constructorTitle').textContent = '🛠️ Создание викторины';
+                quizQuestions = [];
+                document.getElementById('quizTitle').value = '';
+                document.getElementById('quizClass').value = '';
+                document.getElementById('quizSubject').value = '';
+                document.getElementById('quizTheme').value = 'pink';
+                document.getElementById('publishToStore').checked = false;
+                renderQuestions();
+            }
+            
             document.getElementById('constructorOverlay').classList.add('active');
-            renderQuestions();
         };
+
+        async function loadQuizForEdit(quizId) {
+            try {
+                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+                const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+                
+                if (quiz) {
+                    document.getElementById('quizTitle').value = quiz.title || '';
+                    document.getElementById('quizClass').value = quiz.class || '';
+                    document.getElementById('quizSubject').value = quiz.subject || '';
+                    document.getElementById('quizTheme').value = quiz.theme || 'pink';
+                    document.getElementById('publishToStore').checked = false; // Не публикуем заново при редактировании
+                }
+                
+                quizQuestions = (questions || []).map(q => ({
+                    id: q.id || Date.now() + Math.random(),
+                    question: q.question,
+                    answers: q.answers || ['', '', '', ''],
+                    correct: q.correct || 0,
+                    points: q.points || 1
+                }));
+                
+                renderQuestions();
+            } catch (error) {
+                console.error('Ошибка загрузки викторины для редактирования:', error);
+                alert('Не удалось загрузить викторину');
+            }
+        }
 
         window.closeConstructor = function() {
             document.getElementById('constructorOverlay').classList.remove('active');
+            editingQuizId = null;
         };
 
         window.addQuestion = function() {
@@ -917,6 +1214,10 @@
         };
 
         window.removeQuestion = function(index) {
+            if (quizQuestions.length <= 1) {
+                alert('Должен быть хотя бы один вопрос');
+                return;
+            }
             quizQuestions.splice(index, 1);
             renderQuestions();
         };
@@ -950,14 +1251,14 @@
                             <span class="question-number">Вопрос ${i+1}</span>
                             <span class="remove-question" onclick="removeQuestion(${i})">✕</span>
                         </div>
-                        <input type="text" placeholder="Текст вопроса" value="${q.question.replace(/"/g, '&quot;')}" 
+                        <input type="text" placeholder="Текст вопроса" value="${(q.question || '').replace(/"/g, '&quot;')}" 
                                onchange="updateQuestion(${i}, 'question', this.value)" style="width:100%; padding:10px; margin-bottom:10px;">
                         <div class="answers-grid">
                             ${[0,1,2,3].map(j => `
                                 <div class="answer-option">
-                                    <input type="radio" name="correct-${q.id}" value="${j}" ${q.correct === j ? 'checked' : ''} 
+                                    <input type="radio" name="correct-${q.id || i}" value="${j}" ${q.correct === j ? 'checked' : ''} 
                                            onchange="updateQuestion(${i}, 'correct', this.value)">
-                                    <input type="text" placeholder="Ответ ${j+1}" value="${q.answers[j] || ''}" 
+                                    <input type="text" placeholder="Ответ ${j+1}" value="${(q.answers[j] || '').replace(/"/g, '&quot;')}" 
                                            onchange="updateQuestion(${i}, 'answer${j}', this.value)">
                                 </div>
                             `).join('')}
@@ -978,7 +1279,6 @@
                 const newCoins = (user.coins || 0) + amount;
                 await sb.from('users').update({ coins: newCoins }).eq('id', userId);
                 
-                // Обновляем в памяти
                 if (currentUser && currentUser.id === userId) {
                     currentUser.coins = newCoins;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -998,9 +1298,9 @@
                 return;
             }
 
-            const title = document.getElementById('quizTitle').value;
-            const quizClass = document.getElementById('quizClass').value;
-            const subject = document.getElementById('quizSubject').value;
+            const title = document.getElementById('quizTitle').value.trim();
+            const quizClass = document.getElementById('quizClass').value.trim();
+            const subject = document.getElementById('quizSubject').value.trim();
             const theme = document.getElementById('quizTheme').value;
             const publish = document.getElementById('publishToStore').checked;
 
@@ -1014,53 +1314,98 @@
                 return;
             }
 
+            // Валидация вопросов
             for (let i = 0; i < quizQuestions.length; i++) {
-                if (!quizQuestions[i].question) {
-                    alert(`Заполните вопрос ${i+1}`);
+                const q = quizQuestions[i];
+                
+                if (!q.question || q.question.trim() === '') {
+                    alert(`Заполните текст вопроса ${i+1}`);
                     return;
                 }
-                if (!quizQuestions[i].answers.every(a => a)) {
-                    alert(`Заполните все ответы в вопросе ${i+1}`);
+                
+                // Проверяем, что все ответы заполнены
+                for (let j = 0; j < 4; j++) {
+                    if (!q.answers[j] || q.answers[j].trim() === '') {
+                        alert(`Заполните ответ ${j+1} в вопросе ${i+1}`);
+                        return;
+                    }
+                }
+                
+                // Проверяем, что выбран правильный ответ
+                if (q.correct === undefined || q.correct === null) {
+                    alert(`Выберите правильный ответ в вопросе ${i+1}`);
                     return;
                 }
             }
 
-            const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-            
             try {
-                await sb.from('quizzes').insert({
-                    id: quizId,
-                    title: title,
-                    class: quizClass,
-                    subject: subject,
-                    theme: theme,
-                    question_count: quizQuestions.length,
-                    max_score: quizQuestions.reduce((sum, q) => sum + (q.points || 1), 0),
-                    created_by: currentUser.id,
-                    is_published: publish,
-                    likes: 0,
-                    created_at: Date.now()
-                });
+                if (editingQuizId) {
+                    // Обновляем существующую викторину
+                    await sb.from('quizzes').update({
+                        title: title,
+                        class: quizClass,
+                        subject: subject,
+                        theme: theme,
+                        question_count: quizQuestions.length,
+                        max_score: quizQuestions.reduce((sum, q) => sum + (q.points || 1), 0)
+                    }).eq('id', editingQuizId);
 
-                for (let i = 0; i < quizQuestions.length; i++) {
-                    await sb.from('questions').insert({
-                        quiz_id: quizId,
-                        question_index: i,
-                        question: quizQuestions[i].question,
-                        answers: quizQuestions[i].answers,
-                        correct: quizQuestions[i].correct,
-                        points: quizQuestions[i].points || 1
+                    // Удаляем старые вопросы
+                    await sb.from('questions').delete().eq('quiz_id', editingQuizId);
+
+                    // Добавляем новые
+                    for (let i = 0; i < quizQuestions.length; i++) {
+                        await sb.from('questions').insert({
+                            quiz_id: editingQuizId,
+                            question_index: i,
+                            question: quizQuestions[i].question,
+                            answers: quizQuestions[i].answers,
+                            correct: quizQuestions[i].correct,
+                            points: quizQuestions[i].points || 1
+                        });
+                    }
+
+                    alert('✅ Викторина обновлена!');
+                    
+                } else {
+                    // Создаем новую
+                    const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+                    
+                    await sb.from('quizzes').insert({
+                        id: quizId,
+                        title: title,
+                        class: quizClass,
+                        subject: subject,
+                        theme: theme,
+                        question_count: quizQuestions.length,
+                        max_score: quizQuestions.reduce((sum, q) => sum + (q.points || 1), 0),
+                        created_by: currentUser.id,
+                        is_published: publish,
+                        likes: 0,
+                        created_at: Date.now()
                     });
+
+                    for (let i = 0; i < quizQuestions.length; i++) {
+                        await sb.from('questions').insert({
+                            quiz_id: quizId,
+                            question_index: i,
+                            question: quizQuestions[i].question,
+                            answers: quizQuestions[i].answers,
+                            correct: quizQuestions[i].correct,
+                            points: quizQuestions[i].points || 1
+                        });
+                    }
+
+                    // Награда за создание
+                    await addCoins(currentUser.id, 50, 'created_quiz');
+                    
+                    if (publish) {
+                        await addCoins(currentUser.id, 100, 'published_quiz');
+                    }
+
+                    alert(publish ? '✅ Викторина опубликована! +150 монет' : '✅ Викторина сохранена! +50 монет');
                 }
 
-                // Награда за создание
-                await addCoins(currentUser.id, 50, 'created_quiz');
-                
-                if (publish) {
-                    await addCoins(currentUser.id, 100, 'published_quiz');
-                }
-
-                alert(publish ? '✅ Викторина опубликована! +150 монет' : '✅ Викторина сохранена! +50 монет');
                 closeConstructor();
                 loadMyQuizzes();
 
@@ -1072,12 +1417,52 @@
 
         window.playQuiz = function(quizId) {
             if (!quizId) return;
-            window.location.href = `teacher.html?quiz=${quizId}`;
+            
+            if (currentUser.role === 'teacher') {
+                window.location.href = `teacher.html?quiz=${quizId}`;
+            } else {
+                // Для учеников нужно создать лобби или просто показать вопросы?
+                // Пока отправляем на страницу учителя, но потом сделаем отдельную страницу для учеников
+                window.location.href = `teacher.html?quiz=${quizId}`;
+            }
         };
 
         window.editQuiz = function(quizId) {
-            alert('Редактирование будет доступно позже');
+            openConstructor(quizId);
         };
+
+        // ===== СИСТЕМА РЕФЕРАЛОВ ДЛЯ РАЗРАБА =====
+        window.generateReferral = function() {
+            if (!currentUser || !currentUser.is_moderator) {
+                alert('Только модераторы могут создавать реферальные ссылки');
+                return;
+            }
+            
+            const refCode = 'ref_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+            const url = window.location.origin + window.location.pathname + '?ref=' + refCode;
+            
+            prompt('🔗 Ваша реферальная ссылка (одноразовая):', url);
+        };
+
+        // Добавляем кнопку для модераторов
+        setInterval(() => {
+            if (currentUser && currentUser.is_moderator && !document.getElementById('refBtn')) {
+                const userSection = document.getElementById('userSection');
+                if (userSection) {
+                    const refBtn = document.createElement('button');
+                    refBtn.id = 'refBtn';
+                    refBtn.innerHTML = '🔗 Рефка';
+                    refBtn.onclick = generateReferral;
+                    refBtn.style.marginLeft = '10px';
+                    refBtn.style.padding = '5px 10px';
+                    refBtn.style.background = '#ffd700';
+                    refBtn.style.border = 'none';
+                    refBtn.style.borderRadius = '20px';
+                    refBtn.style.cursor = 'pointer';
+                    userSection.appendChild(refBtn);
+                }
+            }
+        }, 1000);
 
         // ===== ПРОВЕРКА АВТОРИЗАЦИИ =====
         (function checkAuth() {
@@ -1087,6 +1472,8 @@
                     currentUser = JSON.parse(saved);
                     userCoins = currentUser.coins || 100;
                     userThemes = currentUser.themes || ['pink'];
+                    isModerator = currentUser.is_moderator || false;
+                    
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainScreen').classList.add('active');
                     updateUI();
