@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ИЛЬЯКЛАСС - Результаты</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,17 +24,125 @@
 
         /* ТЕМЫ */
         body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
-        body.pink-theme .stat-card { background: rgba(255, 240, 245, 0.7); }
-        
         body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
-        body.blue-theme .stat-card { background: rgba(255, 255, 255, 0.2); }
-        
         body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
-        body.green-theme .stat-card { background: rgba(255, 255, 255, 0.3); }
-        
         body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
         body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
         body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+
+        /* АДАПТИВ ДЛЯ МОБИЛОК */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .user-card {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .results-container {
+                padding: 20px;
+            }
+            
+            .filters {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .filter-btn {
+                flex: 1;
+                text-align: center;
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .results-table {
+                font-size: 0.8rem;
+            }
+            
+            .results-table th,
+            .results-table td {
+                padding: 8px 5px;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                gap: 8px;
+            }
+            
+            .nav-link {
+                width: calc(50% - 4px);
+                text-align: center;
+                padding: 8px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .user-card {
+                justify-content: center;
+            }
+            
+            .avatar {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .filter-btn {
+                width: 100%;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
 
         .container {
             max-width: 1200px;
@@ -116,6 +224,11 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .coins {
@@ -208,6 +321,7 @@
             text-align: center;
             padding: 50px;
             color: #6366f1;
+            font-size: 1.2rem;
         }
 
         .empty-state {
@@ -237,27 +351,36 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
+            color: white;
+            font-family: 'Comfortaa', cursive;
         }
 
         .filter-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .filter-btn.active {
             background: #6366f1;
+            border-color: white;
         }
 
-        @media (max-width: 768px) {
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-            .results-table {
-                font-size: 0.9rem;
-            }
-            .results-table th,
-            .results-table td {
-                padding: 8px;
-            }
+        .error-state {
+            text-align: center;
+            padding: 50px;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 40px;
+        }
+
+        .moderator-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #ffd700;
+            color: #4a4a4a;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -288,8 +411,10 @@
         let currentUser = null;
         let userName = '';
         let userCoins = 0;
+        let userRole = '';
         let allResults = [];
         let allUsers = [];
+        let allQuizzes = [];
         let currentFilter = 'all';
 
         // ===== ТЕМА =====
@@ -311,6 +436,7 @@
                     <div class="user-card">
                         <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
                         <span>${userName}</span>
+                        ${currentUser.is_moderator ? '<span style="color: #ffd700;">👑</span>' : ''}
                         <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                         <button onclick="logout()" class="logout-btn">Выйти</button>
                     </div>
@@ -334,6 +460,7 @@
             currentUser = user;
             userName = user.username;
             userCoins = user.coins || 0;
+            userRole = user.role;
 
             // Применяем тему
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
@@ -341,14 +468,21 @@
 
             updateUI();
 
-            // Загружаем все результаты
-            const { data: results } = await sb.from('results').select('*');
-            const { data: users } = await sb.from('users').select('*');
-            
-            allResults = results || [];
-            allUsers = users || [];
+            try {
+                // Загружаем все результаты
+                const { data: results } = await sb.from('results').select('*');
+                const { data: users } = await sb.from('users').select('*');
+                const { data: quizzes } = await sb.from('quizzes').select('*');
+                
+                allResults = results || [];
+                allUsers = users || [];
+                allQuizzes = quizzes || [];
 
-            renderContent();
+                renderContent();
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('content').innerHTML = '<div class="error-state">❌ Ошибка загрузки результатов</div>';
+            }
         }
 
         function renderContent() {
@@ -361,6 +495,7 @@
                         <div class="empty-state">
                             <div class="empty-icon">📭</div>
                             <p>Пока нет результатов</p>
+                            <p style="margin-top: 10px; opacity: 0.7;">Пройдите викторину, чтобы увидеть статистику</p>
                         </div>
                     </div>
                 `;
@@ -379,36 +514,49 @@
             const myTotalScore = myResults.reduce((sum, r) => sum + (r.score || 0), 0);
             const myAvgScore = myResults.length ? (myTotalScore / myResults.length).toFixed(1) : 0;
 
-            // Фильтруем результаты для таблицы
-            let filteredResults = [...allResults];
-            if (currentFilter === 'my') {
+            // Для учителя показываем все результаты, для ученика - только свои
+            let filteredResults = [];
+            if (userRole === 'teacher') {
+                if (currentFilter === 'my') {
+                    filteredResults = myResults;
+                } else if (currentFilter === 'best') {
+                    filteredResults = [...allResults].sort((a, b) => (b.score || 0) - (a.score || 0));
+                } else {
+                    filteredResults = [...allResults];
+                }
+            } else {
+                // Ученик видит только свои результаты
                 filteredResults = myResults;
-            } else if (currentFilter === 'best') {
-                filteredResults = [...allResults].sort((a, b) => (b.score || 0) - (a.score || 0));
             }
 
             // Таблица результатов
             let tableRows = '';
-            for (let r of filteredResults.slice(0, 50)) { // Показываем последние 50
+            for (let r of filteredResults.slice(0, 50)) {
                 const date = r.date ? new Date(r.date).toLocaleString() : '';
                 const student = allUsers.find(u => u.id === r.student_id);
                 const studentName = student?.username || r.student_name || 'Неизвестно';
                 const isMe = r.student_id === currentUser.id;
+                const quiz = allQuizzes.find(q => q.id === r.quiz_id);
                 
                 tableRows += `
                     <tr>
-                        <td class="${isMe ? 'glow-name' : ''}">${studentName} ${isMe ? '⭐' : ''}</td>
-                        <td>${r.quiz_title || '?'}</td>
+                        <td class="${isMe ? 'glow-name' : ''}">
+                            ${studentName} ${isMe ? '⭐' : ''}
+                            ${student?.is_moderator ? '<span class="moderator-badge">👑</span>' : ''}
+                        </td>
+                        <td>${quiz?.title || r.quiz_title || '?'}</td>
                         <td class="score-cell">${r.score || 0}/${r.max_score || 0}</td>
                         <td>${date}</td>
                     </tr>
                 `;
             }
 
-            c.innerHTML = `
-                <div class="results-container">
-                    <h2 style="color: #6366f1; margin-bottom: 30px;">📊 Статистика</h2>
-                    
+            // Разный контент для учителя и ученика
+            let statsHtml = '';
+            let filtersHtml = '';
+
+            if (userRole === 'teacher') {
+                statsHtml = `
                     <div class="stats-cards">
                         <div class="stat-card">
                             <div class="stat-value">${totalResults}</div>
@@ -444,7 +592,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 20px; flex-wrap: wrap; gap: 15px;">
                         <h3 class="section-title" style="margin:0;">📋 Все результаты</h3>
                         <div class="filters">
                             <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="filterResults('all')">Все</button>
@@ -452,6 +600,33 @@
                             <button class="filter-btn ${currentFilter === 'best' ? 'active' : ''}" onclick="filterResults('best')">Лучшие</button>
                         </div>
                     </div>
+                `;
+            } else {
+                statsHtml = `
+                    <div class="stats-cards" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="stat-card">
+                            <div class="stat-value">${myResults.length}</div>
+                            <div>Пройдено</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${myTotalScore}</div>
+                            <div>Мои баллы</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${myAvgScore}</div>
+                            <div>Средний балл</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title" style="margin-top: 30px;">📋 Моя статистика</h3>
+                `;
+            }
+
+            c.innerHTML = `
+                <div class="results-container">
+                    <h2 style="color: #6366f1; margin-bottom: 30px;">📊 Статистика</h2>
+                    
+                    ${statsHtml}
 
                     <div style="overflow-x: auto;">
                         <table class="results-table">
@@ -468,6 +643,8 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    ${filteredResults.length > 50 ? '<p style="text-align: center; margin-top: 15px; opacity: 0.7;">Показаны последние 50 результатов</p>' : ''}
                 </div>
             `;
         }
