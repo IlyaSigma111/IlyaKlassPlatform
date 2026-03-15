@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👤 Ученик | ИЛЬЯКЛАСС</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,6 +23,93 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        /* ТЕМЫ */
+        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
+        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
+        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+
+        /* АДАПТИВ ДЛЯ МОБИЛОК */
+        @media (max-width: 768px) {
+            .student-container {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.4rem;
+            }
+            
+            .options-grid {
+                gap: 10px;
+            }
+            
+            .option {
+                padding: 15px;
+            }
+            
+            .option-letter {
+                width: 35px;
+                height: 35px;
+                font-size: 1.1rem;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .player-info {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .score {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .join-card h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .student-container {
+                padding: 15px;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .player-info {
+                flex-wrap: wrap;
+            }
+            
+            .player-avatar {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .option {
+                padding: 12px;
+            }
+            
+            .option-letter {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            
+            .final-score {
+                font-size: 3rem;
+            }
         }
 
         .student-container {
@@ -40,6 +127,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .back-btn {
@@ -52,6 +141,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
         }
 
         .player-info {
@@ -118,6 +213,12 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 20px #10b981;
+        }
+
         .join-btn {
             width: 100%;
             padding: 18px;
@@ -129,6 +230,12 @@
             font-weight: 700;
             cursor: pointer;
             margin: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #10b981;
         }
 
         .game-header {
@@ -165,10 +272,12 @@
 
         .option:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .option.selected {
             background: #10b981;
+            border-color: white;
         }
 
         .option-letter {
@@ -235,13 +344,36 @@
             margin: 30px 0;
         }
 
-        @media (max-width: 600px) {
-            .student-container {
-                padding: 20px;
-            }
-            .question-text {
-                font-size: 1.4rem;
-            }
+        .players-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .player-mini-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .player-mini-avatar {
+            width: 30px;
+            height: 30px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+        }
+
+        .waiting-text {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -262,6 +394,7 @@
         let myScore = 0;
         let playerName = null;
         let hasAnswered = false;
+        let channel = null;
 
         const urlParams = new URLSearchParams(window.location.search);
         const lobbyId = urlParams.get('lobby');
@@ -273,6 +406,7 @@
             if (saved) {
                 currentUser = JSON.parse(saved);
                 if (currentUser.role !== 'student') {
+                    // Если учитель зашел на страницу ученика - перенаправляем
                     window.location.href = 'index.html';
                 }
             } else {
@@ -280,9 +414,17 @@
             }
         }
 
+        // Применяем тему
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+        }
+
         // Определяем, что показывать
         async function init() {
             checkAuth();
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
 
             if (lobbyId && playerParam) {
                 playerName = decodeURIComponent(playerParam);
@@ -338,51 +480,63 @@
                 return;
             }
 
-            const { data: lobbies } = await sb.from('lobbies').select('*').eq('code', code).eq('status', 'waiting');
-            
-            if (!lobbies || lobbies.length === 0) {
-                showError('Игра с таким кодом не найдена');
-                return;
+            try {
+                const { data: lobbies } = await sb.from('lobbies').select('*').eq('code', code).eq('status', 'waiting');
+                
+                if (!lobbies || lobbies.length === 0) {
+                    showError('Игра с таким кодом не найдена или уже началась');
+                    return;
+                }
+
+                const lobby = lobbies[0];
+
+                const players = lobby.players || {};
+                
+                if (players[name]) {
+                    showError('Игрок с таким именем уже есть');
+                    return;
+                }
+
+                players[name] = {
+                    name: name,
+                    joined_at: Date.now(),
+                    score: 0
+                };
+
+                await sb.from('lobbies').update({ players: players }).eq('id', lobby.id);
+
+                window.location.href = `student.html?lobby=${lobby.id}&player=${encodeURIComponent(name)}`;
+            } catch (error) {
+                console.error('Ошибка подключения:', error);
+                showError('Ошибка подключения к игре');
             }
-
-            const lobby = lobbies[0];
-
-            if (lobby.players && lobby.players[name]) {
-                showError('Игрок с таким именем уже есть');
-                return;
-            }
-
-            const players = lobby.players || {};
-            players[name] = {
-                name: name,
-                joined_at: Date.now(),
-                score: 0
-            };
-
-            await sb.from('lobbies').update({ players: players }).eq('id', lobby.id);
-
-            window.location.href = `student.html?lobby=${lobby.id}&player=${encodeURIComponent(name)}`;
         };
 
         async function loadGame(lobbyId) {
-            const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
-            if (!lobby) {
-                showError('Игра не найдена');
-                return;
+            try {
+                const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
+                if (!lobby) {
+                    showError('Игра не найдена');
+                    return;
+                }
+
+                currentLobby = lobby;
+
+                // Загружаем вопросы
+                const { data: questionsData } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
+                questions = questionsData || [];
+
+                // Получаем мой счет
+                if (lobby.players && lobby.players[playerName]) {
+                    myScore = lobby.players[playerName].score || 0;
+                }
+
+                showGameUI();
+                listenToLobby(lobbyId);
+            } catch (error) {
+                console.error('Ошибка загрузки игры:', error);
+                showError('Ошибка загрузки игры');
             }
-
-            currentLobby = lobby;
-
-            const { data: questionsData } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
-            questions = questionsData || [];
-
-            // Получаем мой счет
-            if (lobby.players && lobby.players[playerName]) {
-                myScore = lobby.players[playerName].score || 0;
-            }
-
-            showGameUI();
-            listenToLobby(lobbyId);
         }
 
         function showGameUI() {
@@ -398,6 +552,8 @@
                 <div id="waitingScreen" style="text-align: center; padding: 30px;">
                     <div class="loader"></div>
                     <h3>Ожидание начала...</h3>
+                    <div id="playersCount" class="waiting-text">Игроков: 0</div>
+                    <div id="playersList" class="players-list"></div>
                 </div>
 
                 <div id="questionScreen" style="display: none;">
@@ -415,13 +571,25 @@
                 <div id="resultsScreen" style="display: none; text-align: center;">
                     <h2>🎉 Викторина завершена!</h2>
                     <div class="final-score" id="finalScore">${myScore}</div>
-                    <a href="index.html" class="back-btn" style="display: inline-block;">На главную</a>
+                    
+                    <div style="margin: 30px 0;">
+                        <h3>Итоговая таблица</h3>
+                        <div id="finalPlayersList" class="players-list"></div>
+                    </div>
+                    
+                    <a href="index.html" class="back-btn" style="display: inline-block;">
+                        <i class="fas fa-home"></i> На главную
+                    </a>
                 </div>
             `;
         }
 
         function listenToLobby(lobbyId) {
-            const channel = sb
+            if (channel) {
+                sb.removeChannel(channel);
+            }
+
+            channel = sb
                 .channel('lobby-student-' + lobbyId)
                 .on('postgres_changes', 
                     { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` },
@@ -432,6 +600,7 @@
                     })
                 .subscribe();
 
+            // Первоначальная загрузка
             sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
                 if (data && data[0]) {
                     handleLobbyUpdate(data[0]);
@@ -441,6 +610,9 @@
 
         function handleLobbyUpdate(lobby) {
             currentLobby = lobby;
+
+            // Обновляем список игроков
+            updatePlayersList(lobby.players);
 
             if (lobby.status === 'active') {
                 const qIndex = lobby.current_question || 0;
@@ -455,7 +627,56 @@
                 document.getElementById('waitingScreen').style.display = 'none';
                 document.getElementById('questionScreen').style.display = 'none';
                 document.getElementById('resultsScreen').style.display = 'block';
+                showFinalResults(lobby.players);
             }
+        }
+
+        function updatePlayersList(players) {
+            if (!players) return;
+
+            const playersCount = document.getElementById('playersCount');
+            const playersList = document.getElementById('playersList');
+            
+            if (playersCount) {
+                playersCount.textContent = `Игроков: ${Object.keys(players).length}`;
+            }
+
+            if (playersList) {
+                let html = '';
+                for (let [name, data] of Object.entries(players)) {
+                    html += `
+                        <div class="player-mini-card">
+                            <div class="player-mini-avatar">${name.charAt(0).toUpperCase()}</div>
+                            <div>${name}</div>
+                            <div style="font-size: 0.8rem;">🎯 ${data.score || 0}</div>
+                        </div>
+                    `;
+                }
+                playersList.innerHTML = html;
+            }
+        }
+
+        function showFinalResults(players) {
+            const finalList = document.getElementById('finalPlayersList');
+            if (!finalList) return;
+
+            // Сортируем по убыванию счета
+            const sorted = Object.entries(players).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
+            
+            let html = '';
+            for (let [name, data] of sorted) {
+                const isMe = name === playerName;
+                html += `
+                    <div class="player-mini-card" style="${isMe ? 'border-color: #10b981;' : ''}">
+                        <div class="player-mini-avatar">${name.charAt(0).toUpperCase()}</div>
+                        <div>${name} ${isMe ? '⭐' : ''}</div>
+                        <div style="font-size: 0.9rem; color: #10b981;">${data.score || 0}</div>
+                    </div>
+                `;
+            }
+            finalList.innerHTML = html;
+            
+            document.getElementById('finalScore').textContent = myScore;
         }
 
         function showQuestion(question, index) {
@@ -524,10 +745,14 @@
                 document.getElementById('playerScore').textContent = myScore;
 
                 // Обновляем счет в лобби
-                const players = currentLobby.players || {};
-                if (players[playerName]) {
-                    players[playerName].score = myScore;
-                    await sb.from('lobbies').update({ players: players }).eq('id', currentLobby.id);
+                try {
+                    const players = currentLobby.players || {};
+                    if (players[playerName]) {
+                        players[playerName].score = myScore;
+                        await sb.from('lobbies').update({ players: players }).eq('id', currentLobby.id);
+                    }
+                } catch (error) {
+                    console.error('Ошибка обновления счета:', error);
                 }
             }
         };
@@ -540,6 +765,8 @@
                 setTimeout(() => {
                     errorEl.style.display = 'none';
                 }, 3000);
+            } else {
+                alert(msg);
             }
         }
 
