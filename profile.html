@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ИЛЬЯКЛАСС - Профиль</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,12 +22,113 @@
             transition: background 0.3s ease;
         }
 
+        /* ТЕМЫ */
         body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
         body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
         body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
         body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
         body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
         body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+
+        /* АДАПТИВ ДЛЯ МОБИЛОК */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .user-card {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            
+            .profile-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .profile-sidebar {
+                padding: 20px;
+            }
+            
+            .profile-main {
+                padding: 20px;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .setting-input {
+                width: 100%;
+            }
+            
+            .themes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-box {
+                padding: 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                gap: 8px;
+            }
+            
+            .nav-link {
+                width: calc(50% - 4px);
+                text-align: center;
+                padding: 8px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-card {
+                justify-content: center;
+            }
+            
+            .avatar {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
 
         .container {
             max-width: 1200px;
@@ -109,6 +210,11 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .profile-container {
@@ -154,6 +260,17 @@
             font-size: 0.9rem;
         }
 
+        .moderator-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #ffd700;
+            color: #4a4a4a;
+            border-radius: 30px;
+            margin: 5px 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
         .profile-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -167,6 +284,12 @@
             border-radius: 20px;
             padding: 15px;
             text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .stat-value {
@@ -189,10 +312,19 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
 
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
         .settings-title {
             font-size: 1.3rem;
             color: #6366f1;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .setting-item {
@@ -214,6 +346,12 @@
             border-radius: 30px;
             color: white;
             width: 200px;
+            font-family: 'Comfortaa', cursive;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #6366f1;
         }
 
         .save-btn {
@@ -226,6 +364,12 @@
             width: 100%;
             font-weight: 600;
             margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #6366f1;
         }
 
         .themes-grid {
@@ -253,6 +397,7 @@
         .theme-item.active {
             border-color: #6366f1;
             background: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 15px #6366f1;
         }
 
         .theme-color {
@@ -260,6 +405,7 @@
             height: 30px;
             border-radius: 50%;
             margin: 0 auto 5px;
+            border: 2px solid white;
         }
 
         .coins {
@@ -271,20 +417,40 @@
             text-align: center;
             padding: 50px;
             color: #6366f1;
+            font-size: 1.2rem;
         }
 
-        @media (max-width: 768px) {
-            .profile-container {
-                grid-template-columns: 1fr;
-            }
-            .setting-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .setting-input {
-                width: 100%;
-            }
+        .error-state {
+            text-align: center;
+            padding: 50px;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 40px;
+        }
+
+        .ref-link-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 30px;
+        }
+
+        .ref-link-title {
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .ref-link-btn {
+            background: #ffd700;
+            color: #4a4a4a;
+            border: none;
+            padding: 10px;
+            border-radius: 30px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -317,6 +483,7 @@
         let userRole = '';
         let userCoins = 100;
         let userThemes = ['pink'];
+        let isModerator = false;
 
         const allThemes = [
             { id: 'pink', name: 'Розовая', color: '#fbc7d1' },
@@ -327,14 +494,11 @@
             { id: 'dark', name: 'Темная', color: '#2c3e50' }
         ];
 
-        // Функция применения темы (НЕТ РЕКУРСИИ!)
+        // Функция применения темы
         function applyTheme(themeId) {
-            // Просто меняем класс body
             document.body.className = themeId + '-theme';
-            // Сохраняем в localStorage
             localStorage.setItem('currentTheme', themeId);
             
-            // Обновляем подсветку активной темы (если есть контейнер)
             const container = document.getElementById('themesContainer');
             if (container) {
                 const items = container.querySelectorAll('.theme-item');
@@ -367,6 +531,7 @@
                     <div class="user-card">
                         <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
                         <span>${userName}</span>
+                        ${isModerator ? '<span style="color: #ffd700;">👑</span>' : ''}
                         <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                         <button onclick="logout()" class="logout-btn">Выйти</button>
                     </div>
@@ -391,6 +556,7 @@
             userRole = user.role;
             userCoins = user.coins || 100;
             userThemes = user.themes || ['pink'];
+            isModerator = user.is_moderator || false;
 
             // Применяем сохраненную тему
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
@@ -409,11 +575,100 @@
                 let avgScore = totalQuizzes ? (totalScore / totalQuizzes).toFixed(1) : 0;
 
                 const c = document.getElementById('content');
+                
+                // Разный контент для учителя и ученика
+                let settingsHtml = '';
+                
+                if (userRole === 'teacher') {
+                    settingsHtml = `
+                        <div class="settings-section">
+                            <h2 class="settings-title">⚙️ Настройки профиля</h2>
+                            
+                            <div class="setting-item">
+                                <span>Имя пользователя</span>
+                                <input type="text" id="userNameInput" class="setting-input" value="${userName}">
+                            </div>
+                            
+                            <button class="save-btn" onclick="saveName()">💾 Сохранить имя</button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h2 class="settings-title">🔐 Безопасность</h2>
+                            
+                            <div class="setting-item">
+                                <span>Новый пароль</span>
+                                <input type="password" id="newPass" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span>Повторите пароль</span>
+                                <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
+                        </div>
+                    `;
+                } else {
+                    settingsHtml = `
+                        <div class="settings-section">
+                            <h2 class="settings-title">👤 Профиль ученика</h2>
+                            
+                            <div class="setting-item">
+                                <span>Имя пользователя</span>
+                                <span>${userName}</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span>Роль</span>
+                                <span>👨‍🎓 Ученик</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span>Монет</span>
+                                <span class="coins">${userCoins}</span>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h2 class="settings-title">🔐 Безопасность</h2>
+                            
+                            <div class="setting-item">
+                                <span>Новый пароль</span>
+                                <input type="password" id="newPass" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <span>Повторите пароль</span>
+                                <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
+                            </div>
+                            
+                            <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
+                        </div>
+                    `;
+                }
+
+                // Добавляем секцию для модераторов
+                if (isModerator) {
+                    settingsHtml += `
+                        <div class="settings-section">
+                            <h2 class="settings-title">🔗 Реферальные ссылки</h2>
+                            <div class="ref-link-section">
+                                <div class="ref-link-title">👑 Панель модератора</div>
+                                <p style="margin-bottom: 15px; opacity: 0.8;">Создавайте одноразовые ссылки для приглашения модераторов</p>
+                                <button class="ref-link-btn" onclick="generateReferral()">
+                                    🔗 Сгенерировать ссылку
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 c.innerHTML = `
                     <div class="profile-container">
                         <div class="profile-sidebar">
                             <div class="profile-avatar">${userName.charAt(0).toUpperCase()}</div>
                             <div class="profile-name">${userName}</div>
+                            ${isModerator ? '<div class="moderator-badge">👑 МОДЕРАТОР</div>' : ''}
                             <div class="profile-role">${userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик'}</div>
                             
                             <div class="profile-stats">
@@ -444,32 +699,7 @@
                         </div>
                         
                         <div class="profile-main">
-                            <div class="settings-section">
-                                <h2 class="settings-title">⚙️ Настройки профиля</h2>
-                                
-                                <div class="setting-item">
-                                    <span>Имя пользователя</span>
-                                    <input type="text" id="userNameInput" class="setting-input" value="${userName}">
-                                </div>
-                                
-                                <button class="save-btn" onclick="saveName()">💾 Сохранить имя</button>
-                            </div>
-
-                            <div class="settings-section">
-                                <h2 class="settings-title">🔐 Безопасность</h2>
-                                
-                                <div class="setting-item">
-                                    <span>Новый пароль</span>
-                                    <input type="password" id="newPass" class="setting-input" placeholder="******">
-                                </div>
-                                
-                                <div class="setting-item">
-                                    <span>Повторите пароль</span>
-                                    <input type="password" id="newPassConfirm" class="setting-input" placeholder="******">
-                                </div>
-                                
-                                <button class="save-btn" onclick="changePassword()">🔑 Сменить пароль</button>
-                            </div>
+                            ${settingsHtml}
 
                             <div class="settings-section">
                                 <h2 class="settings-title">🎨 Мои темы</h2>
@@ -485,7 +715,7 @@
                 renderThemes();
             } catch (error) {
                 console.error('Ошибка загрузки профиля:', error);
-                document.getElementById('content').innerHTML = '<div class="error-state">Ошибка загрузки профиля</div>';
+                document.getElementById('content').innerHTML = '<div class="error-state">❌ Ошибка загрузки профиля</div>';
             }
         }
 
@@ -544,17 +774,38 @@
             try {
                 await sb.from('users').update({ password: hashPassword(newPass) }).eq('id', currentUser.id);
                 alert('Пароль изменен!');
+                
+                // Очищаем поля
+                document.getElementById('newPass').value = '';
+                document.getElementById('newPassConfirm').value = '';
             } catch (error) {
                 alert('Ошибка: ' + error.message);
             }
         }
 
-        // Глобальная функция для применения темы (без рекурсии)
+        // Функция для генерации реферальной ссылки (только для модераторов)
+        window.generateReferral = function() {
+            const refCode = 'ref_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+            const url = window.location.origin + window.location.pathname.replace('profile.html', 'index.html') + '?ref=' + refCode;
+            
+            // Сохраняем в историю ссылок (можно потом добавить в БД)
+            const refLinks = JSON.parse(localStorage.getItem('moderatorRefs') || '[]');
+            refLinks.push({
+                code: refCode,
+                url: url,
+                created: new Date().toISOString(),
+                used: false
+            });
+            localStorage.setItem('moderatorRefs', JSON.stringify(refLinks));
+            
+            prompt('🔗 Одноразовая реферальная ссылка (скопируйте и отправьте):', url);
+        };
+
+        // Глобальная функция для применения темы
         window.applyTheme = function(themeId) {
             document.body.className = themeId + '-theme';
             localStorage.setItem('currentTheme', themeId);
             
-            // Обновляем подсветку
             const container = document.getElementById('themesContainer');
             if (container) {
                 const items = container.querySelectorAll('.theme-item');
