@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👩‍🏫 Учитель | ИЛЬЯКЛАСС</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,6 +20,126 @@
             color: white;
             min-height: 100vh;
             overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        /* ТЕМЫ */
+        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
+        body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
+        body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+
+        /* АДАПТИВ ДЛЯ МОБИЛОК */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 10px;
+                overflow-y: auto;
+            }
+            
+            .left-column, .right-column {
+                width: 100%;
+                min-height: auto;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .code-display {
+                font-size: 1.2rem;
+                padding: 8px 15px;
+            }
+            
+            .glass-panel {
+                padding: 15px;
+            }
+            
+            .big-code {
+                font-size: 2.5rem;
+                padding: 15px;
+            }
+            
+            .players-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-height: 200px;
+            }
+            
+            .questions-list {
+                grid-template-columns: repeat(4, 1fr);
+                max-height: 200px;
+            }
+            
+            .presentation-question {
+                padding: 20px;
+            }
+            
+            .presentation-question h2 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .answer-block {
+                padding: 15px;
+            }
+            
+            .correct-answer {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .code-display {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .questions-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .presentation-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .presentation-content {
+                padding: 15px;
+            }
+            
+            .stat-box {
+                padding: 5px 10px;
+            }
+            
+            .stat-value {
+                font-size: 1rem;
+            }
         }
 
         .container {
@@ -51,6 +171,12 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
         }
 
         .code-display {
@@ -145,6 +271,12 @@
             border-radius: 30px;
             padding: 15px;
             text-align: center;
+            transition: all 0.3s;
+        }
+
+        .player-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .player-avatar {
@@ -170,6 +302,17 @@
             width: 100%;
             cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #10b981;
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .control-buttons {
@@ -190,14 +333,21 @@
             transition: all 0.3s;
             font-size: 1rem;
             font-weight: 600;
+            color: white;
         }
 
         .control-btn.primary {
             background: #10b981;
         }
 
-        .control-btn:hover {
+        .control-btn:hover:not(:disabled) {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .questions-list {
@@ -215,6 +365,11 @@
             padding: 12px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .question-item.active {
@@ -250,6 +405,8 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .presentation-content {
@@ -310,6 +467,25 @@
             margin: 15px 0;
         }
 
+        .secret-answer {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 30px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #ffd700;
+        }
+
+        .moderator-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #ffd700;
+            color: #4a4a4a;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -324,15 +500,6 @@
             background: #10b981;
             border-radius: 3px;
         }
-
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            .left-column, .right-column {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -342,6 +509,7 @@
                 <i class="fas fa-arrow-left"></i> На главную
             </a>
             <div id="codeDisplay" class="code-display" style="display: none;">----</div>
+            <div id="moderatorBadge" style="display: none;"></div>
         </header>
 
         <div class="main-content" id="dynamicContent">
@@ -351,7 +519,7 @@
 
     <div class="presentation-mode" id="presentationMode">
         <div class="presentation-header">
-            <div style="display: flex; gap: 30px; align-items: center;">
+            <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
                 <span style="font-size: 1.3rem;">🎯 РЕЖИМ ПРЕЗЕНТАЦИИ</span>
                 <span id="presentationCounter">Вопрос 1/0</span>
             </div>
@@ -373,12 +541,15 @@
             </div>
         </div>
 
-        <div style="padding: 20px; text-align: center; border-top: 2px solid rgba(255,255,255,0.3);">
+        <div style="padding: 20px; text-align: center; border-top: 2px solid rgba(255,255,255,0.3); display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
             <button onclick="exitPresentation()" class="control-btn" style="display: inline-flex; width: auto; margin: 0 10px;">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             <button onclick="showAnswer()" class="control-btn primary" style="display: inline-flex; width: auto; margin: 0 10px;">
                 <i class="fas fa-check-circle"></i> Ответ
+            </button>
+            <button onclick="nextQuestion()" class="control-btn" style="display: inline-flex; width: auto; margin: 0 10px;">
+                <i class="fas fa-forward"></i> Далее
             </button>
         </div>
     </div>
@@ -394,6 +565,8 @@
         let questions = [];
         let currentQuestionIndex = 0;
         let lobbyCode = null;
+        let isModerator = false;
+        let boughtAnswers = [];
 
         const urlParams = new URLSearchParams(window.location.search);
         const quizId = urlParams.get('quiz');
@@ -407,14 +580,35 @@
                 if (currentUser.role !== 'teacher') {
                     window.location.href = 'index.html';
                 }
+                isModerator = currentUser.is_moderator || false;
+                
+                // Загружаем купленные ответы
+                const savedAnswers = localStorage.getItem('boughtAnswers');
+                if (savedAnswers) {
+                    boughtAnswers = JSON.parse(savedAnswers);
+                }
+                
+                // Показываем бейдж модератора
+                if (isModerator) {
+                    document.getElementById('moderatorBadge').style.display = 'block';
+                    document.getElementById('moderatorBadge').innerHTML = '<span class="moderator-badge">👑 МОДЕРАТОР</span>';
+                }
             } else {
                 window.location.href = 'index.html';
             }
         }
 
+        // Применяем тему
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+        }
+
         // Определяем, что показывать
         async function init() {
             checkAuth();
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
 
             if (lobbyId) {
                 await loadGame(lobbyId);
@@ -426,35 +620,44 @@
         }
 
         async function createLobby(quizId) {
-            // Загружаем информацию о викторине
-            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-            if (!quiz) {
+            try {
+                // Загружаем информацию о викторине
+                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+                if (!quiz) {
+                    showError();
+                    return;
+                }
+
+                quizData = quiz;
+                lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
+                const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+
+                const lobbyData = {
+                    id: newLobbyId,
+                    quiz_id: quizId,
+                    teacher_id: currentUser.id,
+                    teacher_name: currentUser.username,
+                    code: lobbyCode,
+                    status: 'waiting',
+                    created_at: Date.now(),
+                    players: {},
+                    current_question: 0
+                };
+
+                await sb.from('lobbies').insert(lobbyData);
+                currentLobby = lobbyData;
+
+                // Загружаем вопросы
+                const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+                questions = qs || [];
+
+                // Показываем интерфейс лобби
+                showLobbyUI();
+                listenToLobby(newLobbyId);
+            } catch (error) {
+                console.error('Ошибка создания лобби:', error);
                 showError();
-                return;
             }
-
-            quizData = quiz;
-            lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
-            const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-
-            const lobbyData = {
-                id: newLobbyId,
-                quiz_id: quizId,
-                teacher_id: currentUser.id,
-                teacher_name: currentUser.username,
-                code: lobbyCode,
-                status: 'waiting',
-                created_at: Date.now(),
-                players: {},
-                current_question: 0
-            };
-
-            await sb.from('lobbies').insert(lobbyData);
-            currentLobby = lobbyData;
-
-            // Показываем интерфейс лобби
-            showLobbyUI();
-            listenToLobby(newLobbyId);
         }
 
         function showLobbyUI() {
@@ -467,7 +670,7 @@
                         <h2><i class="fas fa-info-circle"></i> ИНФОРМАЦИЯ</h2>
                         <div class="lobby-info">
                             <div class="quiz-title">${quizData.title}</div>
-                            <div>${quizData.question_count || 0} вопросов</div>
+                            <div>${questions.length} вопросов</div>
                             <div class="big-code">${lobbyCode}</div>
                             <button class="start-btn" onclick="startGame()" id="startGameBtn" disabled>
                                 <i class="fas fa-play"></i> НАЧАТЬ ИГРУ
@@ -485,27 +688,32 @@
         }
 
         async function loadGame(lobbyId) {
-            const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
-            if (!lobby) {
+            try {
+                const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
+                if (!lobby) {
+                    showError();
+                    return;
+                }
+
+                currentLobby = lobby;
+                lobbyCode = lobby.code;
+
+                // Загружаем вопросы
+                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', lobby.quiz_id).single();
+                const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
+                
+                quizData = quiz;
+                questions = qs || [];
+
+                document.getElementById('codeDisplay').style.display = 'block';
+                document.getElementById('codeDisplay').textContent = lobbyCode;
+
+                showGameUI();
+                listenToLobby(lobbyId);
+            } catch (error) {
+                console.error('Ошибка загрузки игры:', error);
                 showError();
-                return;
             }
-
-            currentLobby = lobby;
-            lobbyCode = lobby.code;
-
-            // Загружаем вопросы
-            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', lobby.quiz_id).single();
-            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
-            
-            quizData = quiz;
-            questions = qs || [];
-
-            document.getElementById('codeDisplay').style.display = 'block';
-            document.getElementById('codeDisplay').textContent = lobbyCode;
-
-            showGameUI();
-            listenToLobby(lobbyId);
         }
 
         function showGameUI() {
@@ -514,15 +722,15 @@
                     <div class="glass-panel">
                         <h2><i class="fas fa-gamepad"></i> УПРАВЛЕНИЕ</h2>
                         <div class="control-buttons">
-                            <button onclick="startNextQuestion()" class="control-btn primary">
+                            <button onclick="startNextQuestion()" class="control-btn primary" id="showQuestionBtn">
                                 <i class="fas fa-play"></i> ПОКАЗАТЬ ВОПРОС
                             </button>
-                            <button onclick="nextQuestion()" class="control-btn">
+                            <button onclick="nextQuestion()" class="control-btn" id="nextQuestionBtn">
                                 <i class="fas fa-forward"></i> СЛЕДУЮЩИЙ
                             </button>
                         </div>
                         <div style="margin-top: 15px;">
-                            <div>Текущий: <span id="currentQ">0/${questions.length}</span></div>
+                            <div>Текущий: <span id="currentQ">${currentQuestionIndex}/${questions.length}</span></div>
                             <div>Игроков: <span id="playerCount">0</span></div>
                         </div>
                     </div>
@@ -619,9 +827,30 @@
             }
 
             const question = questions[currentQuestionIndex];
+            
+            // Подсчитываем статистику
+            const players = currentLobby.players || {};
+            const answered = Object.values(players).filter(p => p.last_answer === currentQuestionIndex).length;
+            const correct = Object.values(players).filter(p => p.last_correct === currentQuestionIndex).length;
+            
             document.getElementById('presentationMode').classList.add('active');
             document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex + 1}/${questions.length}`;
-            document.getElementById('presentationQuestion').innerHTML = `<h2>${question.question}</h2>`;
+            document.getElementById('answeredCount').textContent = answered;
+            document.getElementById('correctCount').textContent = correct;
+            
+            let questionHtml = `<h2>${question.question}</h2>`;
+            
+            // Если модератор и есть купленные ответы
+            if (isModerator && hasAnswer(quizData?.id)) {
+                questionHtml += `
+                    <div class="secret-answer">
+                        <i class="fas fa-crown" style="color: #ffd700;"></i>
+                        СЕКРЕТНЫЙ ОТВЕТ: ${question.answers[question.correct]}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('presentationQuestion').innerHTML = questionHtml;
 
             // Обновляем статус в лобби
             sb.from('lobbies').update({
@@ -631,6 +860,18 @@
 
             renderQuestionsList();
         };
+
+        function hasAnswer(quizId) {
+            if (!quizId) return false;
+            
+            // Проверяем, есть ли купленные ответы для этой викторины
+            for (let item of boughtAnswers) {
+                if (item === 'all' || item.includes(quizId)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         window.showAnswer = function() {
             const question = questions[currentQuestionIndex];
@@ -650,12 +891,16 @@
         };
 
         window.nextQuestion = function() {
-            currentQuestionIndex++;
-            exitPresentation();
-            if (currentQuestionIndex >= questions.length) {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                exitPresentation();
+                renderQuestionsList();
+            } else {
+                // Завершаем игру
                 sb.from('lobbies').update({ status: 'finished' }).eq('id', currentLobby.id);
+                exitPresentation();
+                alert('🎉 Викторина завершена!');
             }
-            renderQuestionsList();
         };
 
         window.exitPresentation = function() {
