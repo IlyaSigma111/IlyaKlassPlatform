@@ -26,17 +26,169 @@
             transition: background 0.3s ease;
         }
 
-        /* ТЕМЫ */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: white; }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); color: white; }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); color: white; }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); color: white; }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); color: white; }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); color: white; }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); color: white; }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #2c3e50 100%); color: white; }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); color: white; }
+        /* ТЕМЫ С ЧИТАЕМЫМ ТЕКСТОМ */
+        body.pink-theme { 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); 
+            color: #2d3436; 
+        }
+        body.pink-theme .student-container,
+        body.pink-theme .option,
+        body.pink-theme .back-btn,
+        body.pink-theme .join-btn,
+        body.pink-theme .player-info,
+        body.pink-theme .score,
+        body.pink-theme .status-message,
+        body.pink-theme .question-text,
+        body.pink-theme .player-mini-card { 
+            color: #2d3436; 
+        }
+        body.pink-theme .student-container,
+        body.pink-theme .option,
+        body.pink-theme .back-btn,
+        body.pink-theme .player-info,
+        body.pink-theme .score,
+        body.pink-theme .status-message,
+        body.pink-theme .player-mini-card { 
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(45, 52, 54, 0.2);
+        }
+        body.pink-theme .join-btn { background: #10b981; color: white; }
+        body.pink-theme .option.selected { background: #10b981; color: white; }
+        
+        body.blue-theme { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            color: #1e3799; 
+        }
+        body.blue-theme .student-container,
+        body.blue-theme .option,
+        body.blue-theme .back-btn,
+        body.blue-theme .player-info,
+        body.blue-theme .score,
+        body.blue-theme .status-message,
+        body.blue-theme .player-mini-card { 
+            color: #1e3799; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.green-theme { 
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); 
+            color: #145a32; 
+        }
+        body.green-theme .student-container,
+        body.green-theme .option,
+        body.green-theme .back-btn,
+        body.green-theme .player-info,
+        body.green-theme .score,
+        body.green-theme .status-message,
+        body.green-theme .player-mini-card { 
+            color: #145a32; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.purple-theme { 
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); 
+            color: #4a235a; 
+        }
+        body.purple-theme .student-container,
+        body.purple-theme .option,
+        body.purple-theme .back-btn,
+        body.purple-theme .player-info,
+        body.purple-theme .score,
+        body.purple-theme .status-message,
+        body.purple-theme .player-mini-card { 
+            color: #4a235a; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.orange-theme { 
+            background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); 
+            color: #b45f06; 
+        }
+        body.orange-theme .student-container,
+        body.orange-theme .option,
+        body.orange-theme .back-btn,
+        body.orange-theme .player-info,
+        body.orange-theme .score,
+        body.orange-theme .status-message,
+        body.orange-theme .player-mini-card { 
+            color: #b45f06; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.dark-theme { 
+            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
+            color: white; 
+        }
+        body.dark-theme .student-container,
+        body.dark-theme .option,
+        body.dark-theme .back-btn,
+        body.dark-theme .player-info,
+        body.dark-theme .score,
+        body.dark-theme .status-message,
+        body.dark-theme .player-mini-card { 
+            color: white; 
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        body.sunset-theme { 
+            background: linear-gradient(135deg, #ffd89b 0%, #ff9a9e 100%); 
+            color: #b33939; 
+        }
+        body.sunset-theme .student-container,
+        body.sunset-theme .option,
+        body.sunset-theme .back-btn,
+        body.sunset-theme .player-info,
+        body.sunset-theme .score,
+        body.sunset-theme .status-message,
+        body.sunset-theme .player-mini-card { 
+            color: #b33939; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.ocean-theme { 
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
+            color: #0a3b5e; 
+        }
+        body.ocean-theme .student-container,
+        body.ocean-theme .option,
+        body.ocean-theme .back-btn,
+        body.ocean-theme .player-info,
+        body.ocean-theme .score,
+        body.ocean-theme .status-message,
+        body.ocean-theme .player-mini-card { 
+            color: #0a3b5e; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.forest-theme { 
+            background: linear-gradient(135deg, #a8e6cf 0%, #d4edda 100%); 
+            color: #1d5a3c; 
+        }
+        body.forest-theme .student-container,
+        body.forest-theme .option,
+        body.forest-theme .back-btn,
+        body.forest-theme .player-info,
+        body.forest-theme .score,
+        body.forest-theme .status-message,
+        body.forest-theme .player-mini-card { 
+            color: #1d5a3c; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.candy-theme { 
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); 
+            color: #6c3483; 
+        }
+        body.candy-theme .student-container,
+        body.candy-theme .option,
+        body.candy-theme .back-btn,
+        body.candy-theme .player-info,
+        body.candy-theme .score,
+        body.candy-theme .status-message,
+        body.candy-theme .player-mini-card { 
+            color: #6c3483; 
+            background: rgba(255, 255, 255, 0.4);
+        }
 
         /* АДАПТИВ */
         @media (max-width: 768px) {
@@ -121,6 +273,7 @@
             justify-content: center;
             font-weight: 700;
             font-size: 1.2rem;
+            color: white;
         }
 
         .score {
@@ -231,6 +384,7 @@
         .option.selected {
             background: #10b981;
             border-color: white;
+            color: white;
         }
 
         .option-letter {
@@ -323,6 +477,7 @@
             justify-content: center;
             margin: 0 auto 8px;
             font-weight: 700;
+            color: white;
         }
 
         .waiting-text {
@@ -330,9 +485,40 @@
             margin: 20px 0;
             opacity: 0.8;
         }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 16px;
+            font-size: 0.6rem;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">Ссылка скопирована! 🔗</div>
+    
     <div class="student-container" id="mainContainer">
         <!-- Контент будет подгружаться динамически -->
     </div>
@@ -358,6 +544,13 @@
         const lobbyId = urlParams.get('lobby');
         const playerParam = urlParams.get('player');
 
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
         async function sendToTG(message) {
             try {
                 await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
@@ -372,11 +565,17 @@
             const saved = localStorage.getItem('currentUser');
             if (saved) {
                 currentUser = JSON.parse(saved);
-                if (currentUser.role !== 'student') window.location.href = 'index.html';
-            } else window.location.href = 'index.html';
+                if (currentUser.role !== 'student') {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
         }
 
-        function applyTheme(themeId) { document.body.className = themeId + '-theme'; }
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+        }
 
         async function init() {
             checkAuth();
@@ -487,7 +686,7 @@
                 showGameUI();
                 listenToLobby(lobbyId);
                 
-                sendToTG(`🎯 ${currentUser.username} начал игру (лобби: ${lobby.code})`);
+                sendToTG(`🎯 ${currentUser.username} начал игру (код: ${lobby.code})`);
             } catch (error) {
                 console.error('Ошибка загрузки игры:', error);
                 showError('Ошибка загрузки игры');
@@ -540,27 +739,38 @@
         }
 
         function listenToLobby(lobbyId) {
-            if (channel) sb.removeChannel(channel);
+            if (channel) {
+                sb.removeChannel(channel);
+            }
 
             channel = sb
                 .channel('lobby-student-' + lobbyId)
                 .on('postgres_changes', 
                     { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` },
-                    payload => { if (payload.new) handleLobbyUpdate(payload.new); })
+                    payload => {
+                        if (payload.new) {
+                            handleLobbyUpdate(payload.new);
+                        }
+                    })
                 .subscribe();
 
             sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
-                if (data && data[0]) handleLobbyUpdate(data[0]);
+                if (data && data[0]) {
+                    handleLobbyUpdate(data[0]);
+                }
             });
         }
 
         function handleLobbyUpdate(lobby) {
             currentLobby = lobby;
+
             updatePlayersList(lobby.players);
 
             if (lobby.status === 'active') {
                 const qIndex = lobby.current_question || 0;
-                if (qIndex < questions.length) showQuestion(questions[qIndex], qIndex);
+                if (qIndex < questions.length) {
+                    showQuestion(questions[qIndex], qIndex);
+                }
             } else if (lobby.status === 'waiting') {
                 document.getElementById('waitingScreen').style.display = 'block';
                 document.getElementById('questionScreen').style.display = 'none';
@@ -581,7 +791,9 @@
             const playersCount = document.getElementById('playersCount');
             const playersList = document.getElementById('playersList');
             
-            if (playersCount) playersCount.textContent = `Игроков: ${Object.keys(players).length}`;
+            if (playersCount) {
+                playersCount.textContent = `Игроков: ${Object.keys(players).length}`;
+            }
 
             if (playersList) {
                 let html = '';
@@ -631,6 +843,7 @@
             document.getElementById('questionCounter').textContent = `Вопрос ${index + 1}/${questions.length}`;
             document.getElementById('questionText').textContent = question.question;
 
+            // Перемешиваем варианты
             const shuffled = shuffleOptions(question);
             
             let html = '';
@@ -654,6 +867,7 @@
             const correctIndex = question.correct;
             const correctValue = options[correctIndex];
             
+            // Перемешиваем
             for (let i = options.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [options[i], options[j]] = [options[j], options[i]];
@@ -661,13 +875,17 @@
             
             const newCorrectIndex = options.indexOf(correctValue);
             
-            return { options: options, correctIndex: newCorrectIndex };
+            return {
+                options: options,
+                correctIndex: newCorrectIndex
+            };
         }
 
         window.selectAnswer = async function(selectedIndex, correctIndex) {
             if (hasAnswered) return;
             hasAnswered = true;
 
+            // Подсвечиваем выбранный ответ
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             document.querySelectorAll('.option')[selectedIndex].classList.add('selected');
 
@@ -681,10 +899,13 @@
                 myScore += 1;
                 document.getElementById('playerScore').textContent = myScore;
 
+                // Обновляем счет в лобби
                 try {
                     const players = currentLobby.players || {};
                     if (players[playerName]) {
                         players[playerName].score = myScore;
+                        players[playerName].last_answer = currentQuestionIndex;
+                        players[playerName].last_correct = isCorrect ? currentQuestionIndex : null;
                         await sb.from('lobbies').update({ players: players }).eq('id', currentLobby.id);
                     }
                 } catch (error) {
@@ -698,8 +919,12 @@
             if (errorEl) {
                 errorEl.textContent = msg;
                 errorEl.style.display = 'block';
-                setTimeout(() => errorEl.style.display = 'none', 3000);
-            } else alert(msg);
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                }, 3000);
+            } else {
+                alert(msg);
+            }
         }
 
         init();
