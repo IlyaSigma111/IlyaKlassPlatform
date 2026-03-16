@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Стили как в предыдущей версии + адаптив */
         * {
             margin: 0;
             padding: 0;
@@ -24,12 +23,16 @@
         }
 
         /* ТЕМЫ */
-        body.pink-theme { background: linear-gradient(135deg, #fbc7d1 0%, #f8cdda 100%); color: #4a4a4a; }
+        body.pink-theme { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #4a4a4a; }
         body.blue-theme { background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); color: white; }
-        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #2d4a1e; }
+        body.green-theme { background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: #1e3a0e; }
         body.purple-theme { background: linear-gradient(135deg, #b993d6 0%, #8ca6db 100%); color: #2d2d5a; }
         body.orange-theme { background: linear-gradient(135deg, #f9d423 0%, #f83600 100%); color: #4a2a1a; }
         body.dark-theme { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+        body.sunset-theme { background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); color: #4a2a1a; }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #f2fcfe 100%); color: #0a2f44; }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); color: #e0f2e9; }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #453a94 100%); color: white; }
 
         /* АДАПТИВ ДЛЯ МОБИЛОК */
         @media (max-width: 768px) {
@@ -51,7 +54,7 @@
             
             .nav-link {
                 padding: 8px 12px;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             
             .user-card {
@@ -66,7 +69,8 @@
             }
             
             .themes-section,
-            .store-section {
+            .store-section,
+            .secret-section {
                 padding: 20px;
             }
             
@@ -79,6 +83,7 @@
             .store-filters {
                 width: 100%;
                 justify-content: space-between;
+                flex-wrap: wrap;
             }
             
             .filter-btn {
@@ -86,6 +91,7 @@
                 text-align: center;
                 padding: 8px 10px;
                 font-size: 0.8rem;
+                min-width: 80px;
             }
             
             .themes-grid {
@@ -100,18 +106,27 @@
             .store-quiz-card {
                 padding: 15px;
             }
+            
+            .theme-card {
+                padding: 10px;
+            }
+            
+            .theme-name {
+                font-size: 0.85rem;
+                word-break: break-word;
+            }
         }
 
         @media (max-width: 480px) {
             .nav-menu {
-                gap: 8px;
+                gap: 5px;
             }
             
             .nav-link {
-                width: calc(50% - 4px);
+                width: calc(50% - 3px);
                 text-align: center;
                 padding: 8px 5px;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             
             .user-card {
@@ -149,12 +164,24 @@
             .like-btn {
                 width: 100%;
             }
+            
+            .secret-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .theme-color {
+                width: 35px;
+                height: 35px;
+            }
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         .header {
@@ -167,12 +194,14 @@
             border-radius: 40px;
             margin-bottom: 30px;
             border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
         }
 
         .logo-small {
             font-size: 1.8rem;
             font-weight: 700;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .nav-menu {
@@ -232,6 +261,7 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
+            color: inherit;
         }
 
         .logout-btn:hover {
@@ -248,6 +278,7 @@
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 20px;
+            width: 100%;
         }
 
         .themes-section,
@@ -258,6 +289,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             padding: 25px;
+            width: 100%;
         }
 
         .secret-section {
@@ -280,13 +312,15 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            word-break: break-word;
         }
 
         .themes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             margin: 20px 0;
+            width: 100%;
         }
 
         .theme-card {
@@ -312,34 +346,36 @@
         }
 
         .theme-color {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             margin: 0 auto 10px;
             border: 2px solid white;
         }
 
         .theme-name {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 5px;
+            word-break: break-word;
         }
 
         .theme-price {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             opacity: 0.8;
         }
 
         .apply-theme-btn,
         .buy-theme-btn {
             margin-top: 10px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             background: #6366f1;
             border: none;
             border-radius: 20px;
             color: white;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             transition: all 0.3s;
+            width: 100%;
         }
 
         .apply-theme-btn:hover,
@@ -384,6 +420,7 @@
             max-height: 600px;
             overflow-y: auto;
             padding: 10px;
+            width: 100%;
         }
 
         .store-quiz-card {
@@ -417,15 +454,17 @@
         }
 
         .store-quiz-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 5px;
+            word-break: break-word;
         }
 
         .store-quiz-stats {
             display: flex;
             gap: 15px;
             margin: 10px 0;
+            flex-wrap: wrap;
         }
 
         .store-quiz-actions {
@@ -485,9 +524,10 @@
         }
 
         .secret-item-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #ffd700;
+            word-break: break-word;
         }
 
         .secret-item-price {
@@ -515,6 +555,7 @@
             text-align: center;
             padding: 40px;
             opacity: 0.7;
+            width: 100%;
         }
 
         .empty-icon {
@@ -560,14 +601,13 @@
                 </div>
                 
                 <div id="themesList" class="themes-grid">
-                    <!-- Сюда загрузятся темы -->
                     <div class="empty-state">Загрузка тем...</div>
                 </div>
                 
                 <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 30px;">
                     <h3 style="color: #6366f1; margin-bottom: 10px;">🎨 Текущая тема</h3>
-                    <div id="currentTheme" style="display: flex; align-items: center; gap: 10px;">
-                        <div id="currentThemeColor" style="width: 30px; height: 30px; border-radius: 50%; background: #fbc7d1; border: 2px solid white;"></div>
+                    <div id="currentTheme" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <div id="currentThemeColor" style="width: 35px; height: 35px; border-radius: 50%; background: #ff9a9e; border: 2px solid white;"></div>
                         <span id="currentThemeName">Розовая</span>
                     </div>
                 </div>
@@ -618,6 +658,10 @@
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
+        // ТГ БОТ
+        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
+        const TG_CHAT_ID = '1474901393';
+
         let currentUser = null;
         let userCoins = 100;
         let userThemes = ['pink'];
@@ -625,21 +669,44 @@
         let isModerator = false;
 
         const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#fbc7d1' },
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff9a9e' },
             { id: 'blue', name: '💙 Синяя', price: 50, color: '#6dd5ed' },
-            { id: 'green', name: '💚 Зеленая', price: 50, color: '#a8e063' },
-            { id: 'purple', name: '💜 Фиолетовая', price: 100, color: '#b993d6' },
-            { id: 'orange', name: '🧡 Оранжевая', price: 100, color: '#f9d423' },
-            { id: 'dark', name: '🖤 Темная', price: 200, color: '#2c3e50' }
+            { id: 'green', name: '💚 Зеленая', price: 100, color: '#a8e063' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#b993d6' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f9d423' },
+            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
+            { id: 'forest', name: '🌲 Лес', price: 225, color: '#134e5e' },
+            { id: 'sunset', name: '🌅 Закат', price: 250, color: '#ff7e5f' },
+            { id: 'ocean', name: '🌊 Океан', price: 275, color: '#1c92d2' },
+            { id: 'dark', name: '🖤 Темная', price: 300, color: '#2c3e50' }
         ];
 
-        // Секретные товары (ответы на викторины)
         const secretItems = [
-            { id: 'answer1', name: '📝 Ответы на "Математика 5 класс"', price: 500, quizId: 'quiz_math_5' },
-            { id: 'answer2', name: '📝 Ответы на "Русский язык 6 класс"', price: 500, quizId: 'quiz_russian_6' },
-            { id: 'answer3', name: '📝 Ответы на "История 7 класс"', price: 500, quizId: 'quiz_history_7' },
-            { id: 'answer4', name: '🔓 Универсальный ключ (все ответы)', price: 2000, quizId: 'all' }
+            { id: 'answer_math_5', name: '📝 Ответы на "Математика 5 класс"', price: 500, quizId: 'quiz_math_5' },
+            { id: 'answer_russian_6', name: '📝 Ответы на "Русский язык 6 класс"', price: 500, quizId: 'quiz_russian_6' },
+            { id: 'answer_history_7', name: '📝 Ответы на "История 7 класс"', price: 500, quizId: 'quiz_history_7' },
+            { id: 'answer_biology_8', name: '📝 Ответы на "Биология 8 класс"', price: 500, quizId: 'quiz_biology_8' },
+            { id: 'answer_physics_9', name: '📝 Ответы на "Физика 9 класс"', price: 500, quizId: 'quiz_physics_9' },
+            { id: 'answer_chemistry_10', name: '📝 Ответы на "Химия 10 класс"', price: 500, quizId: 'quiz_chemistry_10' },
+            { id: 'answer_all', name: '🔓 Универсальный ключ (все ответы)', price: 2000, quizId: 'all' }
         ];
+
+        async function sendToTG(message) {
+            try {
+                const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TG_CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+            } catch (e) {
+                console.error('Ошибка отправки в ТГ:', e);
+            }
+        }
 
         function applyTheme(themeId) {
             document.body.className = themeId + '-theme';
@@ -677,6 +744,9 @@
         }
 
         function logout() {
+            if (currentUser) {
+                sendToTG(`🚪 Выход из магазина: ${currentUser.username}`);
+            }
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
@@ -703,6 +773,8 @@
             
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
+            
+            sendToTG(`🛒 ${currentUser.username} зашел в магазин`);
         }
 
         function loadThemesShop() {
@@ -750,6 +822,8 @@
                     currentUser.themes = userThemes;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
+                    sendToTG(`💰 ${currentUser.username} купил тему ${theme.name} за ${theme.price} монет`);
+                    
                     updateUI();
                     loadThemesShop();
                     
@@ -780,7 +854,6 @@
                     return;
                 }
 
-                // Сортируем по фильтру
                 let sortedQuizzes = [...quizzes];
                 if (storeFilter === 'popular') {
                     sortedQuizzes.sort((a, b) => (b.likes || 0) - (a.likes || 0));
@@ -853,6 +926,8 @@
                 currentUser.liked_quizzes = newLiked;
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
+                sendToTG(`${isLiked ? '👎' : '❤️'} ${currentUser.username} ${isLiked ? 'убрал лайк' : 'лайкнул'} викторину ${quizId}`);
+                
                 loadStoreQuizzes();
             } catch (error) {
                 console.error('Ошибка лайка:', error);
@@ -898,6 +973,7 @@
                     });
                 }
 
+                sendToTG(`📥 ${currentUser.username} сохранил викторину "${original.title}" в свою коллекцию`);
                 alert('✅ Викторина сохранена в вашу коллекцию!');
             } catch (error) {
                 console.error('Ошибка сохранения:', error);
@@ -916,7 +992,7 @@
                             <div class="secret-item-title">${item.name}</div>
                             <div style="opacity: 0.7;">Купите ответы и проходите викторины на 100%</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                             <span class="secret-item-price">${item.price} <i class="fas fa-coins" style="color: #ffd700;"></i></span>
                             <button class="secret-buy-btn" onclick="buySecretItem('${item.id}', ${item.price})">Купить</button>
                         </div>
@@ -947,10 +1023,11 @@
                     
                     updateUI();
                     
-                    // Сохраняем купленные ответы
                     const boughtAnswers = JSON.parse(localStorage.getItem('boughtAnswers') || '[]');
                     boughtAnswers.push(itemId);
                     localStorage.setItem('boughtAnswers', JSON.stringify(boughtAnswers));
+                    
+                    sendToTG(`🤫 ${currentUser.username} купил секретные ответы: ${itemId} за ${price} монет`);
                     
                     alert('✅ Ответы куплены! Теперь вы знаете все правильные варианты.');
                 } catch (error) {
