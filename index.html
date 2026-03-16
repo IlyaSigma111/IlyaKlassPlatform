@@ -1065,65 +1065,125 @@
                 const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
                 
                 await sb.from('users').insert({
-                    id: userId, username: name, password: hashPassword(pass),
-                    role: selectedRole, coins: 100, themes: ['pink'],
-                    liked_quizzes: [], role_title: 'user', created_at: new Date().toISOString()
+                    id: userId,
+                    username: name,
+                    password: hashPassword(pass),
+                    role: selectedRole,
+                    coins: 100,
+                    themes: ['pink'],
+                    liked_quizzes: [],
+                    role_title: 'user',
+                    created_at: new Date().toISOString()
                 });
 
                 await sb.from('user_tokens').insert({
-                    user_id: userId, balance: 0,
+                    user_id: userId,
+                    balance: 0,
                     referral_code: 'ref_' + userId + '_' + Math.floor(Math.random() * 1000000)
                 });
 
-                currentUser = { id: userId, username: name, role: selectedRole, coins: 100, themes: ['pink'], role_title: 'user' };
+                currentUser = { 
+                    id: userId, 
+                    username: name, 
+                    role: selectedRole, 
+                    coins: 100, 
+                    themes: ['pink'],
+                    liked_quizzes: [],
+                    role_title: 'user'
+                };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 
                 sendToTG(`🆕 Новый пользователь: ${name} (${selectedRole})`);
                 
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainScreen').classList.add('active');
-                updateUI(); loadQuizzes();
+                updateUI(); 
+                loadQuizzes();
 
                 const savedTheme = localStorage.getItem('currentTheme') || 'pink';
                 applyTheme(savedTheme);
 
-            } catch (error) { document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; }
+            } catch (error) { 
+                console.error('Ошибка регистрации:', error);
+                document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; 
+            }
         }
 
         window.doLogin = async function() {
             const name = document.getElementById('loginName').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if (!name || !pass) { document.getElementById('errorMsg').textContent = 'Введите имя и пароль'; return; }
+            if (!name || !pass) { 
+                document.getElementById('errorMsg').textContent = 'Введите имя и пароль'; 
+                return; 
+            }
 
             // Вход для владельца
             if (name === 'Ильяблоко' && pass === 'JojoTop1') {
-                const { data: existing } = await sb.from('users').select('*').eq('username', 'Ильяблоко');
-                
-                if (!existing || existing.length === 0) {
-                    await sb.from('users').insert({
-                        id: 'owner', username: 'Ильяблоко', password: hashPassword('JojoTop1'),
-                        role: 'teacher', coins: 99999, themes: allThemes.map(t => t.id), role_title: 'owner'
-                    });
-                    await sb.from('user_tokens').insert({ user_id: 'owner', balance: 99999, referral_code: 'ref_owner' });
-                } else {
-                    await sb.from('users').update({ role_title: 'owner', coins: 99999 }).eq('username', 'Ильяблоко');
+                try {
+                    const { data: existing } = await sb.from('users').select('*').eq('username', 'Ильяблоко');
+                    
+                    let userId = 'owner';
+                    
+                    if (!existing || existing.length === 0) {
+                        await sb.from('users').insert({
+                            id: userId,
+                            username: 'Ильяблоко',
+                            password: hashPassword('JojoTop1'),
+                            role: 'teacher',
+                            coins: 99999,
+                            themes: allThemes.map(t => t.id),
+                            role_title: 'owner'
+                        });
+                        
+                        await sb.from('user_tokens').insert({ 
+                            user_id: userId, 
+                            balance: 99999, 
+                            referral_code: 'ref_owner' 
+                        });
+                    } else {
+                        await sb.from('users').update({ 
+                            role_title: 'owner', 
+                            coins: 99999 
+                        }).eq('username', 'Ильяблоко');
+                        
+                        userId = existing[0].id;
+                    }
+                    
+                    const { data: tokens } = await sb.from('user_tokens')
+                        .select('balance')
+                        .eq('user_id', userId)
+                        .single();
+                    
+                    currentUser = { 
+                        id: userId, 
+                        username: 'Ильяблоко', 
+                        role: 'teacher', 
+                        coins: 99999, 
+                        themes: allThemes.map(t => t.id),
+                        liked_quizzes: [],
+                        role_title: 'owner'
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    userCoins = 99999; 
+                    userTokens = tokens?.balance || 99999; 
+                    userThemes = allThemes.map(t => t.id);
+                    
+                    sendToTG(`👑 Вход: Ильяблоко (Владелец)`);
+                    
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainScreen').classList.add('active');
+                    updateUI(); 
+                    loadQuizzes();
+                    
+                    const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+                    applyTheme(savedTheme);
+                    
+                } catch (error) {
+                    console.error('Ошибка входа владельца:', error);
+                    document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message;
                 }
-                
-                const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', 'owner').single();
-                
-                currentUser = { id: 'owner', username: 'Ильяблоко', role: 'teacher', coins: 99999, themes: allThemes.map(t => t.id), role_title: 'owner' };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                userCoins = 99999; userTokens = tokens?.balance || 99999; userThemes = allThemes.map(t => t.id);
-                
-                sendToTG(`👑 Вход: Ильяблоко (Владелец)`);
-                
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainScreen').classList.add('active');
-                updateUI(); loadQuizzes();
-                
-                const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-                applyTheme(savedTheme);
                 return;
             }
 
@@ -1132,26 +1192,43 @@
                 const user = users && users[0];
 
                 if (user && user.password === hashPassword(pass)) {
-                    const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).single();
+                    const { data: tokens } = await sb.from('user_tokens')
+                        .select('balance')
+                        .eq('user_id', user.id)
+                        .single();
                     
                     currentUser = { 
-                        id: user.id, username: user.username, role: user.role,
-                        coins: user.coins || 100, themes: user.themes || ['pink'],
-                        liked_quizzes: user.liked_quizzes || [], role_title: user.role_title || 'user'
+                        id: user.id, 
+                        username: user.username, 
+                        role: user.role,
+                        coins: user.coins || 100, 
+                        themes: user.themes || ['pink'],
+                        liked_quizzes: user.liked_quizzes || [], 
+                        role_title: user.role_title || 'user'
                     };
+                    
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    userCoins = currentUser.coins; userTokens = tokens?.balance || 0; userThemes = currentUser.themes;
+                    userCoins = currentUser.coins; 
+                    userTokens = tokens?.balance || 0; 
+                    userThemes = currentUser.themes;
                     
                     sendToTG(`🔑 Вход: ${name} (${user.role_title})`);
                     
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainScreen').classList.add('active');
-                    updateUI(); loadQuizzes();
+                    updateUI(); 
+                    loadQuizzes();
                     
                     const savedTheme = localStorage.getItem('currentTheme') || 'pink';
                     applyTheme(savedTheme);
-                } else { document.getElementById('errorMsg').textContent = 'Неверное имя или пароль'; }
-            } catch (error) { document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; }
+                    
+                } else { 
+                    document.getElementById('errorMsg').textContent = 'Неверное имя или пароль'; 
+                }
+            } catch (error) { 
+                console.error('Ошибка входа:', error);
+                document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; 
+            }
         };
 
         window.logout = function() {
@@ -1166,8 +1243,23 @@
             
             if (!s || !currentUser) return;
             
-            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
-            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
+            const roleEmoji = { 
+                'owner': '👑', 
+                'mediacoord': '🎥', 
+                'chief': '⭐', 
+                'curator': '📚', 
+                'moderator': '🛡️', 
+                'user': '👤' 
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = { 
+                'owner': 'role-owner', 
+                'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 
+                'curator': 'role-curator', 
+                'moderator': 'role-moderator', 
+                'user': '' 
+            }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
@@ -1204,23 +1296,41 @@
             
             try {
                 let query = sb.from('quizzes').select('*');
-                if (currentTab === 'free') query = query.eq('type', 'kahoot').eq('published', true);
-                else if (currentTab === 'premium') query = query.eq('type', 'constructed').eq('published', true);
-                else if (currentTab === 'my' && currentUser.role === 'teacher') query = query.eq('created_by', currentUser.id);
                 
-                const { data: quizzes } = await query;
+                if (currentTab === 'free') {
+                    query = query.eq('type', 'kahoot').eq('published', true);
+                } else if (currentTab === 'premium') {
+                    query = query.eq('type', 'constructed').eq('published', true);
+                } else if (currentTab === 'my' && currentUser.role === 'teacher') {
+                    query = query.eq('created_by', currentUser.id);
+                } else {
+                    // Если не подходит ни одно условие, возвращаем пустой результат
+                    document.getElementById('myQuizzesList').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>Нет викторин</p></div>`;
+                    return;
+                }
+                
+                const { data: quizzes, error } = await query;
+                
+                if (error) {
+                    console.error('Ошибка загрузки:', error);
+                    return;
+                }
+                
                 const container = document.getElementById('myQuizzesList');
                 
                 if (!quizzes || quizzes.length === 0) {
-                    if (currentTab === 'free') container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎁</div><p>Бесплатных викторин пока нет</p></div>`;
-                    else if (currentTab === 'premium') container.innerHTML = `<div class="empty-state"><div class="empty-icon">💎</div><p>Премиум викторин пока нет</p><a href="shop.html"><button class="shop-btn">В магазин</button></a></div>`;
-                    else container.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><p>У вас пока нет викторин</p><button class="create-btn" onclick="openConstructor()">Создать</button></div>`;
+                    if (currentTab === 'free') {
+                        container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎁</div><p>Бесплатных викторин пока нет</p></div>`;
+                    } else if (currentTab === 'premium') {
+                        container.innerHTML = `<div class="empty-state"><div class="empty-icon">💎</div><p>Премиум викторин пока нет</p><a href="shop.html"><button class="shop-btn">В магазин</button></a></div>`;
+                    } else {
+                        container.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><p>У вас пока нет викторин</p><button class="create-btn" onclick="openConstructor()">Создать</button></div>`;
+                    }
                     return;
                 }
 
                 let html = '';
                 for (let q of quizzes) {
-                    // Используем фиксированные цвета вместо поля theme
                     const themeColor = q.type === 'kahoot' ? '#10b981' : '#f59e0b';
                     const cardClass = q.type === 'kahoot' ? 'free' : 'premium';
                     
@@ -1246,16 +1356,38 @@
                     html += `</div>`;
                 }
                 container.innerHTML = html;
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error('Ошибка загрузки викторин:', e); 
+            }
         }
 
         window.buyQuiz = async (quizId, price) => {
             if (!currentUser) return;
-            if (userTokens < price) { alert('Недостаточно токенов!'); return; }
+            if (userTokens < price) { 
+                alert('Недостаточно токенов!'); 
+                return; 
+            }
             if (confirm(`Купить викторину за ${price} токенов?`)) {
-                const { data } = await sb.rpc('buy_quiz_with_tokens', { p_user_id: currentUser.id, p_quiz_id: quizId });
-                if (data) { userTokens -= price; updateUI(); alert('✅ Викторина куплена!'); sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`); }
-                else alert('❌ Ошибка');
+                try {
+                    const { data, error } = await sb.rpc('buy_quiz_with_tokens', { 
+                        p_user_id: currentUser.id, 
+                        p_quiz_id: quizId 
+                    });
+                    
+                    if (error) throw error;
+                    
+                    if (data) { 
+                        userTokens -= price; 
+                        updateUI(); 
+                        alert('✅ Викторина куплена!'); 
+                        sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`); 
+                    } else { 
+                        alert('❌ Ошибка при покупке'); 
+                    }
+                } catch (error) {
+                    console.error('Ошибка покупки:', error);
+                    alert('Ошибка: ' + error.message);
+                }
             }
         };
 
@@ -1263,42 +1395,115 @@
         window.editQuiz = (quizId) => openConstructor(quizId);
 
         window.openConstructor = function(editId = null) {
-            if (!currentUser || currentUser.role !== 'teacher') { alert('Только учителя'); return; }
+            if (!currentUser || currentUser.role !== 'teacher') { 
+                alert('Только учителя могут создавать викторины'); 
+                return; 
+            }
             editingQuizId = editId;
-            if (editId) { document.getElementById('constructorTitle').textContent = '✏️ Редактирование'; loadQuizForEdit(editId); } 
-            else { document.getElementById('constructorTitle').textContent = '🛠️ Создание'; quizQuestions = []; document.getElementById('quizTitle').value = ''; document.getElementById('quizClass').value = ''; document.getElementById('quizSubject').value = ''; document.getElementById('quizTheme').value = 'pink'; document.getElementById('quizType').value = 'kahoot'; document.getElementById('quizPriceTokens').value = '0'; document.getElementById('publishToStore').checked = false; renderQuestions(); }
+            if (editId) { 
+                document.getElementById('constructorTitle').textContent = '✏️ Редактирование'; 
+                loadQuizForEdit(editId); 
+            } else { 
+                document.getElementById('constructorTitle').textContent = '🛠️ Создание'; 
+                quizQuestions = []; 
+                document.getElementById('quizTitle').value = ''; 
+                document.getElementById('quizClass').value = ''; 
+                document.getElementById('quizSubject').value = ''; 
+                document.getElementById('quizTheme').value = 'pink'; 
+                document.getElementById('quizType').value = 'kahoot'; 
+                document.getElementById('quizPriceTokens').value = '0'; 
+                document.getElementById('publishToStore').checked = false; 
+                renderQuestions(); 
+            }
             document.getElementById('constructorOverlay').classList.add('active');
         };
 
-        window.closeConstructor = () => { document.getElementById('constructorOverlay').classList.remove('active'); editingQuizId = null; };
-        window.addQuestion = () => { quizQuestions.push({ id: Date.now(), question: '', answers: ['', '', '', ''], correct: 0 }); renderQuestions(); };
-        window.removeQuestion = (i) => { if (quizQuestions.length <= 1) { alert('Должен быть хотя бы один вопрос'); return; } quizQuestions.splice(i, 1); renderQuestions(); };
+        window.closeConstructor = () => { 
+            document.getElementById('constructorOverlay').classList.remove('active'); 
+            editingQuizId = null; 
+        };
+        
+        window.addQuestion = () => { 
+            quizQuestions.push({ 
+                id: Date.now(), 
+                question: '', 
+                answers: ['', '', '', ''], 
+                correct: 0 
+            }); 
+            renderQuestions(); 
+        };
+        
+        window.removeQuestion = (i) => { 
+            if (quizQuestions.length <= 1) { 
+                alert('Должен быть хотя бы один вопрос'); 
+                return; 
+            } 
+            quizQuestions.splice(i, 1); 
+            renderQuestions(); 
+        };
         
         function renderQuestions() {
-            let html = '', c = document.getElementById('questionsContainer');
+            let html = '', 
+                c = document.getElementById('questionsContainer');
+            
+            if (quizQuestions.length === 0) {
+                c.innerHTML = '<p style="text-align:center; opacity:0.7;">Добавьте первый вопрос</p>';
+                return;
+            }
+            
             for (let i = 0; i < quizQuestions.length; i++) {
                 let q = quizQuestions[i];
-                html += `<div class="question-card"><div class="question-header"><span>Вопрос ${i+1}</span><span onclick="removeQuestion(${i})">✕</span></div><input placeholder="Вопрос" value="${q.question}" onchange="updateQuestion(${i},'question',this.value)"><div class="answers-grid">${[0,1,2,3].map(j => `<div class="answer-option"><input type="radio" name="q${q.id}" ${q.correct===j?'checked':''} onchange="updateQuestion(${i},'correct',${j})"><input placeholder="Ответ ${j+1}" value="${q.answers[j]}" onchange="updateQuestion(${i},'answer${j}',this.value)"></div>`).join('')}</div></div>`;
+                html += `<div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Вопрос ${i+1}</span>
+                        <span class="remove-question" onclick="removeQuestion(${i})">✕</span>
+                    </div>
+                    <input type="text" placeholder="Текст вопроса" value="${(q.question || '').replace(/"/g, '&quot;')}" 
+                           onchange="updateQuestion(${i}, 'question', this.value)" style="width:100%; padding:10px; margin-bottom:10px;">
+                    <div class="answers-grid">`;
+                
+                for (let j = 0; j < 4; j++) {
+                    html += `<div class="answer-option">
+                        <input type="radio" name="correct-${q.id || i}" value="${j}" ${q.correct === j ? 'checked' : ''} 
+                               onchange="updateQuestion(${i}, 'correct', this.value)">
+                        <input type="text" placeholder="Ответ ${j+1}" value="${(q.answers[j] || '').replace(/"/g, '&quot;')}" 
+                               onchange="updateQuestion(${i}, 'answer${j}', this.value)">
+                    </div>`;
+                }
+                
+                html += `</div></div>`;
             }
             c.innerHTML = html;
         }
 
         window.updateQuestion = (i, f, v) => {
-            if (f === 'question') quizQuestions[i].question = v;
-            else if (f.startsWith('answer')) quizQuestions[i].answers[parseInt(f.replace('answer',''))] = v;
-            else if (f === 'correct') quizQuestions[i].correct = parseInt(v);
+            if (f === 'question') {
+                quizQuestions[i].question = v;
+            } else if (f.startsWith('answer')) {
+                let ai = parseInt(f.replace('answer',''));
+                quizQuestions[i].answers[ai] = v;
+            } else if (f === 'correct') {
+                quizQuestions[i].correct = parseInt(v);
+            }
         };
 
         async function loadQuizForEdit(quizId) {
             try {
-                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-                const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+                const { data: quiz, error: quizError } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+                if (quizError) throw quizError;
+                
+                const { data: questions, error: questionsError } = await sb.from('questions')
+                    .select('*')
+                    .eq('quiz_id', quizId)
+                    .order('question_index');
+                    
+                if (questionsError) throw questionsError;
                 
                 if (quiz) {
                     document.getElementById('quizTitle').value = quiz.title || '';
                     document.getElementById('quizClass').value = quiz.class || '';
                     document.getElementById('quizSubject').value = quiz.subject || '';
-                    document.getElementById('quizTheme').value = quiz.theme || 'pink';
+                    document.getElementById('quizTheme').value = 'pink'; // Значение по умолчанию
                     document.getElementById('quizType').value = quiz.type || 'kahoot';
                     document.getElementById('quizPriceTokens').value = quiz.price_tokens || 0;
                     document.getElementById('publishToStore').checked = false;
@@ -1312,30 +1517,67 @@
                 }));
                 
                 renderQuestions();
-            } catch (error) { console.error('Ошибка загрузки викторины:', error); alert('Не удалось загрузить викторину'); }
+            } catch (error) { 
+                console.error('Ошибка загрузки викторины:', error); 
+                alert('Не удалось загрузить викторину: ' + error.message); 
+            }
         }
 
         async function addCoins(userId, amount, reason) {
             if (!userId) return null;
             try {
-                const { data: user } = await sb.from('users').select('coins').eq('id', userId).single();
+                const { data: user, error: userError } = await sb.from('users')
+                    .select('coins')
+                    .eq('id', userId)
+                    .single();
+                    
+                if (userError) throw userError;
                 if (!user) return null;
+                
                 const newCoins = (user.coins || 0) + amount;
-                await sb.from('users').update({ coins: newCoins }).eq('id', userId);
+                
+                const { error: updateError } = await sb.from('users')
+                    .update({ coins: newCoins })
+                    .eq('id', userId);
+                    
+                if (updateError) throw updateError;
+                
                 if (currentUser && currentUser.id === userId) {
                     currentUser.coins = newCoins;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     updateUI();
                 }
+                
                 sendToTG(`💰 ${currentUser?.username} получил ${amount} монет (${reason})`);
                 return newCoins;
-            } catch (error) { console.error('Ошибка добавления монет:', error); return null; }
+                
+            } catch (error) { 
+                console.error('Ошибка добавления монет:', error); 
+                return null; 
+            }
         }
 
-        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ (БЕЗ likes И theme) =====
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ =====
         window.saveQuiz = async function() {
             if (!currentUser) {
                 alert('Ошибка: пользователь не найден');
+                return;
+            }
+
+            // Проверяем, что пользователь существует в БД
+            try {
+                const { data: userCheck, error: userError } = await sb.from('users')
+                    .select('id')
+                    .eq('id', currentUser.id)
+                    .single();
+                    
+                if (userError || !userCheck) {
+                    alert('Ошибка: пользователь не найден в базе данных');
+                    return;
+                }
+            } catch (error) {
+                console.error('Ошибка проверки пользователя:', error);
+                alert('Ошибка проверки пользователя: ' + error.message);
                 return;
             }
 
@@ -1346,12 +1588,33 @@
             const price = parseInt(document.getElementById('quizPriceTokens').value) || 0;
             const publish = document.getElementById('publishToStore').checked;
 
-            if (!title) { alert('Введите название викторины'); return; }
-            if (quizQuestions.length === 0) { alert('Добавьте хотя бы один вопрос'); return; }
+            if (!title) { 
+                alert('Введите название викторины'); 
+                return; 
+            }
+            
+            if (quizQuestions.length === 0) { 
+                alert('Добавьте хотя бы один вопрос'); 
+                return; 
+            }
 
-            for (let q of quizQuestions) {
-                if (!q.question || q.answers.some(a => !a)) { 
-                    alert('Заполните все поля вопросов');
+            for (let i = 0; i < quizQuestions.length; i++) {
+                const q = quizQuestions[i];
+                
+                if (!q.question || q.question.trim() === '') {
+                    alert(`Заполните текст вопроса ${i+1}`);
+                    return;
+                }
+                
+                for (let j = 0; j < 4; j++) {
+                    if (!q.answers[j] || q.answers[j].trim() === '') {
+                        alert(`Заполните ответ ${j+1} в вопросе ${i+1}`);
+                        return;
+                    }
+                }
+                
+                if (q.correct === undefined || q.correct === null) {
+                    alert(`Выберите правильный ответ в вопросе ${i+1}`);
                     return;
                 }
             }
@@ -1359,7 +1622,7 @@
             try {
                 if (editingQuizId) {
                     // Обновление существующей викторины
-                    await sb.from('quizzes').update({
+                    const { error: updateError } = await sb.from('quizzes').update({
                         title: title,
                         class: quizClass,
                         subject: subject,
@@ -1370,28 +1633,37 @@
                         published: publish
                     }).eq('id', editingQuizId);
 
+                    if (updateError) throw updateError;
+
                     // Удаляем старые вопросы
-                    await sb.from('questions').delete().eq('quiz_id', editingQuizId);
+                    const { error: deleteError } = await sb.from('questions')
+                        .delete()
+                        .eq('quiz_id', editingQuizId);
+                        
+                    if (deleteError) throw deleteError;
 
                     // Добавляем новые вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
-                        await sb.from('questions').insert({
+                        const q = quizQuestions[i];
+                        const { error: insertError } = await sb.from('questions').insert({
                             quiz_id: editingQuizId,
                             question_index: i,
-                            question: quizQuestions[i].question,
-                            answers: quizQuestions[i].answers,
-                            correct: quizQuestions[i].correct
+                            question: q.question,
+                            answers: q.answers,
+                            correct: q.correct
                         });
+                        
+                        if (insertError) throw insertError;
                     }
 
                     sendToTG(`✏️ ${currentUser.username} отредактировал викторину: ${title}`);
                     alert('✅ Викторина обновлена!');
                     
                 } else {
-                    // Создание новой викторины (БЕЗ ПОЛЯ theme И likes)
+                    // Создание новой викторины
                     const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
                     
-                    const { error } = await sb.from('quizzes').insert({
+                    const quizData = {
                         id: quizId,
                         title: title,
                         class: quizClass,
@@ -1403,28 +1675,38 @@
                         created_by: currentUser.id,
                         published: publish,
                         created_at: Date.now()
-                        // ПОЛЯ theme И likes УДАЛЕНЫ!
-                    });
+                    };
+                    
+                    console.log('Сохраняем викторину:', quizData);
+                    
+                    const { error: insertError } = await sb.from('quizzes').insert(quizData);
 
-                    if (error) { 
-                        console.error('Ошибка при вставке викторины:', error);
-                        alert('Ошибка базы данных: ' + error.message); 
+                    if (insertError) { 
+                        console.error('Ошибка при вставке викторины:', insertError);
+                        alert('Ошибка базы данных: ' + insertError.message); 
                         return; 
                     }
 
                     // Добавляем вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
-                        await sb.from('questions').insert({
+                        const q = quizQuestions[i];
+                        const { error: qError } = await sb.from('questions').insert({
                             quiz_id: quizId,
                             question_index: i,
-                            question: quizQuestions[i].question,
-                            answers: quizQuestions[i].answers,
-                            correct: quizQuestions[i].correct
+                            question: q.question,
+                            answers: q.answers,
+                            correct: q.correct
                         });
+                        
+                        if (qError) {
+                            console.error('Ошибка при добавлении вопроса:', qError);
+                            throw qError;
+                        }
                     }
 
                     // Начисляем монеты
                     await addCoins(currentUser.id, 50, 'created_quiz');
+                    
                     if (publish) {
                         await addCoins(currentUser.id, 100, 'published_quiz');
                         sendToTG(`📢 ${currentUser.username} опубликовал викторину: ${title} (+100 монет)`);
@@ -1448,19 +1730,49 @@
         (function checkAuth() {
             const saved = localStorage.getItem('currentUser');
             if (saved) {
-                currentUser = JSON.parse(saved);
-                userCoins = currentUser.coins || 100;
-                userThemes = currentUser.themes || ['pink'];
-                sb.from('user_tokens').select('balance').eq('user_id', currentUser.id).single().then(({ data }) => {
-                    userTokens = data?.balance || 0;
+                try {
+                    currentUser = JSON.parse(saved);
+                    userCoins = currentUser.coins || 100;
+                    userThemes = currentUser.themes || ['pink'];
+                    
+                    // Проверяем, что пользователь действительно существует в БД
+                    sb.from('users')
+                        .select('id')
+                        .eq('id', currentUser.id)
+                        .single()
+                        .then(({ data, error }) => {
+                            if (error || !data) {
+                                console.error('Пользователь не найден в БД, очищаем localStorage');
+                                localStorage.removeItem('currentUser');
+                                window.location.reload();
+                                return;
+                            }
+                            
+                            // Загружаем токены
+                            sb.from('user_tokens')
+                                .select('balance')
+                                .eq('user_id', currentUser.id)
+                                .single()
+                                .then(({ data: tokenData }) => {
+                                    userTokens = tokenData?.balance || 0;
+                                    updateUI();
+                                })
+                                .catch(err => console.error('Ошибка загрузки токенов:', err));
+                        })
+                        .catch(err => console.error('Ошибка проверки пользователя:', err));
+                    
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainScreen').classList.add('active');
                     updateUI();
-                });
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainScreen').classList.add('active');
-                updateUI();
-                loadQuizzes();
-                const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-                applyTheme(savedTheme);
+                    loadQuizzes();
+                    
+                    const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+                    applyTheme(savedTheme);
+                    
+                } catch (e) {
+                    console.error('Ошибка парсинга пользователя:', e);
+                    localStorage.removeItem('currentUser');
+                }
             }
         })();
     </script>
