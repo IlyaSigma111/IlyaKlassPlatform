@@ -1220,10 +1220,21 @@
 
                 let html = '';
                 for (let q of quizzes) {
-                    const theme = allThemes.find(t => t.id === q.theme) || allThemes[0];
+                    // Используем фиксированные цвета вместо поля theme
+                    const themeColor = q.type === 'kahoot' ? '#10b981' : '#f59e0b';
                     const cardClass = q.type === 'kahoot' ? 'free' : 'premium';
                     
-                    html += `<div class="quiz-card ${cardClass}"><div class="quiz-card-header"><div class="quiz-theme-badge" style="background: ${theme.color};"></div><div class="quiz-class">${q.class || ''}</div></div><div class="quiz-title">${q.title}</div><div class="quiz-subject">${q.subject || ''}</div><div class="quiz-stats"><span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>${q.type === 'constructed' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${q.price_tokens || 0}</span>` : ''}</div>`;
+                    html += `<div class="quiz-card ${cardClass}">
+                        <div class="quiz-card-header">
+                            <div class="quiz-theme-badge" style="background: ${themeColor};"></div>
+                            <div class="quiz-class">${q.class || ''}</div>
+                        </div>
+                        <div class="quiz-title">${q.title}</div>
+                        <div class="quiz-subject">${q.subject || ''}</div>
+                        <div class="quiz-stats">
+                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                            ${q.type === 'constructed' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${q.price_tokens || 0}</span>` : ''}
+                        </div>`;
                     
                     if (currentTab === 'premium' && currentUser.role === 'student') {
                         html += `<div class="quiz-actions"><div class="quiz-action-btn buy" onclick="buyQuiz('${q.id}', ${q.price_tokens})"><i class="fas fa-shopping-cart"></i> Купить</div></div>`;
@@ -1321,7 +1332,7 @@
             } catch (error) { console.error('Ошибка добавления монет:', error); return null; }
         }
 
-        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ (БЕЗ likes) =====
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ (БЕЗ likes И theme) =====
         window.saveQuiz = async function() {
             if (!currentUser) {
                 alert('Ошибка: пользователь не найден');
@@ -1331,7 +1342,6 @@
             const title = document.getElementById('quizTitle').value.trim();
             const quizClass = document.getElementById('quizClass').value.trim();
             const subject = document.getElementById('quizSubject').value.trim();
-            const theme = document.getElementById('quizTheme').value;
             const type = document.getElementById('quizType').value;
             const price = parseInt(document.getElementById('quizPriceTokens').value) || 0;
             const publish = document.getElementById('publishToStore').checked;
@@ -1353,7 +1363,6 @@
                         title: title,
                         class: quizClass,
                         subject: subject,
-                        theme: theme,
                         type: type,
                         price_tokens: price,
                         question_count: quizQuestions.length,
@@ -1379,7 +1388,7 @@
                     alert('✅ Викторина обновлена!');
                     
                 } else {
-                    // Создание новой викторины (БЕЗ ПОЛЯ likes)
+                    // Создание новой викторины (БЕЗ ПОЛЯ theme И likes)
                     const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
                     
                     const { error } = await sb.from('quizzes').insert({
@@ -1387,7 +1396,6 @@
                         title: title,
                         class: quizClass,
                         subject: subject,
-                        theme: theme,
                         type: type,
                         price_tokens: price,
                         question_count: quizQuestions.length,
@@ -1395,7 +1403,7 @@
                         created_by: currentUser.id,
                         published: publish,
                         created_at: Date.now()
-                        // ПОЛЕ likes УДАЛЕНО!
+                        // ПОЛЯ theme И likes УДАЛЕНЫ!
                     });
 
                     if (error) { 
