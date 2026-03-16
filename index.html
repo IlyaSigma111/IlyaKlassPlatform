@@ -104,7 +104,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* ===== АДАПТИВ ДЛЯ МОБИЛОК (ПОЛНЫЙ РЕДИЗАЙН) ===== */
+        /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
         @media (max-width: 768px) {
             .container {
                 padding: 8px;
@@ -972,25 +972,29 @@
                 
                 <div class="publish-checkbox">
                     <input type="checkbox" id="publishToStore">
-                    <label for="publishToStore">📢 Опубликовать в магазине (+100 монет)</label>
+                    <label for="publishToStore">📢 Опубликовать в магазине (получить +100 монет)</label>
                 </div>
                 
                 <div id="questionsContainer"></div>
                 
                 <button class="add-question-btn" onclick="addQuestion()"><i class="fas fa-plus"></i> Добавить вопрос</button>
-                <button class="save-quiz-btn" onclick="saveQuiz()"><i class="fas fa-save"></i> Сохранить</button>
+                <button class="save-quiz-btn" onclick="saveQuiz()"><i class="fas fa-save"></i> Сохранить викторину</button>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ===== SUPABASE КОНФИГ =====
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
+        // ===== ТГ БОТ =====
         const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
         const TG_CHAT_ID = '1474901393';
 
+        // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
         let currentUser = null;
         let selectedRole = 'teacher';
         let userCoins = 100;
@@ -1000,6 +1004,7 @@
         let editingQuizId = null;
         let currentTab = 'free';
 
+        // ===== РАСШИРЕННЫЙ СПИСОК ТЕМ =====
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff758c' },
             { id: 'blue', name: '💙 Синяя', price: 50, color: '#4facfe' },
@@ -1013,21 +1018,31 @@
             { id: 'dark', name: '🖤 Темная', price: 300, color: '#2c3e50' }
         ];
 
+        // ===== ФУНКЦИЯ ОТПРАВКИ В ТГ =====
         async function sendToTG(message) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:message, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
+                });
+            } catch (e) { console.error('Ошибка ТГ:', e); }
         }
 
+        // ===== ХЕШ ПАРОЛЯ =====
         function hashPassword(p) {
             let h = 0;
             for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
             return h.toString(16);
         }
 
+        // ===== ФУНКЦИИ ТЕМЫ =====
         function applyTheme(themeId) {
             document.body.className = themeId + '-theme';
             localStorage.setItem('currentTheme', themeId);
         }
 
+        // ===== ФУНКЦИИ ЛОГИНА =====
         window.selectRole = function(role) {
             selectedRole = role;
             document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
@@ -1306,8 +1321,12 @@
             } catch (error) { console.error('Ошибка добавления монет:', error); return null; }
         }
 
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ (БЕЗ likes) =====
         window.saveQuiz = async function() {
-            if (!currentUser) { alert('Ошибка: пользователь не найден'); return; }
+            if (!currentUser) {
+                alert('Ошибка: пользователь не найден');
+                return;
+            }
 
             const title = document.getElementById('quizTitle').value.trim();
             const quizClass = document.getElementById('quizClass').value.trim();
@@ -1321,21 +1340,35 @@
             if (quizQuestions.length === 0) { alert('Добавьте хотя бы один вопрос'); return; }
 
             for (let q of quizQuestions) {
-                if (!q.question || q.answers.some(a => !a)) { alert('Заполните все поля вопросов'); return; }
+                if (!q.question || q.answers.some(a => !a)) { 
+                    alert('Заполните все поля вопросов');
+                    return;
+                }
             }
 
             try {
                 if (editingQuizId) {
+                    // Обновление существующей викторины
                     await sb.from('quizzes').update({
-                        title, class: quizClass, subject, theme, type, price_tokens: price,
-                        question_count: quizQuestions.length, max_score: quizQuestions.length, published: publish
+                        title: title,
+                        class: quizClass,
+                        subject: subject,
+                        theme: theme,
+                        type: type,
+                        price_tokens: price,
+                        question_count: quizQuestions.length,
+                        max_score: quizQuestions.length,
+                        published: publish
                     }).eq('id', editingQuizId);
 
+                    // Удаляем старые вопросы
                     await sb.from('questions').delete().eq('quiz_id', editingQuizId);
 
+                    // Добавляем новые вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
                         await sb.from('questions').insert({
-                            quiz_id: editingQuizId, question_index: i,
+                            quiz_id: editingQuizId,
+                            question_index: i,
                             question: quizQuestions[i].question,
                             answers: quizQuestions[i].answers,
                             correct: quizQuestions[i].correct
@@ -1346,25 +1379,43 @@
                     alert('✅ Викторина обновлена!');
                     
                 } else {
+                    // Создание новой викторины (БЕЗ ПОЛЯ likes)
                     const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
                     
                     const { error } = await sb.from('quizzes').insert({
-                        id: quizId, title, class: quizClass, subject, theme, type, price_tokens: price,
-                        question_count: quizQuestions.length, max_score: quizQuestions.length,
-                        created_by: currentUser.id, published: publish, likes: 0, created_at: Date.now()
+                        id: quizId,
+                        title: title,
+                        class: quizClass,
+                        subject: subject,
+                        theme: theme,
+                        type: type,
+                        price_tokens: price,
+                        question_count: quizQuestions.length,
+                        max_score: quizQuestions.length,
+                        created_by: currentUser.id,
+                        published: publish,
+                        created_at: Date.now()
+                        // ПОЛЕ likes УДАЛЕНО!
                     });
 
-                    if (error) { alert('Ошибка: ' + error.message); return; }
+                    if (error) { 
+                        console.error('Ошибка при вставке викторины:', error);
+                        alert('Ошибка базы данных: ' + error.message); 
+                        return; 
+                    }
 
+                    // Добавляем вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
                         await sb.from('questions').insert({
-                            quiz_id: quizId, question_index: i,
+                            quiz_id: quizId,
+                            question_index: i,
                             question: quizQuestions[i].question,
                             answers: quizQuestions[i].answers,
                             correct: quizQuestions[i].correct
                         });
                     }
 
+                    // Начисляем монеты
                     await addCoins(currentUser.id, 50, 'created_quiz');
                     if (publish) {
                         await addCoins(currentUser.id, 100, 'published_quiz');
@@ -1379,9 +1430,13 @@
                 closeConstructor();
                 await loadQuizzes();
 
-            } catch (error) { console.error('Ошибка сохранения:', error); alert('Ошибка: ' + error.message); }
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                alert('Ошибка: ' + error.message);
+            }
         };
 
+        // ===== ПРОВЕРКА АВТОРИЗАЦИИ =====
         (function checkAuth() {
             const saved = localStorage.getItem('currentUser');
             if (saved) {
