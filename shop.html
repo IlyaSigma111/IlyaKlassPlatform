@@ -917,18 +917,7 @@
                         .update({ coins: userCoins, themes: userThemes })
                         .eq('id', currentUser.id);
                         
-                    if (error) {
-                        // Если ошибка с coins, пробуем обновить только themes
-                        console.log('Ошибка обновления coins:', error);
-                        const { error: themesError } = await sb.from('users')
-                            .update({ themes: userThemes })
-                            .eq('id', currentUser.id);
-                            
-                        if (themesError) throw themesError;
-                        
-                        // Обновляем coins через отдельный запрос, если нужно
-                        // Здесь можно добавить логику для обновления монет через другую колонку
-                    }
+                    if (error) throw error;
                     
                     currentUser.coins = userCoins;
                     currentUser.themes = userThemes;
@@ -975,61 +964,21 @@
             
             if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
                 try {
-                    // Обновляем монеты пользователя - пробуем разные варианты
-                    let coinsUpdateSuccess = false;
+                    // Обновляем монеты пользователя - используем только coins
+                    const newCoins = userCoins - amount;
                     
-                    // Вариант 1: пробуем обновить coins
-                    try {
-                        const { error } = await sb.from('users')
-                            .update({ coins: userCoins - amount })
-                            .eq('id', currentUser.id);
-                            
-                        if (!error) {
-                            coinsUpdateSuccess = true;
-                            userCoins -= amount;
-                            currentUser.coins = userCoins;
-                        }
-                    } catch (e) {
-                        console.log('Ошибка при обновлении coins:', e);
+                    const { error: coinsError } = await sb.from('users')
+                        .update({ coins: newCoins })
+                        .eq('id', currentUser.id);
+                        
+                    if (coinsError) {
+                        console.error('Ошибка при обновлении coins:', coinsError);
+                        throw new Error('Не удалось обновить баланс монет: ' + coinsError.message);
                     }
                     
-                    // Вариант 2: пробуем обновить balance
-                    if (!coinsUpdateSuccess) {
-                        try {
-                            const { error } = await sb.from('users')
-                                .update({ balance: userCoins - amount })
-                                .eq('id', currentUser.id);
-                                
-                            if (!error) {
-                                coinsUpdateSuccess = true;
-                                userCoins -= amount;
-                                currentUser.balance = userCoins;
-                            }
-                        } catch (e) {
-                            console.log('Ошибка при обновлении balance:', e);
-                        }
-                    }
-                    
-                    // Вариант 3: пробуем обновить money
-                    if (!coinsUpdateSuccess) {
-                        try {
-                            const { error } = await sb.from('users')
-                                .update({ money: userCoins - amount })
-                                .eq('id', currentUser.id);
-                                
-                            if (!error) {
-                                coinsUpdateSuccess = true;
-                                userCoins -= amount;
-                                currentUser.money = userCoins;
-                            }
-                        } catch (e) {
-                            console.log('Ошибка при обновлении money:', e);
-                        }
-                    }
-                    
-                    if (!coinsUpdateSuccess) {
-                        throw new Error('Не удалось обновить баланс монет');
-                    }
+                    // Обновляем локально
+                    userCoins = newCoins;
+                    currentUser.coins = newCoins;
                     
                     // Обновляем токены
                     const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
