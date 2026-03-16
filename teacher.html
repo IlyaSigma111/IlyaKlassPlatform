@@ -23,17 +23,161 @@
             transition: background 0.3s ease;
         }
 
-        /* ТЕМЫ */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: white; }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); color: white; }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); color: white; }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); color: white; }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); color: white; }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); color: white; }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); color: white; }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #2c3e50 100%); color: white; }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); color: white; }
+        /* ТЕМЫ С ЧИТАЕМЫМ ТЕКСТОМ */
+        body.pink-theme { 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); 
+            color: #2d3436; 
+        }
+        body.pink-theme .glass-panel,
+        body.pink-theme .player-card,
+        body.pink-theme .control-btn,
+        body.pink-theme .back-btn,
+        body.pink-theme .question-item,
+        body.pink-theme .link-container,
+        body.pink-theme .start-btn,
+        body.pink-theme .code-display,
+        body.pink-theme .copy-btn { 
+            color: #2d3436; 
+        }
+        body.pink-theme .glass-panel,
+        body.pink-theme .player-card,
+        body.pink-theme .control-btn,
+        body.pink-theme .back-btn,
+        body.pink-theme .question-item,
+        body.pink-theme .link-container { 
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(45, 52, 54, 0.2);
+        }
+        body.pink-theme .start-btn { background: #10b981; color: white; }
+        body.pink-theme .control-btn.primary { background: #10b981; color: white; }
+        body.pink-theme .code-display { background: rgba(255, 255, 255, 0.3); color: #10b981; border-color: #10b981; }
+        body.pink-theme .copy-btn { background: #6366f1; color: white; }
+        
+        body.blue-theme { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            color: #1e3799; 
+        }
+        body.blue-theme .glass-panel,
+        body.blue-theme .player-card,
+        body.blue-theme .control-btn,
+        body.blue-theme .back-btn,
+        body.blue-theme .question-item,
+        body.blue-theme .link-container { 
+            color: #1e3799; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.green-theme { 
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); 
+            color: #145a32; 
+        }
+        body.green-theme .glass-panel,
+        body.green-theme .player-card,
+        body.green-theme .control-btn,
+        body.green-theme .back-btn,
+        body.green-theme .question-item,
+        body.green-theme .link-container { 
+            color: #145a32; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.purple-theme { 
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); 
+            color: #4a235a; 
+        }
+        body.purple-theme .glass-panel,
+        body.purple-theme .player-card,
+        body.purple-theme .control-btn,
+        body.purple-theme .back-btn,
+        body.purple-theme .question-item,
+        body.purple-theme .link-container { 
+            color: #4a235a; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.orange-theme { 
+            background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); 
+            color: #b45f06; 
+        }
+        body.orange-theme .glass-panel,
+        body.orange-theme .player-card,
+        body.orange-theme .control-btn,
+        body.orange-theme .back-btn,
+        body.orange-theme .question-item,
+        body.orange-theme .link-container { 
+            color: #b45f06; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.dark-theme { 
+            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
+            color: white; 
+        }
+        body.dark-theme .glass-panel,
+        body.dark-theme .player-card,
+        body.dark-theme .control-btn,
+        body.dark-theme .back-btn,
+        body.dark-theme .question-item,
+        body.dark-theme .link-container { 
+            color: white; 
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        body.sunset-theme { 
+            background: linear-gradient(135deg, #ffd89b 0%, #ff9a9e 100%); 
+            color: #b33939; 
+        }
+        body.sunset-theme .glass-panel,
+        body.sunset-theme .player-card,
+        body.sunset-theme .control-btn,
+        body.sunset-theme .back-btn,
+        body.sunset-theme .question-item,
+        body.sunset-theme .link-container { 
+            color: #b33939; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.ocean-theme { 
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
+            color: #0a3b5e; 
+        }
+        body.ocean-theme .glass-panel,
+        body.ocean-theme .player-card,
+        body.ocean-theme .control-btn,
+        body.ocean-theme .back-btn,
+        body.ocean-theme .question-item,
+        body.ocean-theme .link-container { 
+            color: #0a3b5e; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.forest-theme { 
+            background: linear-gradient(135deg, #a8e6cf 0%, #d4edda 100%); 
+            color: #1d5a3c; 
+        }
+        body.forest-theme .glass-panel,
+        body.forest-theme .player-card,
+        body.forest-theme .control-btn,
+        body.forest-theme .back-btn,
+        body.forest-theme .question-item,
+        body.forest-theme .link-container { 
+            color: #1d5a3c; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.candy-theme { 
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); 
+            color: #6c3483; 
+        }
+        body.candy-theme .glass-panel,
+        body.candy-theme .player-card,
+        body.candy-theme .control-btn,
+        body.candy-theme .back-btn,
+        body.candy-theme .question-item,
+        body.candy-theme .link-container { 
+            color: #6c3483; 
+            background: rgba(255, 255, 255, 0.4);
+        }
 
         /* АДАПТИВ */
         @media (max-width: 768px) {
@@ -56,6 +200,8 @@
             .answer-block { padding: 15px; }
             .correct-answer { font-size: 1.3rem; }
             .presentation-header { flex-direction: column; gap: 10px; padding: 15px; }
+            .link-container { flex-direction: column; }
+            .copy-btn { width: 100%; }
         }
 
         @media (max-width: 480px) {
@@ -189,6 +335,53 @@
             text-align: center;
         }
 
+        .link-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #6366f1;
+            border-radius: 40px;
+            padding: 5px 5px 5px 20px;
+            align-items: center;
+        }
+
+        .link-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-family: 'Comfortaa', cursive;
+            font-size: 0.9rem;
+            padding: 10px 0;
+            word-break: break-all;
+        }
+
+        .link-input:focus {
+            outline: none;
+        }
+
+        .copy-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 35px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #6366f1;
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+        }
+
         .players-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -222,6 +415,12 @@
             justify-content: center;
             font-size: 1.5rem;
             margin: 0 auto 10px;
+            color: white;
+        }
+
+        .player-score {
+            color: #ffd700;
+            font-weight: 600;
         }
 
         .start-btn {
@@ -266,11 +465,12 @@
             transition: all 0.3s;
             font-size: 1rem;
             font-weight: 600;
-            color: white;
+            color: inherit;
         }
 
         .control-btn.primary {
             background: #10b981;
+            color: white;
         }
 
         .control-btn:hover:not(:disabled) {
@@ -408,6 +608,27 @@
             opacity: 0.7;
         }
 
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -416,9 +637,19 @@
             background: #10b981;
             border-radius: 3px;
         }
+
+        .role-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 16px;
+            font-size: 0.6rem;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">Ссылка скопирована! 🔗</div>
+
     <div class="container" id="mainInterface">
         <header class="header">
             <a href="index.html" class="back-btn">
@@ -498,15 +729,28 @@
             } catch (e) { console.error('Ошибка ТГ:', e); }
         }
 
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
         function checkAuth() {
             const saved = localStorage.getItem('currentUser');
             if (saved) {
                 currentUser = JSON.parse(saved);
-                if (currentUser.role !== 'teacher') window.location.href = 'index.html';
-            } else window.location.href = 'index.html';
+                if (currentUser.role !== 'teacher') {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
         }
 
-        function applyTheme(themeId) { document.body.className = themeId + '-theme'; }
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+        }
 
         async function init() {
             checkAuth();
@@ -514,15 +758,22 @@
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
 
-            if (lobbyId) await loadGame(lobbyId);
-            else if (quizId) await createLobby(quizId);
-            else showError();
+            if (lobbyId) {
+                await loadGame(lobbyId);
+            } else if (quizId) {
+                await createLobby(quizId);
+            } else {
+                showError();
+            }
         }
 
         async function createLobby(quizId) {
             try {
                 const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-                if (!quiz) { showError(); return; }
+                if (!quiz) {
+                    showError();
+                    return;
+                }
 
                 quizData = quiz;
                 lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
@@ -560,6 +811,10 @@
             document.getElementById('codeDisplay').style.display = 'block';
             document.getElementById('codeDisplay').textContent = lobbyCode;
 
+            // Генерируем ссылку для учеников
+            const baseUrl = window.location.origin + window.location.pathname.replace('teacher.html', 'student.html');
+            const studentLink = `${baseUrl}?lobby=${currentLobby.id}`;
+
             document.getElementById('dynamicContent').innerHTML = `
                 <div class="left-column">
                     <div class="glass-panel">
@@ -568,6 +823,20 @@
                             <div class="quiz-title">${quizData.title}</div>
                             <div>${questions.length} вопросов</div>
                             <div class="big-code">${lobbyCode}</div>
+                            
+                            <div style="margin: 30px 0;">
+                                <h3 style="color: #6366f1; margin-bottom: 15px;">🔗 Ссылка для учеников</h3>
+                                <div class="link-container">
+                                    <input type="text" class="link-input" id="studentLink" value="${studentLink}" readonly>
+                                    <button class="copy-btn" onclick="copyStudentLink()" id="copyBtn">
+                                        <i class="fas fa-copy"></i> Копировать
+                                    </button>
+                                </div>
+                                <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">
+                                    <i class="fas fa-info-circle"></i> Отправьте эту ссылку ученикам, они перейдут и введут свои имена
+                                </p>
+                            </div>
+
                             <button class="start-btn" onclick="startGame()" id="startGameBtn" disabled>
                                 <i class="fas fa-play"></i> НАЧАТЬ ИГРУ
                             </button>
@@ -583,10 +852,31 @@
             `;
         }
 
+        window.copyStudentLink = function() {
+            const linkInput = document.getElementById('studentLink');
+            linkInput.select();
+            document.execCommand('copy');
+            
+            const copyBtn = document.getElementById('copyBtn');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+            copyBtn.classList.add('copied');
+            
+            showToast('🔗 Ссылка скопирована! Отправьте ученикам');
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.classList.remove('copied');
+            }, 2000);
+        };
+
         async function loadGame(lobbyId) {
             try {
                 const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
-                if (!lobby) { showError(); return; }
+                if (!lobby) {
+                    showError();
+                    return;
+                }
 
                 currentLobby = lobby;
                 lobbyCode = lobby.code;
@@ -649,11 +939,18 @@
                 .channel('lobby-' + lobbyId)
                 .on('postgres_changes', 
                     { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` },
-                    payload => { if (payload.new) { updatePlayersList(payload.new.players); currentLobby = payload.new; } })
+                    payload => {
+                        if (payload.new) {
+                            updatePlayersList(payload.new.players);
+                            currentLobby = payload.new;
+                        }
+                    })
                 .subscribe();
 
             sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
-                if (data && data[0]) updatePlayersList(data[0].players);
+                if (data && data[0]) {
+                    updatePlayersList(data[0].players);
+                }
             });
         }
 
