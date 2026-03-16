@@ -749,7 +749,6 @@
         let userTokens = 0;
         let userThemes = ['pink'];
         let storeFilter = 'all';
-        let coinColumnName = 'coins'; // По умолчанию, будет определено при загрузке
 
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff758c' },
@@ -841,39 +840,6 @@
             window.location.href = 'index.html';
         }
 
-        // Функция для определения названия колонки с монетами
-        async function detectCoinColumn() {
-            try {
-                // Пробуем разные варианты названий
-                const possibleColumns = ['coins', 'balance', 'money', 'points', 'credits'];
-                
-                for (const col of possibleColumns) {
-                    try {
-                        // Пробуем сделать простой запрос
-                        const { data, error } = await sb
-                            .from('users')
-                            .select(col)
-                            .eq('id', currentUser.id)
-                            .maybeSingle();
-                            
-                        if (!error) {
-                            console.log(`Найдена колонка: ${col}`);
-                            return col;
-                        }
-                    } catch (e) {
-                        console.log(`Колонка ${col} не подходит`);
-                    }
-                }
-                
-                // Если ничего не нашли, возвращаем 'coins' как наиболее вероятный
-                console.log('Колонка не найдена, используем coins');
-                return 'coins';
-            } catch (e) {
-                console.error('Ошибка определения колонки:', e);
-                return 'coins';
-            }
-        }
-
         async function loadUser() {
             const user = getCurrentUser();
             if (!user) { 
@@ -882,12 +848,27 @@
             }
             
             currentUser = user;
-            userCoins = user.coins || 0;
-            userThemes = user.themes || ['pink'];
             
-            // Определяем правильное название колонки
-            coinColumnName = await detectCoinColumn();
-            console.log('Используем колонку:', coinColumnName);
+            // Получаем актуальные данные пользователя из БД
+            try {
+                const { data: userData, error } = await sb.from('users')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                    
+                if (error) {
+                    console.error('Ошибка загрузки данных пользователя:', error);
+                } else if (userData) {
+                    // Обновляем данные из БД
+                    currentUser = { ...currentUser, ...userData };
+                    userCoins = userData.coins || 0;
+                    userThemes = userData.themes || ['pink'];
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки пользователя:', e);
+                userCoins = user.coins || 0;
+                userThemes = user.themes || ['pink'];
+            }
             
             try {
                 const { data: tokens, error } = await sb.from('user_tokens')
@@ -951,13 +932,8 @@
                     userCoins -= theme.price;
                     userThemes.push(themeId);
                     
-                    // Используем определенное название колонки
-                    const updateData = {};
-                    updateData[coinColumnName] = userCoins;
-                    updateData.themes = userThemes;
-                    
                     const { error } = await sb.from('users')
-                        .update(updateData)
+                        .update({ coins: userCoins, themes: userThemes })
                         .eq('id', currentUser.id);
                         
                     if (error) throw error;
@@ -1007,26 +983,57 @@
             
             if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
                 try {
-                    // Обновляем монеты пользователя - используем определенное название колонки
+                    // Обновляем монеты пользователя - используем правильное название колонки из схемы
                     const newCoins = userCoins - amount;
                     
+                    // Сначала получаем актуальные данные пользователя
+                    const { data: userData, error: fetchError } = await sb.from('users')
+                        .select('*')
+                        .eq('id', currentUser.id)
+                        .single();
+                        
+                    if (fetchError) {
+                        console.error('Ошибка получения данных пользователя:', fetchError);
+                        throw new Error('Не удалось получить данные пользователя');
+                    }
+                    
+                    console.log('Данные пользователя из БД:', userData);
+                    
+                    // Определяем, какая колонка используется для монет
+                    let coinField = null;
+                    const possibleFields = ['coins', 'balance', 'money', 'points', 'credits'];
+                    
+                    for (const field of possibleFields) {
+                        if (userData[field] !== undefined) {
+                            coinField = field;
+                            console.log('Найдено поле для монет:', field, '=', userData[field]);
+                            break;
+                        }
+                    }
+                    
+                    if (!coinField) {
+                        throw new Error('Не удалось определить поле с монетами в таблице users');
+                    }
+                    
+                    // Обновляем монеты
                     const updateData = {};
-                    updateData[coinColumnName] = newCoins;
+                    updateData[coinField] = newCoins;
                     
-                    console.log('Обновляем монеты:', coinColumnName, '=', newCoins);
+                    console.log('Обновляем поле:', coinField, 'новое значение:', newCoins);
                     
-                    const { error: coinsError } = await sb.from('users')
+                    const { error: updateError } = await sb.from('users')
                         .update(updateData)
                         .eq('id', currentUser.id);
                         
-                    if (coinsError) {
-                        console.error('Ошибка при обновлении монет:', coinsError);
-                        throw new Error(`Не удалось обновить баланс монет: ${coinsError.message}`);
+                    if (updateError) {
+                        console.error('Ошибка при обновлении монет:', updateError);
+                        throw new Error(`Не удалось обновить баланс монет: ${updateError.message}`);
                     }
                     
                     // Обновляем локально
                     userCoins = newCoins;
-                    currentUser.coins = newCoins;
+                    currentUser[coinField] = newCoins;
+                    currentUser.coins = newCoins; // Для совместимости
                     
                     // Обновляем токены
                     const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
