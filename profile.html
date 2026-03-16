@@ -22,17 +22,164 @@
             transition: background 0.3s ease;
         }
 
-        /* ТЕМЫ */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); color: white; }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); color: white; }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); color: white; }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); color: white; }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); color: white; }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); color: white; }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); color: white; }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #2c3e50 100%); color: white; }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); color: white; }
+        /* ТЕМЫ С ЧИТАЕМЫМ ТЕКСТОМ */
+        body.pink-theme { 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); 
+            color: #2d3436; 
+        }
+        body.pink-theme .nav-link,
+        body.pink-theme .profile-sidebar,
+        body.pink-theme .profile-main,
+        body.pink-theme .theme-item,
+        body.pink-theme .stat-box,
+        body.pink-theme .user-card,
+        body.pink-theme .setting-input,
+        body.pink-theme .save-btn,
+        body.pink-theme .delete-btn,
+        body.pink-theme .settings-title,
+        body.pink-theme .profile-name,
+        body.pink-theme .profile-role,
+        body.pink-theme .stat-value { 
+            color: #2d3436; 
+        }
+        body.pink-theme .nav-link,
+        body.pink-theme .profile-sidebar,
+        body.pink-theme .profile-main,
+        body.pink-theme .theme-item,
+        body.pink-theme .stat-box,
+        body.pink-theme .user-card { 
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(45, 52, 54, 0.2);
+        }
+        body.pink-theme .setting-input { background: rgba(255, 255, 255, 0.5); }
+        body.pink-theme .save-btn { background: #6366f1; color: white; }
+        body.pink-theme .delete-btn { background: #ef4444; color: white; }
+        
+        body.blue-theme { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            color: #1e3799; 
+        }
+        body.blue-theme .nav-link,
+        body.blue-theme .profile-sidebar,
+        body.blue-theme .profile-main,
+        body.blue-theme .theme-item,
+        body.blue-theme .stat-box,
+        body.blue-theme .user-card { 
+            color: #1e3799; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.green-theme { 
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); 
+            color: #145a32; 
+        }
+        body.green-theme .nav-link,
+        body.green-theme .profile-sidebar,
+        body.green-theme .profile-main,
+        body.green-theme .theme-item,
+        body.green-theme .stat-box,
+        body.green-theme .user-card { 
+            color: #145a32; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.purple-theme { 
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); 
+            color: #4a235a; 
+        }
+        body.purple-theme .nav-link,
+        body.purple-theme .profile-sidebar,
+        body.purple-theme .profile-main,
+        body.purple-theme .theme-item,
+        body.purple-theme .stat-box,
+        body.purple-theme .user-card { 
+            color: #4a235a; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.orange-theme { 
+            background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); 
+            color: #b45f06; 
+        }
+        body.orange-theme .nav-link,
+        body.orange-theme .profile-sidebar,
+        body.orange-theme .profile-main,
+        body.orange-theme .theme-item,
+        body.orange-theme .stat-box,
+        body.orange-theme .user-card { 
+            color: #b45f06; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.dark-theme { 
+            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
+            color: white; 
+        }
+        body.dark-theme .nav-link,
+        body.dark-theme .profile-sidebar,
+        body.dark-theme .profile-main,
+        body.dark-theme .theme-item,
+        body.dark-theme .stat-box,
+        body.dark-theme .user-card { 
+            color: white; 
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        body.sunset-theme { 
+            background: linear-gradient(135deg, #ffd89b 0%, #ff9a9e 100%); 
+            color: #b33939; 
+        }
+        body.sunset-theme .nav-link,
+        body.sunset-theme .profile-sidebar,
+        body.sunset-theme .profile-main,
+        body.sunset-theme .theme-item,
+        body.sunset-theme .stat-box,
+        body.sunset-theme .user-card { 
+            color: #b33939; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.ocean-theme { 
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
+            color: #0a3b5e; 
+        }
+        body.ocean-theme .nav-link,
+        body.ocean-theme .profile-sidebar,
+        body.ocean-theme .profile-main,
+        body.ocean-theme .theme-item,
+        body.ocean-theme .stat-box,
+        body.ocean-theme .user-card { 
+            color: #0a3b5e; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.forest-theme { 
+            background: linear-gradient(135deg, #a8e6cf 0%, #d4edda 100%); 
+            color: #1d5a3c; 
+        }
+        body.forest-theme .nav-link,
+        body.forest-theme .profile-sidebar,
+        body.forest-theme .profile-main,
+        body.forest-theme .theme-item,
+        body.forest-theme .stat-box,
+        body.forest-theme .user-card { 
+            color: #1d5a3c; 
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        body.candy-theme { 
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); 
+            color: #6c3483; 
+        }
+        body.candy-theme .nav-link,
+        body.candy-theme .profile-sidebar,
+        body.candy-theme .profile-main,
+        body.candy-theme .theme-item,
+        body.candy-theme .stat-box,
+        body.candy-theme .user-card { 
+            color: #6c3483; 
+            background: rgba(255, 255, 255, 0.4);
+        }
 
         /* АДАПТИВ */
         @media (max-width: 768px) {
@@ -49,6 +196,7 @@
             .themes-grid { grid-template-columns: repeat(2, 1fr); }
             .stat-box { padding: 10px; }
             .stat-value { font-size: 1.5rem; }
+            .delete-btn { width: 100%; }
         }
 
         @media (max-width: 480px) {
@@ -106,7 +254,7 @@
         }
 
         .nav-link:hover { background: rgba(255, 255, 255, 0.2); }
-        .nav-link.active { background: #6366f1; }
+        .nav-link.active { background: #6366f1; color: white; }
 
         .header-right {
             display: flex;
@@ -189,6 +337,7 @@
             border-radius: 30px;
             margin: 10px 0;
             font-size: 0.9rem;
+            color: white;
         }
 
         .role-badge {
@@ -199,9 +348,11 @@
             font-size: 0.9rem;
             font-weight: 600;
         }
-        .role-chief { background: #ffd700; color: #4a4a4a; }
-        .role-curator { background: #c0c0c0; color: #4a4a4a; }
-        .role-moderator { background: #cd7f32; color: white; }
+        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
+        .role-mediacoord { background: #c0c0c0; color: #2d3436; }
+        .role-chief { background: #ffd700; color: #2d3436; }
+        .role-curator { background: #cd7f32; color: white; }
+        .role-moderator { background: #6366f1; color: white; }
 
         .profile-stats {
             display: grid;
@@ -304,6 +455,25 @@
             box-shadow: 0 0 20px #6366f1;
         }
 
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #ef4444;
+        }
+
         .themes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -361,9 +531,102 @@
             background: rgba(239, 68, 68, 0.1);
             border-radius: 40px;
         }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-window {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 3px solid #ef4444;
+            border-radius: 50px;
+            width: 500px;
+            max-width: 100%;
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        .modal-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-btn.confirm {
+            background: #ef4444;
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ef4444;
+        }
+
+        .warning-level {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
+    <!-- Модальное окно для удаления аккаунта -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-window">
+            <div class="modal-title" id="modalTitle">⚠️ ВНИМАНИЕ</div>
+            <div class="modal-text" id="modalText">Вы уверены, что хотите удалить аккаунт?</div>
+            <div class="warning-level" id="warningLevel">⚠️ Предупреждение 1/3</div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeDeleteModal()">Отмена</button>
+                <button class="modal-btn confirm" onclick="confirmDelete()" id="confirmBtn">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
     <header class="header">
         <div class="logo-small" onclick="window.location='index.html'">
             <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
@@ -396,18 +659,18 @@
         let userCoins = 100;
         let userTokens = 0;
         let userThemes = ['pink'];
-        let isModerator = false;
+        let deleteStep = 0;
 
         const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', color: '#ff0844' },
-            { id: 'blue', name: '💙 Синяя', color: '#00c6fb' },
-            { id: 'green', name: '💚 Зеленая', color: '#00b09b' },
-            { id: 'purple', name: '💜 Фиолетовая', color: '#8e2de2' },
-            { id: 'orange', name: '🧡 Оранжевая', color: '#f12711' },
-            { id: 'candy', name: '🍭 Карамель', color: '#f43b47' },
-            { id: 'forest', name: '🌲 Лес', color: '#134e5e' },
-            { id: 'sunset', name: '🌅 Закат', color: '#f83600' },
-            { id: 'ocean', name: '🌊 Океан', color: '#1c92d2' },
+            { id: 'pink', name: '🌸 Розовая', color: '#ff9a9e' },
+            { id: 'blue', name: '💙 Синяя', color: '#a8edea' },
+            { id: 'green', name: '💚 Зеленая', color: '#d4fc79' },
+            { id: 'purple', name: '💜 Фиолетовая', color: '#e0c3fc' },
+            { id: 'orange', name: '🧡 Оранжевая', color: '#fddb92' },
+            { id: 'candy', name: '🍭 Карамель', color: '#fbc2eb' },
+            { id: 'forest', name: '🌲 Лес', color: '#a8e6cf' },
+            { id: 'sunset', name: '🌅 Закат', color: '#ffd89b' },
+            { id: 'ocean', name: '🌊 Океан', color: '#a1c4fd' },
             { id: 'dark', name: '🖤 Темная', color: '#141e30' }
         ];
 
@@ -448,13 +711,29 @@
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
-            const roleEmoji = { chief: '👑', curator: '⭐', moderator: '🛡️', user: '👤' }[currentUser.role_title] || '👤';
+            const roleEmoji = {
+                'owner': '👑',
+                'mediacoord': '🎥',
+                'chief': '⭐',
+                'curator': '📚',
+                'moderator': '🛡️',
+                'user': '👤'
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = {
+                'owner': 'role-owner',
+                'mediacoord': 'role-mediacoord',
+                'chief': 'role-chief',
+                'curator': 'role-curator',
+                'moderator': 'role-moderator',
+                'user': ''
+            }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
                     <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
                     <span>${userName}</span>
-                    <span class="role-badge role-${currentUser.role_title}">${roleEmoji} ${currentUser.role_title}</span>
+                    ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
                     <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                     <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
@@ -468,6 +747,72 @@
             window.location.href = 'index.html';
         }
 
+        // Функции для удаления аккаунта
+        window.showDeleteModal = function() {
+            deleteStep = 1;
+            document.getElementById('modalTitle').textContent = '⚠️ ПРЕДУПРЕЖДЕНИЕ 1/3';
+            document.getElementById('modalText').textContent = 'Вы уверены, что хотите удалить аккаунт? Все ваши данные будут безвозвратно потеряны.';
+            document.getElementById('warningLevel').textContent = '⚠️ Предупреждение 1/3';
+            document.getElementById('deleteModal').classList.add('active');
+        };
+
+        window.closeDeleteModal = function() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteStep = 0;
+        };
+
+        window.confirmDelete = async function() {
+            if (deleteStep === 1) {
+                // Второе предупреждение
+                deleteStep = 2;
+                document.getElementById('modalTitle').textContent = '⚠️ ПРЕДУПРЕЖДЕНИЕ 2/3';
+                document.getElementById('modalText').textContent = 'Это действие нельзя отменить. Вы точно хотите удалить аккаунт?';
+                document.getElementById('warningLevel').textContent = '⚠️ Предупреждение 2/3';
+            } else if (deleteStep === 2) {
+                // Третье предупреждение
+                deleteStep = 3;
+                document.getElementById('modalTitle').textContent = '⚠️ ПОСЛЕДНЕЕ ПРЕДУПРЕЖДЕНИЕ 3/3';
+                document.getElementById('modalText').textContent = 'Аккаунт будет удален навсегда. Продолжить?';
+                document.getElementById('warningLevel').textContent = '⚠️ Предупреждение 3/3';
+                document.getElementById('confirmBtn').textContent = 'УДАЛИТЬ НАВСЕГДА';
+            } else if (deleteStep === 3) {
+                // Финальное удаление
+                await deleteAccount();
+            }
+        };
+
+        async function deleteAccount() {
+            try {
+                // Защита от удаления владельца
+                if (currentUser.role_title === 'owner') {
+                    alert('❌ Аккаунт владельца нельзя удалить!');
+                    closeDeleteModal();
+                    return;
+                }
+
+                // Отправляем уведомление в ТГ
+                sendToTG(`💀 Пользователь ${currentUser.username} (${currentUser.role_title}) удалил аккаунт`);
+
+                // Удаляем связанные данные
+                await sb.from('user_tokens').delete().eq('user_id', currentUser.id);
+                await sb.from('results').delete().eq('student_id', currentUser.id);
+                await sb.from('quizzes').delete().eq('created_by', currentUser.id);
+                
+                // Удаляем пользователя
+                await sb.from('users').delete().eq('id', currentUser.id);
+
+                // Очищаем localStorage и редирект
+                localStorage.removeItem('currentUser');
+                alert('✅ Аккаунт успешно удален');
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                console.error('Ошибка удаления:', error);
+                alert('❌ Ошибка при удалении аккаунта: ' + error.message);
+                closeDeleteModal();
+            }
+        }
+
         async function loadProfile() {
             const user = getCurrentUser();
             if (!user) { window.location.href = 'index.html'; return; }
@@ -477,7 +822,6 @@
             userRole = user.role;
             userCoins = user.coins || 100;
             userThemes = user.themes || ['pink'];
-            isModerator = ['chief', 'curator', 'moderator'].includes(user.role_title);
 
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
@@ -496,14 +840,62 @@
 
                 const c = document.getElementById('content');
                 
-                const roleEmoji = { chief: '👑', curator: '⭐', moderator: '🛡️', user: '👤' }[currentUser.role_title] || '👤';
+                const roleEmoji = {
+                    'owner': '👑',
+                    'mediacoord': '🎥',
+                    'chief': '⭐',
+                    'curator': '📚',
+                    'moderator': '🛡️',
+                    'user': '👤'
+                }[currentUser.role_title] || '👤';
                 
+                const roleClass = {
+                    'owner': 'role-owner',
+                    'mediacoord': 'role-mediacoord',
+                    'chief': 'role-chief',
+                    'curator': 'role-curator',
+                    'moderator': 'role-moderator',
+                    'user': ''
+                }[currentUser.role_title] || '';
+                
+                let settingsHtml = '';
+                
+                if (userRole === 'teacher') {
+                    settingsHtml = `
+                        <div class="settings-section">
+                            <h2 class="settings-title">⚙️ Настройки профиля</h2>
+                            <div class="setting-item">
+                                <span>Имя пользователя</span>
+                                <span>${userName}</span>
+                            </div>
+                            <div class="setting-item">
+                                <span>Роль</span>
+                                <span>👨‍🏫 Учитель</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    settingsHtml = `
+                        <div class="settings-section">
+                            <h2 class="settings-title">👤 Профиль ученика</h2>
+                            <div class="setting-item">
+                                <span>Имя пользователя</span>
+                                <span>${userName}</span>
+                            </div>
+                            <div class="setting-item">
+                                <span>Роль</span>
+                                <span>👨‍🎓 Ученик</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 c.innerHTML = `
                     <div class="profile-container">
                         <div class="profile-sidebar">
                             <div class="profile-avatar">${userName.charAt(0).toUpperCase()}</div>
                             <div class="profile-name">${userName}</div>
-                            <div class="role-badge role-${currentUser.role_title}">${roleEmoji} ${currentUser.role_title}</div>
+                            ${currentUser.role_title !== 'user' ? `<div class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</div>` : ''}
                             <div class="profile-role">${userRole === 'teacher' ? '👨‍🏫 Учитель' : '👨‍🎓 Ученик'}</div>
                             
                             <div class="profile-stats">
@@ -514,13 +906,24 @@
                             </div>
 
                             <div style="margin-top: 20px;">
-                                <div><i class="fas fa-coins" style="color:#ffd700;"></i> Монеты: <span class="coins">${userCoins}</span></div>
-                                <div><i class="fas fa-gem" style="color:#00ffff;"></i> Токены: <span class="tokens">${userTokens}</span></div>
-                                <div>👥 Рефералов: ${tokens?.referrals_count || 0}</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
+                                    <span><i class="fas fa-coins" style="color: #ffd700;"></i> Монеты:</span>
+                                    <span class="coins">${userCoins}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
+                                    <span><i class="fas fa-gem" style="color: #00ffff;"></i> Токены:</span>
+                                    <span class="tokens">${userTokens}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
+                                    <span>👥 Рефералов:</span>
+                                    <span>${tokens?.referrals_count || 0}</span>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="profile-main">
+                            ${settingsHtml}
+
                             <div class="settings-section">
                                 <h2 class="settings-title">🔐 Безопасность</h2>
                                 
@@ -544,11 +947,24 @@
                                     <i class="fas fa-store"></i> В магазин за новыми темами
                                 </a>
                             </div>
+
+                            ${currentUser.role_title !== 'owner' ? `
+                            <div class="settings-section">
+                                <h2 class="settings-title" style="color: #ef4444;">⚠️ Опасная зона</h2>
+                                <button class="delete-btn" onclick="showDeleteModal()">
+                                    <i class="fas fa-trash"></i> Удалить аккаунт
+                                </button>
+                                <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 10px; text-align: center;">
+                                    После удаления все данные будут безвозвратно потеряны
+                                </p>
+                            </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
 
                 renderThemes();
+                updateUI();
             } catch (error) {
                 console.error('Ошибка загрузки профиля:', error);
                 document.getElementById('content').innerHTML = '<div class="error-state">❌ Ошибка загрузки профиля</div>';
