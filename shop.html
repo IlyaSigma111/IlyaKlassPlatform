@@ -31,7 +31,8 @@
         body.pink-theme .theme-card,
         body.pink-theme .store-quiz-card,
         body.pink-theme .user-card,
-        body.pink-theme .filter-btn { 
+        body.pink-theme .filter-btn,
+        body.pink-theme .exchange-card { 
             background: rgba(255, 255, 255, 0.9);
             color: #2d3436;
             border: 2px solid rgba(45, 52, 54, 0.2);
@@ -46,7 +47,8 @@
         body.blue-theme .theme-card,
         body.blue-theme .store-quiz-card,
         body.blue-theme .user-card,
-        body.blue-theme .filter-btn { 
+        body.blue-theme .filter-btn,
+        body.blue-theme .exchange-card { 
             background: rgba(255, 255, 255, 0.9);
             color: #1e3799;
             border: 2px solid rgba(30, 55, 153, 0.2);
@@ -60,38 +62,11 @@
         body.green-theme .theme-card,
         body.green-theme .store-quiz-card,
         body.green-theme .user-card,
-        body.green-theme .filter-btn { 
+        body.green-theme .filter-btn,
+        body.green-theme .exchange-card { 
             background: rgba(255, 255, 255, 0.9);
             color: #145a32;
             border: 2px solid rgba(20, 90, 50, 0.2);
-        }
-        
-        body.purple-theme { 
-            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); 
-            color: #4a235a; 
-        }
-        body.purple-theme .nav-link,
-        body.purple-theme .theme-card,
-        body.purple-theme .store-quiz-card,
-        body.purple-theme .user-card,
-        body.purple-theme .filter-btn { 
-            background: rgba(255, 255, 255, 0.9);
-            color: #4a235a;
-            border: 2px solid rgba(74, 35, 90, 0.2);
-        }
-        
-        body.orange-theme { 
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); 
-            color: #b45f06; 
-        }
-        body.orange-theme .nav-link,
-        body.orange-theme .theme-card,
-        body.orange-theme .store-quiz-card,
-        body.orange-theme .user-card,
-        body.orange-theme .filter-btn { 
-            background: rgba(255, 255, 255, 0.9);
-            color: #b45f06;
-            border: 2px solid rgba(180, 95, 6, 0.2);
         }
         
         body.dark-theme { 
@@ -102,7 +77,8 @@
         body.dark-theme .theme-card,
         body.dark-theme .store-quiz-card,
         body.dark-theme .user-card,
-        body.dark-theme .filter-btn { 
+        body.dark-theme .filter-btn,
+        body.dark-theme .exchange-card { 
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -176,7 +152,7 @@
                 gap: 15px;
             }
             
-            .themes-section, .store-section {
+            .themes-section, .store-section, .exchange-section {
                 padding: 15px;
                 border-radius: 24px;
             }
@@ -259,6 +235,23 @@
             .buy-quiz-btn {
                 padding: 10px;
                 font-size: 0.8rem;
+            }
+            
+            .exchange-card {
+                padding: 15px;
+            }
+            
+            .exchange-input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .exchange-input {
+                width: 100%;
+            }
+            
+            .exchange-btn {
+                width: 100%;
             }
         }
 
@@ -380,12 +373,17 @@
             gap: 20px;
         }
 
-        .themes-section, .store-section {
+        .themes-section, .store-section, .exchange-section {
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             padding: 25px;
+        }
+
+        .exchange-section {
+            margin-top: 20px;
+            grid-column: 1 / -1;
         }
 
         .section-header {
@@ -546,6 +544,77 @@
             box-shadow: 0 0 20px #ffd700;
         }
 
+        /* Стили для обменника */
+        .exchange-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .exchange-rate {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 40px;
+        }
+
+        .exchange-rate span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .exchange-input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .exchange-input {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #6366f1;
+            border-radius: 40px;
+            color: inherit;
+            font-size: 1.2rem;
+            font-family: 'Comfortaa', cursive;
+            width: 200px;
+            text-align: center;
+        }
+
+        .exchange-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px #6366f1;
+        }
+
+        .exchange-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .exchange-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #10b981;
+        }
+
+        .exchange-info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -567,9 +636,32 @@
         .role-chief { background: #ffd700; color: #2d3436; }
         .role-curator { background: #cd7f32; color: white; }
         .role-moderator { background: #6366f1; color: white; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">Операция выполнена! ✅</div>
+
     <header class="header">
         <div class="logo-small" onclick="window.location='index.html'">
             <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
@@ -585,6 +677,7 @@
 
     <main class="container">
         <div class="shop-grid">
+            <!-- ЛЕВАЯ КОЛОНКА - ТЕМЫ -->
             <div class="themes-section">
                 <div class="section-header">
                     <h2 class="section-title"><i class="fas fa-palette" style="color: #f59e0b;"></i> Магазин тем</h2>
@@ -599,6 +692,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ПРАВАЯ КОЛОНКА - ПРЕМИУМ ВИКТОРИНЫ -->
             <div class="store-section">
                 <div class="section-header">
                     <h2 class="section-title"><i class="fas fa-store" style="color: #10b981;"></i> Премиум викторины</h2>
@@ -608,6 +703,34 @@
                     </div>
                 </div>
                 <div id="storeQuizzesList" class="store-grid"></div>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ -->
+        <div class="exchange-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-exchange-alt" style="color: #00ffff;"></i> Обмен валюты</h2>
+                <div style="display: flex; gap: 15px;">
+                    <span class="coins"><i class="fas fa-coins"></i> <span id="userCoinsExchange">0</span></span>
+                    <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokensExchange">0</span></span>
+                </div>
+            </div>
+            
+            <div class="exchange-card">
+                <div class="exchange-rate">
+                    <span>100 монет = 1 токен 💎</span>
+                </div>
+                
+                <div class="exchange-input-group">
+                    <input type="number" id="exchangeAmount" class="exchange-input" placeholder="Количество монет" min="100" step="100" value="100">
+                    <button class="exchange-btn" onclick="exchangeCoins()">
+                        <i class="fas fa-sync-alt"></i> Обменять
+                    </button>
+                </div>
+                
+                <div class="exchange-info">
+                    <i class="fas fa-info-circle"></i> Минимальная сумма обмена: 100 монет (1 токен)
+                </div>
             </div>
         </div>
     </main>
@@ -639,8 +762,21 @@
             { id: 'dark', name: '🖤 Темная', price: 300, color: '#2c3e50' }
         ];
 
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
         async function sendToTG(message) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:message, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
+                });
+            } catch (e) { console.error('Ошибка ТГ:', e); }
         }
 
         function applyTheme(themeId) {
@@ -663,8 +799,23 @@
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
-            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
-            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
+            const roleEmoji = { 
+                'owner': '👑', 
+                'mediacoord': '🎥', 
+                'chief': '⭐', 
+                'curator': '📚', 
+                'moderator': '🛡️', 
+                'user': '👤' 
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = { 
+                'owner': 'role-owner', 
+                'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 
+                'curator': 'role-curator', 
+                'moderator': 'role-moderator', 
+                'user': '' 
+            }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
@@ -676,7 +827,10 @@
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
+            
             document.getElementById('userCoins').textContent = currentUser?.coins || 0;
+            document.getElementById('userCoinsExchange').textContent = currentUser?.coins || 0;
+            document.getElementById('userTokensExchange').textContent = userTokens || 0;
         }
 
         function logout() {
@@ -687,14 +841,30 @@
 
         async function loadUser() {
             const user = getCurrentUser();
-            if (!user) { window.location.href = 'index.html'; return; }
+            if (!user) { 
+                window.location.href = 'index.html'; 
+                return; 
+            }
             
             currentUser = user;
             userCoins = user.coins || 100;
             userThemes = user.themes || ['pink'];
             
-            const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).single();
-            userTokens = tokens?.balance || 0;
+            try {
+                const { data: tokens, error } = await sb.from('user_tokens')
+                    .select('balance')
+                    .eq('user_id', user.id)
+                    .single();
+                    
+                if (error && error.code !== 'PGRST116') { // PGRST116 - запись не найдена
+                    console.error('Ошибка загрузки токенов:', error);
+                }
+                
+                userTokens = tokens?.balance || 0;
+            } catch (e) {
+                console.error('Ошибка загрузки токенов:', e);
+                userTokens = 0;
+            }
             
             updateUI();
             loadThemes();
@@ -742,7 +912,11 @@
                     userCoins -= theme.price;
                     userThemes.push(themeId);
                     
-                    await sb.from('users').update({ coins: userCoins, themes: userThemes }).eq('id', currentUser.id);
+                    const { error } = await sb.from('users')
+                        .update({ coins: userCoins, themes: userThemes })
+                        .eq('id', currentUser.id);
+                        
+                    if (error) throw error;
                     
                     currentUser.coins = userCoins;
                     currentUser.themes = userThemes;
@@ -756,18 +930,110 @@
                     alert('✅ Тема куплена!');
                 } catch (error) {
                     console.error('Ошибка покупки:', error);
-                    alert('Ошибка при покупке');
+                    alert('Ошибка при покупке: ' + error.message);
+                }
+            }
+        };
+
+        // Функция обмена монет на токены
+        window.exchangeCoins = async function() {
+            if (!currentUser) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('exchangeAmount').value);
+            
+            if (isNaN(amount) || amount < 100) {
+                alert('Минимальная сумма обмена: 100 монет');
+                return;
+            }
+            
+            if (amount % 100 !== 0) {
+                alert('Сумма должна быть кратна 100');
+                return;
+            }
+            
+            if (userCoins < amount) {
+                alert('Недостаточно монет!');
+                return;
+            }
+            
+            const tokensToAdd = amount / 100;
+            
+            if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
+                try {
+                    // Обновляем монеты пользователя
+                    const newCoins = userCoins - amount;
+                    
+                    const { error: coinsError } = await sb.from('users')
+                        .update({ coins: newCoins })
+                        .eq('id', currentUser.id);
+                        
+                    if (coinsError) throw coinsError;
+                    
+                    // Обновляем токены
+                    const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
+                        .select('balance')
+                        .eq('user_id', currentUser.id)
+                        .single();
+                        
+                    if (tokenError && tokenError.code !== 'PGRST116') {
+                        throw tokenError;
+                    }
+                    
+                    const currentTokens = tokenData?.balance || 0;
+                    const newTokens = currentTokens + tokensToAdd;
+                    
+                    if (tokenData) {
+                        // Обновляем существующую запись
+                        const { error: updateError } = await sb.from('user_tokens')
+                            .update({ balance: newTokens })
+                            .eq('user_id', currentUser.id);
+                            
+                        if (updateError) throw updateError;
+                    } else {
+                        // Создаем новую запись
+                        const { error: insertError } = await sb.from('user_tokens')
+                            .insert({
+                                user_id: currentUser.id,
+                                balance: newTokens,
+                                referral_code: 'ref_' + currentUser.id + '_' + Math.floor(Math.random() * 1000000)
+                            });
+                            
+                        if (insertError) throw insertError;
+                    }
+                    
+                    // Обновляем локальные данные
+                    userCoins = newCoins;
+                    userTokens = newTokens;
+                    currentUser.coins = newCoins;
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    updateUI();
+                    showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
+                    sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
+                    
+                    // Очищаем поле ввода
+                    document.getElementById('exchangeAmount').value = '100';
+                    
+                } catch (error) {
+                    console.error('Ошибка обмена:', error);
+                    alert('Ошибка при обмене: ' + error.message);
                 }
             }
         };
 
         async function loadStore() {
             try {
-                const { data: quizzes } = await sb
+                const { data: quizzes, error } = await sb
                     .from('quizzes')
                     .select('*, users!quizzes_created_by_fkey(username)')
                     .eq('published', true)
                     .eq('type', 'constructed');
+                
+                if (error) throw error;
                 
                 const container = document.getElementById('storeQuizzesList');
                 
@@ -808,6 +1074,7 @@
 
         window.buyQuiz = async function(quizId, price) {
             if (!currentUser) return;
+            
             if (userTokens < price) {
                 alert('Недостаточно токенов!');
                 return;
@@ -815,21 +1082,42 @@
             
             if (confirm(`Купить викторину за ${price} токенов?`)) {
                 try {
-                    const { data, error } = await sb.rpc('buy_quiz_with_tokens', { 
-                        p_user_id: currentUser.id, 
-                        p_quiz_id: quizId 
-                    });
-                    
-                    if (error) throw error;
-                    
-                    if (data) {
-                        userTokens -= price;
+                    // Проверяем, существует ли функция в БД
+                    try {
+                        const { data, error } = await sb.rpc('buy_quiz_with_tokens', { 
+                            p_user_id: currentUser.id, 
+                            p_quiz_id: quizId 
+                        });
+                        
+                        if (error) throw error;
+                        
+                        if (data) {
+                            userTokens -= price;
+                            updateUI();
+                            alert('✅ Викторина куплена!');
+                            sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
+                            loadStore();
+                        } else {
+                            alert('❌ Ошибка при покупке');
+                        }
+                    } catch (rpcError) {
+                        // Если RPC функция не существует, делаем обновление вручную
+                        console.log('RPC функция не найдена, обновляем вручную');
+                        
+                        // Уменьшаем токены
+                        const newTokens = userTokens - price;
+                        
+                        const { error: tokenError } = await sb.from('user_tokens')
+                            .update({ balance: newTokens })
+                            .eq('user_id', currentUser.id);
+                            
+                        if (tokenError) throw tokenError;
+                        
+                        userTokens = newTokens;
                         updateUI();
                         alert('✅ Викторина куплена!');
                         sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
                         loadStore();
-                    } else {
-                        alert('❌ Ошибка при покупке');
                     }
                 } catch (error) {
                     console.error('Ошибка покупки:', error);
