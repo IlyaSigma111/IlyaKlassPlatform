@@ -22,23 +22,9 @@
             transition: background 0.3s ease;
         }
 
-        /* ТЕМЫ С ЧИТАЕМЫМ ТЕКСТОМ */
+        /* ===== ТЕМЫ С ЧЕТКИМИ ГРАНИЦАМИ ===== */
         body.pink-theme { 
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); 
-            color: #2d3436; 
-        }
-        body.pink-theme .nav-link,
-        body.pink-theme .theme-card,
-        body.pink-theme .store-quiz-card,
-        body.pink-theme .user-card,
-        body.pink-theme .filter-btn,
-        body.pink-theme .section-title,
-        body.pink-theme .theme-name,
-        body.pink-theme .theme-price,
-        body.pink-theme .store-quiz-title,
-        body.pink-theme .store-quiz-stats,
-        body.pink-theme .store-quiz-price,
-        body.pink-theme .buy-quiz-btn { 
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); 
             color: #2d3436; 
         }
         body.pink-theme .nav-link,
@@ -46,13 +32,14 @@
         body.pink-theme .store-quiz-card,
         body.pink-theme .user-card,
         body.pink-theme .filter-btn { 
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(45, 52, 54, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3436;
+            border: 2px solid rgba(45, 52, 54, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        body.pink-theme .buy-quiz-btn { background: #ffd700; color: #2d3436; }
         
         body.blue-theme { 
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
             color: #1e3799; 
         }
         body.blue-theme .nav-link,
@@ -60,12 +47,13 @@
         body.blue-theme .store-quiz-card,
         body.blue-theme .user-card,
         body.blue-theme .filter-btn { 
-            color: #1e3799; 
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3799;
+            border: 2px solid rgba(30, 55, 153, 0.2);
         }
         
         body.green-theme { 
-            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); 
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
             color: #145a32; 
         }
         body.green-theme .nav-link,
@@ -73,12 +61,13 @@
         body.green-theme .store-quiz-card,
         body.green-theme .user-card,
         body.green-theme .filter-btn { 
-            color: #145a32; 
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #145a32;
+            border: 2px solid rgba(20, 90, 50, 0.2);
         }
         
         body.purple-theme { 
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); 
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); 
             color: #4a235a; 
         }
         body.purple-theme .nav-link,
@@ -86,12 +75,13 @@
         body.purple-theme .store-quiz-card,
         body.purple-theme .user-card,
         body.purple-theme .filter-btn { 
-            color: #4a235a; 
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a235a;
+            border: 2px solid rgba(74, 35, 90, 0.2);
         }
         
         body.orange-theme { 
-            background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); 
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); 
             color: #b45f06; 
         }
         body.orange-theme .nav-link,
@@ -99,12 +89,13 @@
         body.orange-theme .store-quiz-card,
         body.orange-theme .user-card,
         body.orange-theme .filter-btn { 
-            color: #b45f06; 
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #b45f06;
+            border: 2px solid rgba(180, 95, 6, 0.2);
         }
         
         body.dark-theme { 
-            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
             color: white; 
         }
         body.dark-theme .nav-link,
@@ -112,99 +103,198 @@
         body.dark-theme .store-quiz-card,
         body.dark-theme .user-card,
         body.dark-theme .filter-btn { 
-            color: white; 
             background: rgba(255, 255, 255, 0.15);
-        }
-        
-        body.sunset-theme { 
-            background: linear-gradient(135deg, #ffd89b 0%, #ff9a9e 100%); 
-            color: #b33939; 
-        }
-        body.sunset-theme .nav-link,
-        body.sunset-theme .theme-card,
-        body.sunset-theme .store-quiz-card,
-        body.sunset-theme .user-card,
-        body.sunset-theme .filter-btn { 
-            color: #b33939; 
-            background: rgba(255, 255, 255, 0.4);
-        }
-        
-        body.ocean-theme { 
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
-            color: #0a3b5e; 
-        }
-        body.ocean-theme .nav-link,
-        body.ocean-theme .theme-card,
-        body.ocean-theme .store-quiz-card,
-        body.ocean-theme .user-card,
-        body.ocean-theme .filter-btn { 
-            color: #0a3b5e; 
-            background: rgba(255, 255, 255, 0.4);
-        }
-        
-        body.forest-theme { 
-            background: linear-gradient(135deg, #a8e6cf 0%, #d4edda 100%); 
-            color: #1d5a3c; 
-        }
-        body.forest-theme .nav-link,
-        body.forest-theme .theme-card,
-        body.forest-theme .store-quiz-card,
-        body.forest-theme .user-card,
-        body.forest-theme .filter-btn { 
-            color: #1d5a3c; 
-            background: rgba(255, 255, 255, 0.4);
-        }
-        
-        body.candy-theme { 
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); 
-            color: #6c3483; 
-        }
-        body.candy-theme .nav-link,
-        body.candy-theme .theme-card,
-        body.candy-theme .store-quiz-card,
-        body.candy-theme .user-card,
-        body.candy-theme .filter-btn { 
-            color: #6c3483; 
-            background: rgba(255, 255, 255, 0.4);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* АДАПТИВ */
+        /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
         @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .header { flex-direction: column; gap: 15px; padding: 15px; }
-            .nav-menu { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .nav-link { padding: 8px 12px; font-size: 0.85rem; }
-            .user-card { width: 100%; justify-content: space-between; flex-wrap: wrap; }
-            .shop-grid { grid-template-columns: 1fr; gap: 15px; }
-            .themes-section, .store-section { padding: 20px; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .store-filters { width: 100%; justify-content: space-between; flex-wrap: wrap; }
-            .filter-btn { flex: 1; text-align: center; padding: 8px 10px; font-size: 0.8rem; min-width: 80px; }
-            .themes-grid { grid-template-columns: repeat(2, 1fr); }
-            .store-grid { grid-template-columns: 1fr; max-height: none; }
-            .theme-card { padding: 10px; }
-            .theme-name { font-size: 0.85rem; word-break: break-word; }
+            .container {
+                padding: 8px;
+                width: 100%;
+            }
+            
+            .header {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .logo-small {
+                font-size: 1.3rem;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            
+            .nav-link {
+                padding: 8px 4px;
+                font-size: 0.7rem;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .header-right {
+                width: 100%;
+            }
+            
+            .user-card {
+                width: 100%;
+                display: grid;
+                grid-template-columns: auto 1fr auto auto auto;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            
+            .logout-btn {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .shop-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .themes-section, .store-section {
+                padding: 15px;
+                border-radius: 24px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .store-filters {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            
+            .filter-btn {
+                padding: 8px 5px;
+                font-size: 0.7rem;
+                text-align: center;
+            }
+            
+            .themes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .theme-card {
+                padding: 12px 8px;
+            }
+            
+            .theme-color {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .theme-name {
+                font-size: 0.75rem;
+            }
+            
+            .theme-price {
+                font-size: 0.65rem;
+            }
+            
+            .apply-theme-btn, .buy-theme-btn {
+                padding: 6px;
+                font-size: 0.65rem;
+            }
+            
+            .store-grid {
+                grid-template-columns: 1fr;
+                max-height: none;
+                overflow-y: visible;
+                gap: 12px;
+            }
+            
+            .store-quiz-card {
+                padding: 15px;
+            }
+            
+            .store-quiz-title {
+                font-size: 1rem;
+            }
+            
+            .store-quiz-stats {
+                font-size: 0.75rem;
+                gap: 8px;
+            }
+            
+            .store-quiz-price {
+                font-size: 0.9rem;
+            }
+            
+            .buy-quiz-btn {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .nav-link { width: calc(50% - 3px); text-align: center; padding: 8px 5px; font-size: 0.75rem; }
-            .user-card { justify-content: center; }
-            .avatar { width: 35px; height: 35px; }
-            .logout-btn { width: 100%; text-align: center; }
-            .themes-grid { grid-template-columns: 1fr; }
-            .store-filters { flex-direction: column; gap: 5px; }
-            .filter-btn { width: 100%; }
-            .store-quiz-actions { flex-direction: column; }
-            .buy-quiz-btn { width: 100%; }
-            .theme-color { width: 35px; height: 35px; }
+            .nav-menu {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .nav-link {
+                font-size: 0.6rem;
+                padding: 6px 2px;
+            }
+            
+            .user-card {
+                grid-template-columns: auto 1fr auto;
+                gap: 4px;
+            }
+            
+            .user-card .coins,
+            .user-card .tokens {
+                font-size: 0.7rem;
+            }
+            
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .store-filters {
+                grid-template-columns: 1fr;
+            }
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            width: 100%;
-            overflow-x: hidden;
         }
 
         .header {
@@ -212,19 +302,17 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(15px);
             border-radius: 40px;
             margin-bottom: 30px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            width: 100%;
         }
 
         .logo-small {
             font-size: 1.8rem;
             font-weight: 700;
             cursor: pointer;
-            white-space: nowrap;
         }
 
         .nav-menu {
@@ -235,30 +323,28 @@
 
         .nav-link {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             color: white;
             text-decoration: none;
             transition: all 0.3s;
+            font-weight: 600;
         }
 
-        .nav-link:hover { background: rgba(255, 255, 255, 0.2); }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.3); }
         .nav-link.active { background: #6366f1; color: white; }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .header-right { display: flex; align-items: center; gap: 20px; }
 
         .user-card {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             padding: 5px 15px 5px 5px;
             border-radius: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .avatar {
@@ -270,6 +356,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            color: white;
         }
 
         .logout-btn {
@@ -279,28 +366,26 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
-            color: inherit;
+            font-weight: 600;
         }
 
         .logout-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-        .coins { color: #ffd700; font-weight: 600; font-size: 1.1rem; }
-        .tokens { color: #00ffff; font-weight: 600; font-size: 1.1rem; margin-left: 10px; }
+        .coins { color: #ffd700; font-weight: 600; }
+        .tokens { color: #00ffff; font-weight: 600; margin-left: 10px; }
 
         .shop-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 20px;
-            width: 100%;
         }
 
         .themes-section, .store-section {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             padding: 25px;
-            width: 100%;
         }
 
         .section-header {
@@ -317,7 +402,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            word-break: break-word;
         }
 
         .themes-grid {
@@ -325,7 +409,6 @@
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             margin: 20px 0;
-            width: 100%;
         }
 
         .theme-card {
@@ -337,9 +420,9 @@
             transition: all 0.3s;
         }
 
-        .theme-card:hover { transform: scale(1.05); }
-        .theme-card.owned { border-color: #10b981; }
-        .theme-card.active { border-color: #6366f1; box-shadow: 0 0 20px #6366f1; }
+        .theme-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .theme-card.owned { border-color: #10b981; border-width: 3px; }
+        .theme-card.active { border-color: #6366f1; border-width: 3px; box-shadow: 0 0 20px #6366f1; }
 
         .theme-color {
             width: 45px;
@@ -349,7 +432,7 @@
             border: 2px solid white;
         }
 
-        .theme-name { font-size: 0.95rem; margin-bottom: 5px; word-break: break-word; }
+        .theme-name { font-size: 0.95rem; margin-bottom: 5px; font-weight: 600; }
         .theme-price { font-size: 0.85rem; opacity: 0.8; }
 
         .apply-theme-btn, .buy-theme-btn {
@@ -363,10 +446,11 @@
             font-size: 0.85rem;
             transition: all 0.3s;
             width: 100%;
+            font-weight: 600;
         }
 
         .apply-theme-btn:hover, .buy-theme-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
             box-shadow: 0 0 10px #6366f1;
         }
 
@@ -385,12 +469,11 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
-            color: white;
-            font-family: 'Comfortaa', cursive;
+            font-weight: 600;
         }
 
-        .filter-btn:hover { background: rgba(255, 255, 255, 0.3); }
-        .filter-btn.active { background: #6366f1; color: white; }
+        .filter-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+        .filter-btn.active { background: #6366f1; color: white; border-color: white; }
 
         .store-grid {
             display: grid;
@@ -399,7 +482,6 @@
             max-height: 600px;
             overflow-y: auto;
             padding: 10px;
-            width: 100%;
         }
 
         .store-quiz-card {
@@ -429,22 +511,21 @@
         .store-quiz-title {
             font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 5px;
-            word-break: break-word;
+            margin-bottom: 10px;
         }
 
         .store-quiz-stats {
             display: flex;
             gap: 15px;
             margin: 10px 0;
-            flex-wrap: wrap;
+            font-size: 0.9rem;
         }
 
         .store-quiz-price {
             color: #ffd700;
             font-weight: 700;
-            margin: 10px 0;
-            font-size: 1.1rem;
+            margin: 15px 0;
+            font-size: 1.2rem;
         }
 
         .buy-quiz-btn {
@@ -469,7 +550,6 @@
             text-align: center;
             padding: 40px;
             opacity: 0.7;
-            width: 100%;
         }
 
         .empty-icon { font-size: 60px; margin-bottom: 20px; }
@@ -512,9 +592,9 @@
                 </div>
                 <div id="themesList" class="themes-grid"></div>
                 <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:30px;">
-                    <h3 style="color:#6366f1;">🎨 Текущая тема</h3>
+                    <h3 style="color:#6366f1; margin-bottom:10px;">🎨 Текущая тема</h3>
                     <div id="currentTheme" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <div id="currentThemeColor" style="width:35px; height:35px; border-radius:50%; background:#ff9a9e; border:2px solid white;"></div>
+                        <div id="currentThemeColor" style="width:35px; height:35px; border-radius:50%; background:#ff758c; border:2px solid white;"></div>
                         <span id="currentThemeName">Розовая</span>
                     </div>
                 </div>
@@ -547,26 +627,20 @@
         let storeFilter = 'all';
 
         const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff9a9e' },
-            { id: 'blue', name: '💙 Синяя', price: 50, color: '#a8edea' },
-            { id: 'green', name: '💚 Зеленая', price: 100, color: '#d4fc79' },
-            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#e0c3fc' },
-            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#fddb92' },
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff758c' },
+            { id: 'blue', name: '💙 Синяя', price: 50, color: '#4facfe' },
+            { id: 'green', name: '💚 Зеленая', price: 100, color: '#43e97b' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#a18cd1' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#fa709a' },
             { id: 'candy', name: '🍭 Карамель', price: 200, color: '#fbc2eb' },
-            { id: 'forest', name: '🌲 Лес', price: 225, color: '#a8e6cf' },
-            { id: 'sunset', name: '🌅 Закат', price: 250, color: '#ffd89b' },
-            { id: 'ocean', name: '🌊 Океан', price: 275, color: '#a1c4fd' },
-            { id: 'dark', name: '🖤 Темная', price: 300, color: '#141e30' }
+            { id: 'forest', name: '🌲 Лес', price: 225, color: '#38f9d7' },
+            { id: 'sunset', name: '🌅 Закат', price: 250, color: '#fee140' },
+            { id: 'ocean', name: '🌊 Океан', price: 275, color: '#00f2fe' },
+            { id: 'dark', name: '🖤 Темная', price: 300, color: '#2c3e50' }
         ];
 
         async function sendToTG(message) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
-                });
-            } catch (e) { console.error('Ошибка ТГ:', e); }
+            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:message, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
         }
 
         function applyTheme(themeId) {
@@ -589,23 +663,8 @@
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
-            const roleEmoji = {
-                'owner': '👑',
-                'mediacoord': '🎥',
-                'chief': '⭐',
-                'curator': '📚',
-                'moderator': '🛡️',
-                'user': '👤'
-            }[currentUser.role_title] || '👤';
-            
-            const roleClass = {
-                'owner': 'role-owner',
-                'mediacoord': 'role-mediacoord',
-                'chief': 'role-chief',
-                'curator': 'role-curator',
-                'moderator': 'role-moderator',
-                'user': ''
-            }[currentUser.role_title] || '';
+            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
+            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
