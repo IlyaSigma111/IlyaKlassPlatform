@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Все стили такие же как в предыдущей версии */
         * {
             margin: 0;
             padding: 0;
@@ -970,7 +971,22 @@
                         .update({ coins: newCoins })
                         .eq('id', currentUser.id);
                         
-                    if (coinsError) throw coinsError;
+                    if (coinsError) {
+                        // Если ошибка с колонкой coins, пробуем использовать balance
+                        console.log('Ошибка с coins, пробуем balance:', coinsError);
+                        
+                        const { error: balanceError } = await sb.from('users')
+                            .update({ balance: newCoins })
+                            .eq('id', currentUser.id);
+                            
+                        if (balanceError) throw balanceError;
+                        
+                        // Обновляем локально
+                        currentUser.balance = newCoins;
+                    } else {
+                        // Обновляем локально
+                        currentUser.coins = newCoins;
+                    }
                     
                     // Обновляем токены
                     const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
@@ -1007,7 +1023,6 @@
                     // Обновляем локальные данные
                     userCoins = newCoins;
                     userTokens = newTokens;
-                    currentUser.coins = newCoins;
                     
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
