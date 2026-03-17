@@ -20,330 +20,118 @@
             color: white;
             min-height: 100vh;
             transition: background 0.3s ease;
+            overflow-x: hidden;
+            width: 100%;
         }
 
-        /* ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ ===== */
-        body.pink-theme { 
-            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); 
-            color: white; 
-        }
-        body.pink-theme .nav-link,
-        body.pink-theme .theme-card,
-        body.pink-theme .store-quiz-card,
-        body.pink-theme .user-card,
-        body.pink-theme .filter-btn,
-        body.pink-theme .exchange-card { 
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        body.blue-theme { 
-            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); 
-            color: white; 
-        }
-        
-        body.green-theme { 
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); 
-            color: white; 
-        }
-        
-        body.purple-theme { 
-            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); 
-            color: white; 
-        }
-        
-        body.orange-theme { 
-            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); 
-            color: white; 
-        }
-        
-        body.dark-theme { 
-            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
-            color: white; 
-        }
-        
-        body.sunset-theme { 
-            background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); 
-            color: white; 
-        }
-        
-        body.ocean-theme { 
-            background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); 
-            color: white; 
-        }
-        
-        body.forest-theme { 
-            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); 
-            color: white; 
-        }
-        
-        body.candy-theme { 
-            background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); 
-            color: white; 
-        }
-        
-        body.gold-theme { 
-            background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); 
-            color: #2d3436; 
-        }
-        body.gold-theme .nav-link,
-        body.gold-theme .theme-card,
-        body.gold-theme .store-quiz-card,
-        body.gold-theme .user-card { 
-            background: rgba(255, 255, 255, 0.2);
-            color: #2d3436;
-        }
-        
-        body.diamond-theme { 
-            background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); 
-            color: white; 
-        }
-        
-        body.ruby-theme { 
-            background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); 
-            color: white; 
-        }
-        
-        body.emerald-theme { 
-            background: linear-gradient(135deg, #50c878 0%, #006400 100%); 
-            color: white; 
-        }
-        
-        body.sapphire-theme { 
-            background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); 
-            color: white; 
-        }
-        
-        body.amethyst-theme { 
-            background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.rose-theme { 
-            background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); 
-            color: white; 
-        }
-        
-        body.neon-theme { 
-            background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); 
-            color: #2d3436; 
-        }
-        
-        body.galaxy-theme { 
-            background: linear-gradient(135deg, #000000 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.lava-theme { 
-            background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); 
-            color: white; 
-        }
+        /* ===== 20 ТЕМ ===== */
+        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
+        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
             .container {
-                padding: 8px;
+                padding: 10px;
+                padding-bottom: 80px;
                 width: 100%;
             }
             
             .header {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 8px;
-                padding: 12px;
-                margin-bottom: 15px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                margin: 10px;
+                width: calc(100% - 20px);
+                z-index: 1000;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                padding: 10px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
             }
             
-            .logo-small {
-                font-size: 1.3rem;
-                width: 100%;
-                text-align: center;
-                margin-bottom: 5px;
-            }
+            .logo-small { display: none; }
             
             .nav-menu {
                 width: 100%;
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 4px;
+                display: flex;
+                justify-content: space-around;
+                gap: 5px;
             }
             
             .nav-link {
-                padding: 8px 4px;
-                font-size: 0.7rem;
+                padding: 12px 5px;
+                font-size: 0.75rem;
                 text-align: center;
+                flex: 1;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 30px;
             }
             
             .header-right {
-                width: 100%;
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: calc(100% - 20px);
+                z-index: 999;
             }
             
             .user-card {
                 width: 100%;
-                display: grid;
-                grid-template-columns: auto 1fr auto auto auto;
+                display: flex;
+                justify-content: space-between;
                 align-items: center;
-                gap: 6px;
-                padding: 6px 10px;
-                font-size: 0.8rem;
+                padding: 8px 15px;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                font-size: 0.85rem;
             }
             
-            .avatar {
-                width: 28px;
-                height: 28px;
-                font-size: 0.8rem;
-            }
+            .avatar { width: 35px; height: 35px; }
+            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
             
-            .logout-btn {
-                padding: 4px 8px;
-                font-size: 0.7rem;
-            }
+            .main-screen { padding-top: 70px; }
             
-            .shop-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .themes-section, .store-section, .exchange-section {
-                padding: 15px;
-                border-radius: 24px;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-                margin-bottom: 15px;
-            }
-            
-            .section-title {
-                font-size: 1.2rem;
-            }
-            
-            .store-filters {
-                width: 100%;
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
-            }
-            
-            .filter-btn {
-                padding: 8px 5px;
-                font-size: 0.7rem;
-                text-align: center;
-            }
-            
-            .themes-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .theme-card {
-                padding: 12px 8px;
-            }
-            
-            .theme-color {
-                width: 35px;
-                height: 35px;
-            }
-            
-            .theme-name {
-                font-size: 0.75rem;
-            }
-            
-            .theme-price {
-                font-size: 0.65rem;
-            }
-            
-            .apply-theme-btn, .buy-theme-btn {
-                padding: 6px;
-                font-size: 0.65rem;
-            }
-            
-            .store-grid {
-                grid-template-columns: 1fr;
-                max-height: none;
-                overflow-y: visible;
-                gap: 12px;
-            }
-            
-            .store-quiz-card {
-                padding: 15px;
-            }
-            
-            .store-quiz-title {
-                font-size: 1rem;
-            }
-            
-            .store-quiz-stats {
-                font-size: 0.75rem;
-                gap: 8px;
-            }
-            
-            .store-quiz-price {
-                font-size: 0.9rem;
-            }
-            
-            .buy-quiz-btn {
-                padding: 10px;
-                font-size: 0.8rem;
-            }
-            
-            .exchange-card {
-                padding: 15px;
-            }
-            
-            .exchange-input-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .exchange-input {
-                width: 100%;
-            }
-            
-            .exchange-btn {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-menu {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .nav-link {
-                font-size: 0.6rem;
-                padding: 6px 2px;
-            }
-            
-            .user-card {
-                grid-template-columns: auto 1fr auto;
-                gap: 4px;
-            }
-            
-            .user-card .coins,
-            .user-card .tokens {
-                font-size: 0.7rem;
-            }
-            
-            .themes-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .store-filters {
-                grid-template-columns: 1fr;
-            }
+            .shop-section { padding: 20px; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .section-title { font-size: 1.2rem; }
+            .themes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .theme-card { padding: 10px; }
+            .theme-color { width: 35px; height: 35px; }
+            .theme-name { font-size: 0.75rem; }
+            .theme-price { font-size: 0.65rem; }
+            .apply-theme-btn, .buy-theme-btn { padding: 6px; font-size: 0.65rem; }
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            width: 100%;
         }
 
         .header {
@@ -377,14 +165,10 @@
             border-radius: 40px;
             color: white;
             text-decoration: none;
-            transition: all 0.3s;
             font-weight: 600;
         }
 
-        .nav-link:hover { background: rgba(255, 255, 255, 0.3); }
-        .nav-link.active { background: #6366f1; color: white; }
-
-        .header-right { display: flex; align-items: center; gap: 20px; }
+        .nav-link.active { background: #6366f1; }
 
         .user-card {
             display: flex;
@@ -414,32 +198,19 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s;
             font-weight: 600;
+            color: white;
         }
-
-        .logout-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
         .coins { color: #ffd700; font-weight: 600; }
         .tokens { color: #00ffff; font-weight: 600; margin-left: 10px; }
 
-        .shop-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
-        }
-
-        .themes-section, .store-section, .exchange-section {
+        .shop-section {
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
-            padding: 25px;
-        }
-
-        .exchange-section {
-            margin-top: 20px;
-            grid-column: 1 / -1;
+            padding: 30px;
         }
 
         .section-header {
@@ -474,7 +245,7 @@
             transition: all 0.3s;
         }
 
-        .theme-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .theme-card:hover { transform: translateY(-5px); }
         .theme-card.owned { border-color: #10b981; border-width: 3px; }
         .theme-card.active { border-color: #6366f1; border-width: 3px; box-shadow: 0 0 20px #6366f1; }
 
@@ -498,185 +269,13 @@
             color: white;
             cursor: pointer;
             font-size: 0.85rem;
-            transition: all 0.3s;
             width: 100%;
             font-weight: 600;
-        }
-
-        .apply-theme-btn:hover, .buy-theme-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 10px #6366f1;
         }
 
         .buy-theme-btn { background: #10b981; }
 
-        .store-filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .filter-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
-        .filter-btn.active { background: #6366f1; color: white; border-color: white; }
-
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding: 10px;
-        }
-
-        .store-quiz-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-
-        .store-quiz-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .store-quiz-card.premium { border-left: 5px solid #f59e0b; }
-
-        .store-quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .store-quiz-author { font-size: 0.9rem; opacity: 0.8; }
-
-        .store-quiz-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .store-quiz-stats {
-            display: flex;
-            gap: 15px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-
-        .store-quiz-price {
-            color: #ffd700;
-            font-weight: 700;
-            margin: 15px 0;
-            font-size: 1.2rem;
-        }
-
-        .buy-quiz-btn {
-            background: #ffd700;
-            color: #2d3436;
-            border: none;
-            padding: 12px;
-            border-radius: 30px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-
-        .buy-quiz-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px #ffd700;
-        }
-
-        /* Стили для обменника */
-        .exchange-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .exchange-rate {
-            font-size: 1.5rem;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 40px;
-        }
-
-        .exchange-rate span {
-            color: #ffd700;
-            font-weight: 700;
-        }
-
-        .exchange-input-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            justify-content: center;
-            margin: 25px 0;
-            flex-wrap: wrap;
-        }
-
-        .exchange-input {
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #6366f1;
-            border-radius: 40px;
-            color: inherit;
-            font-size: 1.2rem;
-            font-family: 'Comfortaa', cursive;
-            width: 200px;
-            text-align: center;
-        }
-
-        .exchange-input:focus {
-            outline: none;
-            box-shadow: 0 0 20px #6366f1;
-        }
-
-        .exchange-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 40px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .exchange-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px #10b981;
-        }
-
-        .exchange-info {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.7;
-        }
-
+        .empty-state { text-align: center; padding: 40px; opacity: 0.7; }
         .empty-icon { font-size: 60px; margin-bottom: 20px; }
 
         .role-badge {
@@ -695,7 +294,7 @@
 
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: #10b981;
@@ -716,86 +315,30 @@
     </style>
 </head>
 <body>
-    <div class="toast" id="toast">Операция выполнена! ✅</div>
+    <div class="toast" id="toast">✅ Операция выполнена!</div>
 
-    <header class="header">
-        <div class="logo-small" onclick="window.location='index.html'">
-            <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
-        </div>
-        <nav class="nav-menu">
-            <a href="index.html" class="nav-link">Главная</a>
-            <a href="shop.html" class="nav-link active">Магазин</a>
-            <a href="results.html" class="nav-link">Результаты</a>
-            <a href="profile.html" class="nav-link">Профиль</a>
-        </nav>
-        <div class="header-right" id="userSection"></div>
-    </header>
-
-    <main class="container">
-        <div class="shop-grid">
-            <!-- ЛЕВАЯ КОЛОНКА - ТЕМЫ -->
-            <div class="themes-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-palette" style="color: #f59e0b;"></i> Магазин тем</h2>
-                    <div id="userCoins" class="coins">0</div>
-                </div>
-                <div id="themesList" class="themes-grid"></div>
-                <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:30px;">
-                    <h3 style="color:#6366f1; margin-bottom:10px;">🎨 Текущая тема</h3>
-                    <div id="currentTheme" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <div id="currentThemeColor" style="width:35px; height:35px; border-radius:50%; background:#ff0844; border:2px solid white;"></div>
-                        <span id="currentThemeName">Розовая</span>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="header">
+            <div class="logo-small" onclick="window.location='index.html'">
+                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
             </div>
-
-            <!-- ПРАВАЯ КОЛОНКА - ПРЕМИУМ ВИКТОРИНЫ -->
-            <div class="store-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-store" style="color: #10b981;"></i> Премиум викторины</h2>
-                    <div class="store-filters">
-                        <button class="filter-btn active" onclick="filterStore('all')">Все</button>
-                        <button class="filter-btn" onclick="filterStore('tokens')">💎 За токены</button>
-                    </div>
-                </div>
-                <div id="storeQuizzesList" class="store-grid"></div>
-            </div>
+            <nav class="nav-menu" id="mainNav"></nav>
+            <div class="header-right" id="userSection"></div>
         </div>
 
-        <!-- СЕКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ -->
-        <div class="exchange-section">
+        <div class="shop-section">
             <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-exchange-alt" style="color: #00ffff;"></i> Обмен валюты</h2>
-                <div style="display: flex; gap: 15px;">
-                    <span class="coins"><i class="fas fa-coins"></i> <span id="userCoinsExchange">0</span></span>
-                    <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokensExchange">0</span></span>
-                </div>
+                <h2 class="section-title"><i class="fas fa-palette"></i> Магазин тем</h2>
+                <span class="coins"><i class="fas fa-coins"></i> <span id="userCoins">0</span></span>
             </div>
-            
-            <div class="exchange-card">
-                <div class="exchange-rate">
-                    <span>100 монет = 1 токен 💎</span>
-                </div>
-                
-                <div class="exchange-input-group">
-                    <input type="number" id="exchangeAmount" class="exchange-input" placeholder="Количество монет" min="100" step="100" value="100">
-                    <button class="exchange-btn" onclick="exchangeCoins()">
-                        <i class="fas fa-sync-alt"></i> Обменять
-                    </button>
-                </div>
-                
-                <div class="exchange-info">
-                    <i class="fas fa-info-circle"></i> Минимальная сумма обмена: 100 монет (1 токен)
-                </div>
-            </div>
+            <div id="themesList" class="themes-grid"></div>
         </div>
-    </main>
+    </div>
 
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-
         const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
         const TG_CHAT_ID = '1474901393';
 
@@ -803,9 +346,7 @@
         let userCoins = 100;
         let userTokens = 0;
         let userThemes = ['pink'];
-        let storeFilter = 'all';
 
-        // ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ =====
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
             { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
@@ -829,32 +370,20 @@
             { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
         ];
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
         }
 
-        async function sendToTG(message) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
-                });
-            } catch (e) { console.error('Ошибка ТГ:', e); }
+        async function sendToTG(msg) {
+            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
         }
 
         function applyTheme(themeId) {
             document.body.className = themeId + '-theme';
             localStorage.setItem('currentTheme', themeId);
-            const theme = allThemes.find(t => t.id === themeId);
-            if (theme) {
-                document.getElementById('currentThemeColor').style.background = theme.color;
-                document.getElementById('currentThemeName').textContent = theme.name;
-            }
-            loadThemes();
         }
 
         function getCurrentUser() {
@@ -862,27 +391,26 @@
             return saved ? JSON.parse(saved) : null;
         }
 
+        function updateNav() {
+            const nav = document.getElementById('mainNav');
+            const role = currentUser?.role;
+            nav.innerHTML = role === 'teacher' 
+                ? `<a href="teacher-menu.html" class="nav-link">Главная</a>
+                   <a href="shop.html" class="nav-link active">Магазин</a>
+                   <a href="results.html" class="nav-link">Результаты</a>
+                   <a href="profile.html" class="nav-link">Профиль</a>`
+                : `<a href="student-menu.html" class="nav-link">Главная</a>
+                   <a href="shop.html" class="nav-link active">Магазин</a>
+                   <a href="results.html" class="nav-link">Результаты</a>
+                   <a href="profile.html" class="nav-link">Профиль</a>`;
+        }
+
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
-            const roleEmoji = { 
-                'owner': '👑', 
-                'mediacoord': '🎥', 
-                'chief': '⭐', 
-                'curator': '📚', 
-                'moderator': '🛡️', 
-                'user': '👤' 
-            }[currentUser.role_title] || '👤';
-            
-            const roleClass = { 
-                'owner': 'role-owner', 
-                'mediacoord': 'role-mediacoord', 
-                'chief': 'role-chief', 
-                'curator': 'role-curator', 
-                'moderator': 'role-moderator', 
-                'user': '' 
-            }[currentUser.role_title] || '';
+            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
+            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
@@ -894,70 +422,31 @@
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
-            
-            document.getElementById('userCoins').textContent = currentUser?.coins || 0;
-            document.getElementById('userCoinsExchange').textContent = currentUser?.coins || 0;
-            document.getElementById('userTokensExchange').textContent = userTokens || 0;
+            document.getElementById('userCoins').textContent = currentUser.coins || 0;
         }
 
         function logout() {
-            sendToTG(`🚪 Выход из магазина: ${currentUser?.username}`);
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
 
         async function loadUser() {
             const user = getCurrentUser();
-            if (!user) { 
-                window.location.href = 'index.html'; 
-                return; 
-            }
+            if (!user) { window.location.href = 'index.html'; return; }
             
             currentUser = user;
+            userCoins = user.coins || 100;
+            userThemes = user.themes || ['pink'];
             
-            try {
-                const { data: userData, error } = await sb.from('users')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single();
-                    
-                if (error) {
-                    console.error('Ошибка загрузки данных пользователя:', error);
-                } else if (userData) {
-                    currentUser = { ...currentUser, ...userData };
-                    userCoins = userData.coins || 0;
-                    userThemes = userData.themes || ['pink'];
-                }
-            } catch (e) {
-                console.error('Ошибка загрузки пользователя:', e);
-                userCoins = user.coins || 0;
-                userThemes = user.themes || ['pink'];
-            }
+            const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
+            userTokens = tokens?.balance || 0;
             
-            try {
-                const { data: tokens, error } = await sb.from('user_tokens')
-                    .select('balance')
-                    .eq('user_id', user.id)
-                    .maybeSingle();
-                    
-                if (error && error.code !== 'PGRST116') {
-                    console.error('Ошибка загрузки токенов:', error);
-                }
-                
-                userTokens = tokens?.balance || 0;
-            } catch (e) {
-                console.error('Ошибка загрузки токенов:', e);
-                userTokens = 0;
-            }
-            
+            updateNav();
             updateUI();
             loadThemes();
-            loadStore();
             
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
-            
-            sendToTG(`🛒 ${currentUser.username} зашел в магазин`);
         }
 
         function loadThemes() {
@@ -996,11 +485,7 @@
                     userCoins -= theme.price;
                     userThemes.push(themeId);
                     
-                    const { error } = await sb.from('users')
-                        .update({ coins: userCoins, themes: userThemes })
-                        .eq('id', currentUser.id);
-                        
-                    if (error) throw error;
+                    await sb.from('users').update({ coins: userCoins, themes: userThemes }).eq('id', currentUser.id);
                     
                     currentUser.coins = userCoins;
                     currentUser.themes = userThemes;
@@ -1011,224 +496,12 @@
                     updateUI();
                     loadThemes();
                     
-                    alert('✅ Тема куплена!');
+                    showToast('✅ Тема куплена!');
                 } catch (error) {
                     console.error('Ошибка покупки:', error);
                     alert('Ошибка при покупке: ' + error.message);
                 }
             }
-        };
-
-        // Функция обмена монет на токены
-        window.exchangeCoins = async function() {
-            if (!currentUser) {
-                alert('Сначала войдите в систему');
-                return;
-            }
-            
-            const amount = parseInt(document.getElementById('exchangeAmount').value);
-            
-            if (isNaN(amount) || amount < 100) {
-                alert('Минимальная сумма обмена: 100 монет');
-                return;
-            }
-            
-            if (amount % 100 !== 0) {
-                alert('Сумма должна быть кратна 100');
-                return;
-            }
-            
-            if (userCoins < amount) {
-                alert(`Недостаточно монет! У вас ${userCoins} монет, нужно ${amount}`);
-                return;
-            }
-            
-            const tokensToAdd = amount / 100;
-            
-            if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
-                try {
-                    const { data: freshUserData, error: fetchError } = await sb.from('users')
-                        .select('*')
-                        .eq('id', currentUser.id)
-                        .single();
-                        
-                    if (fetchError) {
-                        console.error('Ошибка получения данных пользователя:', fetchError);
-                        throw new Error('Не удалось получить данные пользователя');
-                    }
-                    
-                    console.log('Данные пользователя из БД перед обменом:', freshUserData);
-                    
-                    const currentBalance = freshUserData.coins || 0;
-                    
-                    if (currentBalance < amount) {
-                        alert(`Недостаточно монет! По данным БД у вас ${currentBalance} монет, нужно ${amount}`);
-                        return;
-                    }
-                    
-                    const newBalance = currentBalance - amount;
-                    
-                    const { error: updateError } = await sb.from('users')
-                        .update({ coins: newBalance })
-                        .eq('id', currentUser.id);
-                        
-                    if (updateError) {
-                        console.error('Ошибка при обновлении монет:', updateError);
-                        throw new Error(`Не удалось обновить баланс монет: ${updateError.message}`);
-                    }
-                    
-                    userCoins = newBalance;
-                    currentUser.coins = newBalance;
-                    
-                    const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
-                        .select('balance')
-                        .eq('user_id', currentUser.id)
-                        .maybeSingle();
-                        
-                    if (tokenError && tokenError.code !== 'PGRST116') {
-                        throw tokenError;
-                    }
-                    
-                    const currentTokens = tokenData?.balance || 0;
-                    const newTokens = currentTokens + tokensToAdd;
-                    
-                    if (tokenData) {
-                        const { error: updateError } = await sb.from('user_tokens')
-                            .update({ balance: newTokens })
-                            .eq('user_id', currentUser.id);
-                            
-                        if (updateError) throw updateError;
-                    } else {
-                        const { error: insertError } = await sb.from('user_tokens')
-                            .insert({
-                                user_id: currentUser.id,
-                                balance: newTokens,
-                                referral_code: 'ref_' + currentUser.id + '_' + Math.floor(Math.random() * 1000000)
-                            });
-                            
-                        if (insertError) throw insertError;
-                    }
-                    
-                    userTokens = newTokens;
-                    
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    updateUI();
-                    showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
-                    sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
-                    
-                    document.getElementById('exchangeAmount').value = '100';
-                    
-                } catch (error) {
-                    console.error('Ошибка обмена:', error);
-                    alert('Ошибка при обмене: ' + error.message);
-                }
-            }
-        };
-
-        async function loadStore() {
-            try {
-                const { data: quizzes, error } = await sb
-                    .from('quizzes')
-                    .select('*, users!quizzes_created_by_fkey(username)')
-                    .eq('published', true)
-                    .eq('type', 'constructed');
-                
-                if (error) throw error;
-                
-                const container = document.getElementById('storeQuizzesList');
-                
-                if (!quizzes || quizzes.length === 0) {
-                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛒</div><p>Премиум викторин пока нет</p></div>';
-                    return;
-                }
-
-                let filtered = storeFilter === 'tokens' ? quizzes.filter(q => q.price_tokens > 0) : quizzes;
-
-                let html = '';
-                for (let q of filtered) {
-                    html += `
-                        <div class="store-quiz-card premium">
-                            <div class="store-quiz-header">
-                                <span class="store-quiz-author">👤 ${q.users?.username || 'Неизвестно'}</span>
-                            </div>
-                            <div class="store-quiz-title">${q.title}</div>
-                            <div class="store-quiz-stats">
-                                <span>${q.subject || ''} • ${q.class || ''} класс</span>
-                                <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
-                            </div>
-                            <div class="store-quiz-price">
-                                <i class="fas fa-gem"></i> ${q.price_tokens} токенов
-                            </div>
-                            <button class="buy-quiz-btn" onclick="buyQuiz('${q.id}', ${q.price_tokens})">
-                                💎 Купить за токены
-                            </button>
-                        </div>
-                    `;
-                }
-                container.innerHTML = html;
-            } catch (error) {
-                console.error('Ошибка загрузки магазина:', error);
-                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state">❌ Ошибка загрузки</div>';
-            }
-        }
-
-        window.buyQuiz = async function(quizId, price) {
-            if (!currentUser) return;
-            
-            if (userTokens < price) {
-                alert('Недостаточно токенов!');
-                return;
-            }
-            
-            if (confirm(`Купить викторину за ${price} токенов?`)) {
-                try {
-                    try {
-                        const { data, error } = await sb.rpc('buy_quiz_with_tokens', { 
-                            p_user_id: currentUser.id, 
-                            p_quiz_id: quizId 
-                        });
-                        
-                        if (error) throw error;
-                        
-                        if (data) {
-                            userTokens -= price;
-                            updateUI();
-                            alert('✅ Викторина куплена!');
-                            sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
-                            loadStore();
-                        } else {
-                            alert('❌ Ошибка при покупке');
-                        }
-                    } catch (rpcError) {
-                        console.log('RPC функция не найдена, обновляем вручную');
-                        
-                        const newTokens = userTokens - price;
-                        
-                        const { error: tokenError } = await sb.from('user_tokens')
-                            .update({ balance: newTokens })
-                            .eq('user_id', currentUser.id);
-                            
-                        if (tokenError) throw tokenError;
-                        
-                        userTokens = newTokens;
-                        updateUI();
-                        alert('✅ Викторина куплена!');
-                        sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
-                        loadStore();
-                    }
-                } catch (error) {
-                    console.error('Ошибка покупки:', error);
-                    alert('Ошибка: ' + error.message);
-                }
-            }
-        };
-
-        window.filterStore = function(filter) {
-            storeFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            loadStore();
         };
 
         loadUser();
