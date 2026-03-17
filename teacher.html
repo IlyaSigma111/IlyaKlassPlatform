@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>👩‍🏫 Учитель | ИЛЬЯКЛАСС</title>
+    <title>👩‍🏫 Игра | ИЛЬЯКЛАСС</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -23,128 +23,28 @@
             transition: background 0.3s ease;
         }
 
-        /* ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ ===== */
-        body.pink-theme { 
-            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); 
-            color: white; 
-        }
-        body.pink-theme .glass-panel,
-        body.pink-theme .player-card,
-        body.pink-theme .control-btn,
-        body.pink-theme .back-btn,
-        body.pink-theme .question-item,
-        body.pink-theme .link-container,
-        body.pink-theme .start-btn { 
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        body.blue-theme { 
-            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); 
-            color: white; 
-        }
-        
-        body.green-theme { 
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); 
-            color: white; 
-        }
-        
-        body.purple-theme { 
-            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); 
-            color: white; 
-        }
-        
-        body.orange-theme { 
-            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); 
-            color: white; 
-        }
-        
-        body.dark-theme { 
-            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
-            color: white; 
-        }
-        
-        body.sunset-theme { 
-            background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); 
-            color: white; 
-        }
-        
-        body.ocean-theme { 
-            background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); 
-            color: white; 
-        }
-        
-        body.forest-theme { 
-            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); 
-            color: white; 
-        }
-        
-        body.candy-theme { 
-            background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); 
-            color: white; 
-        }
-        
-        body.gold-theme { 
-            background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); 
-            color: #2d3436; 
-        }
-        body.gold-theme .glass-panel,
-        body.gold-theme .player-card,
-        body.gold-theme .control-btn,
-        body.gold-theme .back-btn,
-        body.gold-theme .question-item,
-        body.gold-theme .link-container { 
-            background: rgba(255, 255, 255, 0.2);
-            color: #2d3436;
-        }
-        
-        body.diamond-theme { 
-            background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); 
-            color: white; 
-        }
-        
-        body.ruby-theme { 
-            background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); 
-            color: white; 
-        }
-        
-        body.emerald-theme { 
-            background: linear-gradient(135deg, #50c878 0%, #006400 100%); 
-            color: white; 
-        }
-        
-        body.sapphire-theme { 
-            background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); 
-            color: white; 
-        }
-        
-        body.amethyst-theme { 
-            background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.rose-theme { 
-            background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); 
-            color: white; 
-        }
-        
-        body.neon-theme { 
-            background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); 
-            color: #2d3436; 
-        }
-        
-        body.galaxy-theme { 
-            background: linear-gradient(135deg, #000000 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.lava-theme { 
-            background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); 
-            color: white; 
-        }
+        /* ===== 20 ТЕМ ===== */
+        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -152,35 +52,10 @@
                 overflow-y: auto;
                 height: auto;
             }
-            .left-column, .right-column { width: 100%; min-height: auto; }
-            .header { flex-direction: column; gap: 10px; padding: 15px; }
-            .code-display { font-size: 1.3rem; padding: 8px 15px; }
-            .glass-panel { padding: 15px; }
-            .big-code { font-size: 2.5rem; padding: 15px; }
-            .players-grid { grid-template-columns: repeat(2, 1fr); max-height: 250px; }
-            .questions-list { grid-template-columns: repeat(4, 1fr); max-height: 200px; }
-            .presentation-question { padding: 25px; }
-            .presentation-question h2 { font-size: 1.5rem; }
-            .stats-grid { flex-wrap: wrap; justify-content: center; gap: 10px; }
-            .answer-block { padding: 15px; }
-            .correct-answer { font-size: 1.3rem; }
-            .presentation-header { flex-direction: column; gap: 10px; padding: 15px; }
+            .left-column, .right-column { width: 100%; }
+            .big-code { font-size: 2.5rem; }
             .link-container { flex-direction: column; }
             .copy-btn { width: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .header { padding: 10px; }
-            .back-btn { width: 100%; justify-content: center; }
-            .code-display { width: 100%; text-align: center; font-size: 1.1rem; }
-            .players-grid { grid-template-columns: 1fr; }
-            .questions-list { grid-template-columns: repeat(3, 1fr); }
-            .control-buttons { grid-template-columns: 1fr; }
-            .presentation-content { padding: 15px; }
-            .stat-box { padding: 5px 10px; }
-            .stat-value { font-size: 1rem; }
-            .player-card { padding: 10px; }
-            .player-avatar { width: 40px; height: 40px; font-size: 1.2rem; }
         }
 
         .container {
@@ -198,7 +73,6 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            flex-shrink: 0;
         }
 
         .back-btn {
@@ -211,14 +85,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
             font-weight: 600;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
         }
 
         .code-display {
@@ -240,21 +107,8 @@
             overflow: hidden;
         }
 
-        .left-column {
-            width: 35%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow: hidden;
-        }
-
-        .right-column {
-            width: 65%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow: hidden;
-        }
+        .left-column { width: 35%; display: flex; flex-direction: column; gap: 20px; }
+        .right-column { width: 65%; display: flex; flex-direction: column; gap: 20px; }
 
         .glass-panel {
             background: rgba(255, 255, 255, 0.2);
@@ -267,39 +121,97 @@
             overflow: hidden;
         }
 
-        .glass-panel h2 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .lobby-info {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .quiz-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            word-break: break-word;
-        }
-
         .big-code {
             font-size: 4rem;
             font-weight: 800;
-            letter-spacing: 10px;
             background: rgba(255, 255, 255, 0.2);
             padding: 30px;
             border-radius: 40px;
             margin: 20px 0;
             border: 3px solid #10b981;
-            word-break: break-word;
             text-align: center;
         }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .player-score { color: #ffd700; font-weight: 600; }
+
+        .start-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .control-buttons {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .control-btn.primary { background: #10b981; color: white; }
+
+        .questions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .question-item {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .question-item.active { border-color: #10b981; border-width: 3px; }
 
         .link-container {
             display: flex;
@@ -318,13 +230,7 @@
             border: none;
             color: inherit;
             font-family: 'Comfortaa', cursive;
-            font-size: 0.9rem;
             padding: 10px 0;
-            word-break: break-all;
-        }
-
-        .link-input:focus {
-            outline: none;
         }
 
         .copy-btn {
@@ -336,181 +242,18 @@
             cursor: pointer;
             font-weight: 600;
             white-space: nowrap;
-            transition: all 0.3s;
-        }
-
-        .copy-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px #6366f1;
-        }
-
-        .copy-btn.copied {
-            background: #10b981;
-        }
-
-        .players-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-
-        .player-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .player-card:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .player-avatar {
-            width: 50px;
-            height: 50px;
-            background: #6366f1;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin: 0 auto 10px;
-            color: white;
-        }
-
-        .player-score {
-            color: #ffd700;
-            font-weight: 600;
-        }
-
-        .start-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 60px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .start-btn:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px #10b981;
-        }
-
-        .start-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .control-buttons {
-            display: grid;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .control-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            font-weight: 600;
-            color: inherit;
-        }
-
-        .control-btn.primary {
-            background: #10b981;
-            color: white;
-            border: none;
-        }
-
-        .control-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .control-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .questions-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
-            max-height: 400px;
-        }
-
-        .question-item {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .question-item:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .question-item.active {
-            border-color: #10b981;
-            border-width: 3px;
-            background: rgba(16, 185, 129, 0.2);
-        }
-
-        .question-item.completed {
-            opacity: 0.5;
         }
 
         .presentation-mode {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 1000;
             display: none;
             flex-direction: column;
         }
 
-        .presentation-mode.active {
-            display: flex;
-        }
-
-        .presentation-header {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+        .presentation-mode.active { display: flex; }
 
         .presentation-content {
             flex: 1;
@@ -518,15 +261,13 @@
             align-items: center;
             justify-content: center;
             padding: 30px;
-            overflow-y: auto;
         }
 
         .presentation-question {
             max-width: 900px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(20px);
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255,255,255,0.3);
             border-radius: 60px;
             padding: 50px;
         }
@@ -535,47 +276,13 @@
             font-size: 2.5rem;
             text-align: center;
             margin-bottom: 30px;
-            word-break: break-word;
-        }
-
-        .stats-grid {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-box {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #10b981;
-        }
-
-        .answer-block {
-            margin-top: 30px;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 40px;
         }
 
         .correct-answer {
             color: #10b981;
             font-size: 2rem;
             text-align: center;
-            margin: 15px 0;
-            word-break: break-word;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.7;
+            margin-top: 30px;
         }
 
         .toast {
@@ -587,78 +294,36 @@
             color: white;
             padding: 12px 25px;
             border-radius: 40px;
-            font-weight: 600;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            z-index: 3000;
             display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #10b981;
-            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <div class="toast" id="toast">Ссылка скопирована! 🔗</div>
+    <div class="toast" id="toast">Ссылка скопирована!</div>
 
     <div class="container" id="mainInterface">
         <header class="header">
-            <a href="index.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i> На главную
-            </a>
+            <a href="teacher-menu.html" class="back-btn">← В меню</a>
             <div id="codeDisplay" class="code-display" style="display: none;">----</div>
         </header>
 
         <div class="main-content" id="dynamicContent">
-            <!-- Сюда будет подгружаться либо создание лобби, либо игра -->
+            <!-- Содержимое загружается динамически -->
         </div>
     </div>
 
     <div class="presentation-mode" id="presentationMode">
-        <div class="presentation-header">
-            <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
-                <span style="font-size: 1.3rem;">🎯 РЕЖИМ ПРЕЗЕНТАЦИИ</span>
-                <span id="presentationCounter">Вопрос 1/0</span>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-value" id="answeredCount">0</div>
-                    <div>Ответили</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="correctCount">0</div>
-                    <div>Правильно</div>
-                </div>
-            </div>
+        <div class="presentation-header" style="padding:20px; background:rgba(255,255,255,0.2); display:flex; justify-content:space-between;">
+            <span>🎯 РЕЖИМ ПРЕЗЕНТАЦИИ</span>
+            <span id="presentationCounter">Вопрос 1/0</span>
         </div>
-
         <div class="presentation-content">
-            <div id="presentationQuestion" class="presentation-question">
-                <h2>Вопрос появится здесь</h2>
-            </div>
+            <div id="presentationQuestion" class="presentation-question"><h2>Вопрос появится здесь</h2></div>
         </div>
-
-        <div style="padding: 20px; text-align: center; border-top: 2px solid rgba(255,255,255,0.3); display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-            <button onclick="exitPresentation()" class="control-btn" style="display: inline-flex; width: auto; margin: 0 10px;">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            <button onclick="showAnswer()" class="control-btn primary" style="display: inline-flex; width: auto; margin: 0 10px;">
-                <i class="fas fa-check-circle"></i> Ответ
-            </button>
-            <button onclick="nextQuestion()" class="control-btn" style="display: inline-flex; width: auto; margin: 0 10px;">
-                <i class="fas fa-forward"></i> Далее
-            </button>
+        <div style="padding:20px; text-align:center;">
+            <button onclick="exitPresentation()" class="control-btn">← Назад</button>
+            <button onclick="showAnswer()" class="control-btn primary">✅ Ответ</button>
+            <button onclick="nextQuestion()" class="control-btn">⏩ Далее</button>
         </div>
     </div>
 
@@ -666,7 +331,6 @@
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-
         const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
         const TG_CHAT_ID = '1474901393';
 
@@ -681,33 +345,15 @@
         const quizId = urlParams.get('quiz');
         const lobbyId = urlParams.get('lobby');
 
-        async function sendToTG(message) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
-                });
-            } catch (e) { console.error('Ошибка ТГ:', e); }
+        async function sendToTG(msg) {
+            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
-        }
-
-        function checkAuth() {
-            const saved = localStorage.getItem('currentUser');
-            if (saved) {
-                currentUser = JSON.parse(saved);
-                if (currentUser.role !== 'teacher') {
-                    window.location.href = 'index.html';
-                }
-            } else {
-                window.location.href = 'index.html';
-            }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
         }
 
         function applyTheme(themeId) {
@@ -715,338 +361,182 @@
         }
 
         async function init() {
-            checkAuth();
+            const saved = localStorage.getItem('currentUser');
+            if (!saved) { window.location.href = 'index.html'; return; }
             
+            currentUser = JSON.parse(saved);
+            if (currentUser.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
+
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
 
-            if (lobbyId) {
-                await loadGame(lobbyId);
-            } else if (quizId) {
-                await createLobby(quizId);
-            } else {
-                showError();
-            }
+            if (lobbyId) await loadGame(lobbyId);
+            else if (quizId) await createLobby(quizId);
+            else window.location.href = 'teacher-menu.html';
         }
 
         async function createLobby(quizId) {
-            try {
-                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-                if (!quiz) {
-                    showError();
-                    return;
-                }
+            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+            if (!quiz) { window.location.href = 'teacher-menu.html'; return; }
 
-                quizData = quiz;
-                lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
-                const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            quizData = quiz;
+            lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
+            const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
 
-                const lobbyData = {
-                    id: newLobbyId,
-                    quiz_id: quizId,
-                    teacher_id: currentUser.id,
-                    teacher_name: currentUser.username,
-                    code: lobbyCode,
-                    status: 'waiting',
-                    created_at: Date.now(),
-                    players: {},
-                    current_question: 0
-                };
+            await sb.from('lobbies').insert({
+                id: newLobbyId, quiz_id: quizId, teacher_id: currentUser.id,
+                teacher_name: currentUser.username, code: lobbyCode, status: 'waiting',
+                created_at: Date.now(), players: {}, current_question: 0
+            });
 
-                await sb.from('lobbies').insert(lobbyData);
-                currentLobby = lobbyData;
+            currentLobby = { id: newLobbyId, quiz_id: quizId, code: lobbyCode };
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            questions = qs || [];
 
-                const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
-                questions = qs || [];
+            sendToTG(`🎮 ${currentUser.username} создал лобби для "${quiz.title}" (код:${lobbyCode})`);
 
-                sendToTG(`🎮 ${currentUser.username} создал лобби для викторины "${quiz.title}" (код: ${lobbyCode})`);
-
-                showLobbyUI();
-                listenToLobby(newLobbyId);
-            } catch (error) {
-                console.error('Ошибка создания лобби:', error);
-                showError();
-            }
+            showLobbyUI();
+            listenToLobby(newLobbyId);
         }
 
         function showLobbyUI() {
             document.getElementById('codeDisplay').style.display = 'block';
             document.getElementById('codeDisplay').textContent = lobbyCode;
-
-            const baseUrl = window.location.origin + window.location.pathname.replace('teacher.html', 'student.html');
-            const studentLink = `${baseUrl}?lobby=${currentLobby.id}`;
+            const studentLink = window.location.origin + '/student.html?lobby=' + currentLobby.id;
 
             document.getElementById('dynamicContent').innerHTML = `
                 <div class="left-column">
                     <div class="glass-panel">
-                        <h2><i class="fas fa-info-circle"></i> ИНФОРМАЦИЯ</h2>
+                        <h2>ℹ️ ИНФОРМАЦИЯ</h2>
                         <div class="lobby-info">
                             <div class="quiz-title">${quizData.title}</div>
                             <div>${questions.length} вопросов</div>
                             <div class="big-code">${lobbyCode}</div>
-                            
-                            <div style="margin: 30px 0;">
-                                <h3 style="color: #6366f1; margin-bottom: 15px;">🔗 Ссылка для учеников</h3>
+                            <div style="margin:30px 0;">
+                                <h3 style="color:#6366f1;">🔗 Ссылка для учеников</h3>
                                 <div class="link-container">
                                     <input type="text" class="link-input" id="studentLink" value="${studentLink}" readonly>
-                                    <button class="copy-btn" onclick="copyStudentLink()" id="copyBtn">
-                                        <i class="fas fa-copy"></i> Копировать
-                                    </button>
+                                    <button class="copy-btn" onclick="copyStudentLink()">Копировать</button>
                                 </div>
-                                <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">
-                                    <i class="fas fa-info-circle"></i> Отправьте эту ссылку ученикам, они перейдут и введут свои имена
-                                </p>
                             </div>
-
-                            <button class="start-btn" onclick="startGame()" id="startGameBtn" disabled>
-                                <i class="fas fa-play"></i> НАЧАТЬ ИГРУ
-                            </button>
+                            <button class="start-btn" onclick="startGame()" id="startGameBtn" disabled>🚀 НАЧАТЬ</button>
                         </div>
                     </div>
                 </div>
                 <div class="right-column">
-                    <div class="glass-panel" style="flex: 1;">
-                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
-                        <div id="playersList" class="players-grid"></div>
-                    </div>
-                </div>
-            `;
+                    <div class="glass-panel"><h2>👥 УЧАСТНИКИ</h2><div id="playersList" class="players-grid"></div></div>
+                </div>`;
         }
 
-        window.copyStudentLink = function() {
-            const linkInput = document.getElementById('studentLink');
-            linkInput.select();
+        window.copyStudentLink = () => {
+            document.getElementById('studentLink').select();
             document.execCommand('copy');
-            
-            const copyBtn = document.getElementById('copyBtn');
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
-            copyBtn.classList.add('copied');
-            
-            showToast('🔗 Ссылка скопирована! Отправьте ученикам');
-            
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-                copyBtn.classList.remove('copied');
-            }, 2000);
+            showToast('🔗 Ссылка скопирована!');
         };
 
         async function loadGame(lobbyId) {
-            try {
-                const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
-                if (!lobby) {
-                    showError();
-                    return;
-                }
+            const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
+            if (!lobby) return;
 
-                currentLobby = lobby;
-                lobbyCode = lobby.code;
+            currentLobby = lobby;
+            lobbyCode = lobby.code;
+            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', lobby.quiz_id).single();
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
+            
+            quizData = quiz;
+            questions = qs || [];
 
-                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', lobby.quiz_id).single();
-                const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
-                
-                quizData = quiz;
-                questions = qs || [];
-
-                document.getElementById('codeDisplay').style.display = 'block';
-                document.getElementById('codeDisplay').textContent = lobbyCode;
-
-                showGameUI();
-                listenToLobby(lobbyId);
-                
-                sendToTG(`▶️ ${currentUser.username} загрузил игру (код: ${lobbyCode})`);
-            } catch (error) {
-                console.error('Ошибка загрузки игры:', error);
-                showError();
-            }
+            document.getElementById('codeDisplay').style.display = 'block';
+            document.getElementById('codeDisplay').textContent = lobbyCode;
+            showGameUI();
+            listenToLobby(lobbyId);
+            sendToTG(`▶️ ${currentUser.username} загрузил игру (код:${lobbyCode})`);
         }
 
         function showGameUI() {
             document.getElementById('dynamicContent').innerHTML = `
                 <div class="left-column">
                     <div class="glass-panel">
-                        <h2><i class="fas fa-gamepad"></i> УПРАВЛЕНИЕ</h2>
+                        <h2>🎮 УПРАВЛЕНИЕ</h2>
                         <div class="control-buttons">
-                            <button onclick="startNextQuestion()" class="control-btn primary" id="showQuestionBtn">
-                                <i class="fas fa-play"></i> ПОКАЗАТЬ ВОПРОС
-                            </button>
-                            <button onclick="nextQuestion()" class="control-btn" id="nextQuestionBtn">
-                                <i class="fas fa-forward"></i> СЛЕДУЮЩИЙ
-                            </button>
+                            <button onclick="startNextQuestion()" class="control-btn primary">📢 ПОКАЗАТЬ ВОПРОС</button>
+                            <button onclick="nextQuestion()" class="control-btn">⏩ СЛЕДУЮЩИЙ</button>
                         </div>
-                        <div style="margin-top: 15px;">
-                            <div>Текущий: <span id="currentQ">${currentQuestionIndex}/${questions.length}</span></div>
-                            <div>Игроков: <span id="playerCount">0</span></div>
-                        </div>
+                        <div>Текущий: <span id="currentQ">${currentQuestionIndex}/${questions.length}</span><br>Игроков: <span id="playerCount">0</span></div>
                     </div>
-                    <div class="glass-panel" style="flex: 1;">
-                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
-                        <div id="playersList" class="players-grid"></div>
-                    </div>
+                    <div class="glass-panel"><h2>👥 УЧАСТНИКИ</h2><div id="playersList" class="players-grid"></div></div>
                 </div>
                 <div class="right-column">
-                    <div class="glass-panel" style="flex: 1;">
-                        <h2><i class="fas fa-list-ol"></i> ВОПРОСЫ</h2>
-                        <div id="questionsList" class="questions-list"></div>
-                    </div>
-                </div>
-            `;
-
+                    <div class="glass-panel"><h2>📋 ВОПРОСЫ</h2><div id="questionsList" class="questions-list"></div></div>
+                </div>`;
             renderQuestionsList();
         }
 
-        function listenToLobby(lobbyId) {
-            const channel = sb
-                .channel('lobby-' + lobbyId)
-                .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` },
-                    payload => {
-                        if (payload.new) {
-                            updatePlayersList(payload.new.players);
-                            currentLobby = payload.new;
-                        }
-                    })
-                .subscribe();
+        function listenToLobby(id) {
+            sb.channel('lobby-'+id).on('postgres_changes', { event:'*', schema:'public', table:'lobbies', filter:`id=eq.${id}` }, payload => {
+                if (payload.new) { updatePlayersList(payload.new.players); currentLobby = payload.new; }
+            }).subscribe();
 
-            sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
-                if (data && data[0]) {
-                    updatePlayersList(data[0].players);
-                }
+            sb.from('lobbies').select('*').eq('id', id).then(({data}) => {
+                if (data?.[0]) updatePlayersList(data[0].players);
             });
         }
 
         function updatePlayersList(players) {
-            const container = document.getElementById('playersList');
-            const playerCount = document.getElementById('playerCount');
-            const startBtn = document.getElementById('startGameBtn');
-            
-            if (!players || Object.keys(players).length === 0) {
-                if (container) container.innerHTML = '<div class="empty-state">Ожидание игроков...</div>';
-                if (playerCount) playerCount.textContent = '0';
-                if (startBtn) startBtn.disabled = true;
+            const c = document.getElementById('playersList'), pc = document.getElementById('playerCount'), sb = document.getElementById('startGameBtn');
+            if (!players || !Object.keys(players).length) {
+                if (c) c.innerHTML = '<div class="empty-state">Ожидание игроков...</div>';
+                if (pc) pc.textContent = '0';
+                if (sb) sb.disabled = true;
                 return;
             }
-
-            const playerArray = Object.entries(players).map(([id, data]) => ({ id, ...data }));
-            if (playerCount) playerCount.textContent = playerArray.length;
-            if (startBtn) startBtn.disabled = false;
-
-            if (container) {
-                container.innerHTML = playerArray.map(p => `
-                    <div class="player-card">
-                        <div class="player-avatar">${p.name.charAt(0).toUpperCase()}</div>
-                        <div class="player-name">${p.name}</div>
-                        <div class="player-score">🎯 ${p.score || 0}</div>
-                    </div>
-                `).join('');
-            }
+            const arr = Object.entries(players).map(([id,d]) => d);
+            if (pc) pc.textContent = arr.length;
+            if (sb) sb.disabled = false;
+            if (c) c.innerHTML = arr.map(p => `<div class="player-card"><div class="player-avatar">${p.name[0].toUpperCase()}</div><div>${p.name}</div><div>🎯 ${p.score||0}</div></div>`).join('');
         }
 
         function renderQuestionsList() {
-            const container = document.getElementById('questionsList');
-            if (!container) return;
-
-            container.innerHTML = questions.map((q, i) => {
-                let statusClass = '';
-                if (i === currentQuestionIndex) statusClass = 'active';
-                else if (i < currentQuestionIndex) statusClass = 'completed';
-                
-                return `
-                    <div class="question-item ${statusClass}" onclick="jumpToQuestion(${i})">
-                        <div>${i + 1}</div>
-                    </div>
-                `;
-            }).join('');
+            const c = document.getElementById('questionsList');
+            if (!c) return;
+            c.innerHTML = questions.map((q,i) => `<div class="question-item ${i===currentQuestionIndex?'active': i<currentQuestionIndex?'completed':''}" onclick="jumpToQuestion(${i})"><div>${i+1}</div></div>`).join('');
         }
 
-        window.startGame = function() {
-            if (!currentLobby) return;
-            window.location.href = `teacher.html?lobby=${currentLobby.id}`;
-        };
+        window.startGame = () => window.location.href = `teacher.html?lobby=${currentLobby.id}`;
 
-        window.startNextQuestion = function() {
-            if (currentQuestionIndex >= questions.length) {
-                alert('Викторина завершена!');
-                return;
-            }
-
-            const question = questions[currentQuestionIndex];
-            
-            const players = currentLobby.players || {};
-            const answered = Object.values(players).filter(p => p.last_answer === currentQuestionIndex).length;
-            const correct = Object.values(players).filter(p => p.last_correct === currentQuestionIndex).length;
-            
+        window.startNextQuestion = () => {
+            if (currentQuestionIndex >= questions.length) { alert('Викторина завершена!'); return; }
             document.getElementById('presentationMode').classList.add('active');
-            document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex + 1}/${questions.length}`;
-            document.getElementById('answeredCount').textContent = answered;
-            document.getElementById('correctCount').textContent = correct;
-            
-            document.getElementById('presentationQuestion').innerHTML = `<h2>${question.question}</h2>`;
-
-            sb.from('lobbies').update({
-                current_question: currentQuestionIndex,
-                status: 'active'
-            }).eq('id', currentLobby.id);
-
+            document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex+1}/${questions.length}`;
+            document.getElementById('presentationQuestion').innerHTML = `<h2>${questions[currentQuestionIndex].question}</h2>`;
+            sb.from('lobbies').update({ current_question:currentQuestionIndex, status:'active' }).eq('id', currentLobby.id);
             renderQuestionsList();
-            
-            sendToTG(`❓ ${currentUser.username} показал вопрос ${currentQuestionIndex + 1}`);
+            sendToTG(`❓ ${currentUser.username} показал вопрос ${currentQuestionIndex+1}`);
         };
 
-        window.showAnswer = function() {
-            const question = questions[currentQuestionIndex];
-            if (!question) return;
-
-            const answerBlock = document.createElement('div');
-            answerBlock.className = 'answer-block';
-            answerBlock.innerHTML = `
-                <h3 style="color: #10b981;">✅ ПРАВИЛЬНЫЙ ОТВЕТ:</h3>
-                <div class="correct-answer">${question.answers[question.correct]}</div>
-            `;
-
-            const presentationEl = document.getElementById('presentationQuestion');
-            const oldAnswer = presentationEl.querySelector('.answer-block');
-            if (oldAnswer) oldAnswer.remove();
-            presentationEl.appendChild(answerBlock);
-            
-            sendToTG(`🔓 ${currentUser.username} показал ответ на вопрос ${currentQuestionIndex + 1}`);
+        window.showAnswer = () => {
+            const q = questions[currentQuestionIndex];
+            if (!q) return;
+            const el = document.getElementById('presentationQuestion');
+            el.innerHTML += `<div class="correct-answer">✅ ${q.answers[q.correct]}</div>`;
+            sendToTG(`🔓 ${currentUser.username} показал ответ на вопрос ${currentQuestionIndex+1}`);
         };
 
-        window.nextQuestion = function() {
-            if (currentQuestionIndex < questions.length - 1) {
+        window.nextQuestion = () => {
+            if (currentQuestionIndex < questions.length-1) {
                 currentQuestionIndex++;
                 exitPresentation();
                 renderQuestionsList();
             } else {
-                sb.from('lobbies').update({ status: 'finished' }).eq('id', currentLobby.id);
+                sb.from('lobbies').update({ status:'finished' }).eq('id', currentLobby.id);
                 exitPresentation();
                 alert('🎉 Викторина завершена!');
                 sendToTG(`🏁 ${currentUser.username} завершил викторину`);
             }
         };
 
-        window.exitPresentation = function() {
-            document.getElementById('presentationMode').classList.remove('active');
-        };
-
-        window.jumpToQuestion = function(index) {
-            if (index < currentQuestionIndex) {
-                if (confirm('Перейти к пройденному вопросу?')) {
-                    currentQuestionIndex = index;
-                    renderQuestionsList();
-                }
-            }
-        };
-
-        function showError() {
-            document.getElementById('dynamicContent').innerHTML = `
-                <div style="text-align: center; padding: 50px;">
-                    <h2>❌ Ошибка</h2>
-                    <p>Викторина не найдена</p>
-                    <a href="index.html" class="back-btn" style="display: inline-block; margin-top: 20px;">На главную</a>
-                </div>
-            `;
-        }
+        window.exitPresentation = () => document.getElementById('presentationMode').classList.remove('active');
+        window.jumpToQuestion = (i) => { if (i < currentQuestionIndex && confirm('Перейти к пройденному вопросу?')) { currentQuestionIndex = i; renderQuestionsList(); } };
 
         init();
     </script>
