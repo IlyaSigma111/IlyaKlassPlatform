@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>ИЛЬЯКЛАСС - Ученик</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ===== 20 ТЕМ ===== */
+        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
+
+        /* ===== МОБИЛЬНОЕ МЕНЮ (ВНИЗУ) ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                padding-bottom: 80px;
+                width: 100%;
+            }
+            
+            .header {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                margin: 10px;
+                width: calc(100% - 20px);
+                z-index: 1000;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                padding: 10px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+            }
+            
+            .logo-small { display: none; }
+            
+            .nav-menu {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                gap: 5px;
+            }
+            
+            .nav-link {
+                padding: 12px 5px;
+                font-size: 0.75rem;
+                text-align: center;
+                flex: 1;
+                white-space: nowrap;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 30px;
+            }
+            
+            .header-right {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: calc(100% - 20px);
+                z-index: 999;
+            }
+            
+            .user-card {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 15px;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                font-size: 0.85rem;
+            }
+            
+            .avatar { width: 35px; height: 35px; }
+            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
+            
+            .main-screen { padding-top: 70px; }
+            
+            .join-section { padding: 20px; }
+            .join-title { font-size: 1.5rem; }
+            .join-input { padding: 12px; font-size: 1rem; }
+            .join-btn { padding: 14px; font-size: 1.1rem; }
+            
+            .quizzes-section { padding: 15px; }
+            .section-header { flex-direction: column; align-items: stretch; }
+            .section-header div { display: flex; gap: 5px; }
+            .shop-btn { flex: 1; padding: 8px; font-size: 0.8rem; }
+            .section-title { font-size: 1.2rem; }
+            
+            .quiz-tabs { 
+                display: grid; 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 5px; 
+            }
+            
+            .tab-btn { 
+                padding: 8px 2px; 
+                font-size: 0.65rem; 
+                white-space: nowrap;
+            }
+            
+            .quizzes-grid { grid-template-columns: 1fr; }
+            .quiz-card { padding: 12px; }
+            .quiz-title { font-size: 1rem; }
+            .quiz-actions { flex-direction: column; }
+            .quiz-action-btn { width: 100%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-small {
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-link:hover { background: rgba(255, 255, 255, 0.3); }
+        .nav-link.active { background: #6366f1; }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px 5px 5px;
+            border-radius: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+        }
+
+        .logout-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+        .coins { color: #ffd700; font-weight: 600; }
+        .tokens { color: #00ffff; font-weight: 600; margin-left: 10px; }
+
+        .join-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .join-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .join-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Comfortaa', cursive;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .join-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 20px #10b981;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #10b981;
+        }
+
+        .quizzes-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-title { font-size: 1.8rem; display: flex; align-items: center; gap: 10px; }
+
+        .quiz-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+        .tab-btn.active { background: #6366f1; border-color: white; }
+
+        .shop-btn {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .shop-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px #f59e0b; }
+
+        .quizzes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .quiz-card.free { border-left: 5px solid #10b981; }
+        .quiz-card.premium { border-left: 5px solid #f59e0b; }
+
+        .quiz-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .quiz-theme-badge {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .quiz-class {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .quiz-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .quiz-subject { opacity: 0.8; margin-bottom: 10px; }
+
+        .quiz-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-price {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 20px;
+        }
+
+        .quiz-actions { display: flex; gap: 10px; margin-top: 15px; }
+
+        .quiz-action-btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .quiz-action-btn.play { background: #10b981; color: white; border: none; }
+        .quiz-action-btn.buy { background: #ffd700; color: #2d3436; border: none; }
+
+        .error-msg { color: #ff6b6b; margin-top: 15px; }
+
+        .role-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
+        .role-mediacoord { background: #c0c0c0; color: #2d3436; }
+        .role-chief { background: #ffd700; color: #2d3436; }
+        .role-curator { background: #cd7f32; color: white; }
+        .role-moderator { background: #6366f1; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-small" onclick="window.location='student-menu.html'">
+                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="student-menu.html" class="nav-link active">Главная</a>
+                <a href="shop.html" class="nav-link">Магазин</a>
+                <a href="results.html" class="nav-link">Результаты</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </nav>
+            <div class="header-right" id="userSection"></div>
+        </div>
+
+        <div class="join-section">
+            <h2 class="join-title">🎮 Вход в игру</h2>
+            <input type="text" id="gameCode" class="join-input" placeholder="Введите код игры" maxlength="8">
+            <button class="join-btn" onclick="joinGame()">
+                <i class="fas fa-sign-in-alt"></i> ПОДКЛЮЧИТЬСЯ
+            </button>
+            <div id="joinError" class="error-msg"></div>
+        </div>
+
+        <div class="quizzes-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-gamepad"></i> Доступные викторины</h2>
+                <a href="shop.html"><button class="shop-btn"><i class="fas fa-store"></i> Магазин тем</button></a>
+            </div>
+            
+            <div class="quiz-tabs">
+                <button class="tab-btn active" onclick="loadQuizzes('free')">🎁 Бесплатные</button>
+                <button class="tab-btn" onclick="loadQuizzes('premium')">💎 Премиум</button>
+            </div>
+            
+            <div id="quizzesList" class="quizzes-grid">
+                <div class="empty-state"><div class="empty-icon">🎮</div><p>Загрузка...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
+        const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
+        const TG_CHAT_ID = '1474901393';
+
+        let currentUser = null;
+        let userCoins = 100;
+        let userTokens = 0;
+        let userThemes = ['pink'];
+
+        const allThemes = [
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
+            { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
+            { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
+            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
+            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
+            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
+            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
+            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
+            { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
+            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
+            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
+            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
+            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
+            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
+            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
+            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
+            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
+            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
+        ];
+
+        async function sendToTG(msg) {
+            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
+        }
+
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+            localStorage.setItem('currentTheme', themeId);
+        }
+
+        function getCurrentUser() {
+            const saved = localStorage.getItem('currentUser');
+            return saved ? JSON.parse(saved) : null;
+        }
+
+        function updateUI() {
+            const s = document.getElementById('userSection');
+            if (!s || !currentUser) return;
+            
+            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
+            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
+            
+            s.innerHTML = `
+                <div class="user-card">
+                    <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
+                    <span>${currentUser.username}</span>
+                    ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
+                    <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
+                    <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
+                    <button onclick="logout()" class="logout-btn">Выйти</button>
+                </div>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        async function loadUser() {
+            const user = getCurrentUser();
+            if (!user) { window.location.href = 'index.html'; return; }
+            if (user.role !== 'student') { window.location.href = 'teacher-menu.html'; return; }
+            
+            currentUser = user;
+            userCoins = user.coins || 100;
+            userThemes = user.themes || ['pink'];
+            
+            const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
+            userTokens = tokens?.balance || 0;
+            
+            updateUI();
+            loadQuizzes('free');
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+        }
+
+        window.loadQuizzes = async function(type) {
+            const container = document.getElementById('quizzesList');
+            container.innerHTML = '<div class="empty-state">Загрузка...</div>';
+            
+            const { data: quizzes } = await sb.from('quizzes')
+                .select('*')
+                .eq('published', true)
+                .eq('type', type === 'free' ? 'kahoot' : 'constructed');
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (!quizzes || quizzes.length === 0) {
+                container.innerHTML = `<div class="empty-state"><div class="empty-icon">${type === 'free' ? '🎁' : '💎'}</div><p>${type === 'free' ? 'Бесплатных' : 'Премиум'} викторин пока нет</p></div>`;
+                return;
+            }
+
+            let html = '';
+            for (let q of quizzes) {
+                const theme = allThemes.find(t => t.id === q.theme) || allThemes[0];
+                html += `
+                    <div class="quiz-card ${type === 'free' ? 'free' : 'premium'}">
+                        <div class="quiz-card-header">
+                            <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
+                            <div class="quiz-class">${q.class || ''}</div>
+                        </div>
+                        <div class="quiz-title">${q.title}</div>
+                        <div class="quiz-subject">${q.subject || ''}</div>
+                        <div class="quiz-stats">
+                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                            ${type === 'premium' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${q.price_tokens || 0}</span>` : ''}
+                        </div>
+                        <div class="quiz-actions">
+                            ${type === 'premium' ? 
+                                `<div class="quiz-action-btn buy" onclick="buyQuiz('${q.id}', ${q.price_tokens})"><i class="fas fa-shopping-cart"></i> Купить</div>` :
+                                `<div class="quiz-action-btn play" onclick="playQuiz('${q.id}')"><i class="fas fa-play"></i> Играть</div>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        };
+
+        window.buyQuiz = async (quizId, price) => {
+            if (userTokens < price) { alert('Недостаточно токенов!'); return; }
+            if (confirm(`Купить викторину за ${price} токенов?`)) {
+                try {
+                    const newTokens = userTokens - price;
+                    await sb.from('user_tokens').update({ balance: newTokens }).eq('user_id', currentUser.id);
+                    userTokens = newTokens;
+                    updateUI();
+                    alert('✅ Викторина куплена!');
+                    sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
+                } catch (e) {
+                    alert('Ошибка: ' + e.message);
+                }
+            }
+        };
+
+        window.playQuiz = (quizId) => {
+            window.location.href = `student.html?quiz=${quizId}`;
+        };
+
+        window.joinGame = async function() {
+            const code = document.getElementById('gameCode').value.trim();
+            
+            if (!code || code.length !== 8) {
+                document.getElementById('joinError').textContent = 'Введите 8-значный код';
+                return;
+            }
+
+            try {
+                const { data: lobbies } = await sb.from('lobbies')
+                    .select('*')
+                    .eq('code', code)
+                    .in('status', ['waiting', 'active']);
+                
+                if (!lobbies || lobbies.length === 0) {
+                    document.getElementById('joinError').textContent = 'Игра с таким кодом не найдена';
+                    return;
+                }
+
+                window.location.href = `student.html?lobby=${lobbies[0].id}`;
+                
+            } catch (error) {
+                console.error('Ошибка подключения:', error);
+                document.getElementById('joinError').textContent = 'Ошибка подключения к игре';
+            }
+        };
+
+        loadUser();
+    </script>
+</body>
+</html>
