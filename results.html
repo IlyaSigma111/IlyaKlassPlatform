@@ -20,155 +20,114 @@
             color: white;
             min-height: 100vh;
             transition: all 0.3s ease;
+            overflow-x: hidden;
+            width: 100%;
         }
 
-        /* ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ ===== */
-        body.pink-theme { 
-            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); 
-            color: white; 
-        }
-        body.pink-theme .nav-link,
-        body.pink-theme .results-container,
-        body.pink-theme .stat-card,
-        body.pink-theme .user-card,
-        body.pink-theme .filter-btn,
-        body.pink-theme .results-table th,
-        body.pink-theme .results-table td { 
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        body.blue-theme { 
-            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); 
-            color: white; 
-        }
-        
-        body.green-theme { 
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); 
-            color: white; 
-        }
-        
-        body.purple-theme { 
-            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); 
-            color: white; 
-        }
-        
-        body.orange-theme { 
-            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); 
-            color: white; 
-        }
-        
-        body.dark-theme { 
-            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
-            color: white; 
-        }
-        
-        body.sunset-theme { 
-            background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); 
-            color: white; 
-        }
-        
-        body.ocean-theme { 
-            background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); 
-            color: white; 
-        }
-        
-        body.forest-theme { 
-            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); 
-            color: white; 
-        }
-        
-        body.candy-theme { 
-            background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); 
-            color: white; 
-        }
-        
-        body.gold-theme { 
-            background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); 
-            color: #2d3436; 
-        }
-        body.gold-theme .nav-link,
-        body.gold-theme .results-container,
-        body.gold-theme .stat-card,
-        body.gold-theme .user-card,
-        body.gold-theme .filter-btn { 
-            background: rgba(255, 255, 255, 0.2);
-            color: #2d3436;
-        }
-        
-        body.diamond-theme { 
-            background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); 
-            color: white; 
-        }
-        
-        body.ruby-theme { 
-            background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); 
-            color: white; 
-        }
-        
-        body.emerald-theme { 
-            background: linear-gradient(135deg, #50c878 0%, #006400 100%); 
-            color: white; 
-        }
-        
-        body.sapphire-theme { 
-            background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); 
-            color: white; 
-        }
-        
-        body.amethyst-theme { 
-            background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.rose-theme { 
-            background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); 
-            color: white; 
-        }
-        
-        body.neon-theme { 
-            background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); 
-            color: #2d3436; 
-        }
-        
-        body.galaxy-theme { 
-            background: linear-gradient(135deg, #000000 0%, #4b0082 100%); 
-            color: white; 
-        }
-        
-        body.lava-theme { 
-            background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); 
-            color: white; 
-        }
+        /* ===== 20 ТЕМ ===== */
+        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
+        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .header { flex-direction: column; gap: 15px; padding: 15px; }
-            .nav-menu { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .nav-link { padding: 8px 12px; font-size: 0.85rem; }
-            .user-card { width: 100%; justify-content: space-between; flex-wrap: wrap; }
-            .stats-cards { grid-template-columns: 1fr; gap: 10px; }
-            .results-container { padding: 20px; }
-            .filters { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .filter-btn { flex: 1; text-align: center; padding: 8px 10px; font-size: 0.85rem; min-width: 80px; }
-            .results-table { font-size: 0.8rem; display: block; overflow-x: auto; white-space: nowrap; }
-            .results-table th, .results-table td { padding: 8px 10px; }
-            .stat-card { padding: 15px; }
-            .stat-value { font-size: 2rem; }
-            .section-title { font-size: 1.3rem; }
-        }
-
-        @media (max-width: 480px) {
-            .nav-link { width: calc(50% - 3px); text-align: center; padding: 8px 5px; font-size: 0.75rem; }
-            .user-card { justify-content: center; }
+            .container {
+                padding: 10px;
+                padding-bottom: 80px;
+                width: 100%;
+            }
+            
+            .header {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                margin: 10px;
+                width: calc(100% - 20px);
+                z-index: 1000;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                padding: 10px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+            }
+            
+            .logo-small { display: none; }
+            
+            .nav-menu {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                gap: 5px;
+            }
+            
+            .nav-link {
+                padding: 12px 5px;
+                font-size: 0.75rem;
+                text-align: center;
+                flex: 1;
+                white-space: nowrap;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 30px;
+            }
+            
+            .header-right {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: calc(100% - 20px);
+                z-index: 999;
+            }
+            
+            .user-card {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 15px;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                font-size: 0.85rem;
+            }
+            
             .avatar { width: 35px; height: 35px; }
-            .logout-btn { width: 100%; text-align: center; }
-            .stats-cards { grid-template-columns: 1fr; }
-            .filters { flex-direction: column; gap: 5px; }
-            .filter-btn { width: 100%; }
+            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
+            
+            .main-screen { padding-top: 70px; }
+            
+            .results-container { padding: 20px; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 15px; }
             .stat-value { font-size: 1.8rem; }
+            .section-title { font-size: 1.3rem; }
+            .filters { 
+                display: grid; 
+                grid-template-columns: ${currentUser?.role === 'teacher' ? 'repeat(3, 1fr)' : '1fr'}; 
+                gap: 6px; 
+            }
+            .filter-btn { padding: 8px 5px; font-size: 0.7rem; }
+            .results-table { font-size: 0.7rem; display: block; overflow-x: auto; }
         }
 
         .container {
@@ -219,7 +178,11 @@
         .nav-link:hover { background: rgba(255, 255, 255, 0.3); }
         .nav-link.active { background: #6366f1; color: white; }
 
-        .header-right { display: flex; align-items: center; gap: 20px; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
         .user-card {
             display: flex;
@@ -390,29 +353,22 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo-small" onclick="window.location='index.html'">
-            <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+    <div class="container">
+        <div class="header">
+            <div class="logo-small" onclick="window.location='index.html'">
+                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+            </div>
+            <nav class="nav-menu" id="mainNav"></nav>
+            <div class="header-right" id="userSection"></div>
         </div>
-        <nav class="nav-menu">
-            <a href="index.html" class="nav-link">Главная</a>
-            <a href="shop.html" class="nav-link">Магазин</a>
-            <a href="results.html" class="nav-link active">Результаты</a>
-            <a href="profile.html" class="nav-link">Профиль</a>
-        </nav>
-        <div class="header-right" id="userSection"></div>
-    </header>
 
-    <main class="container">
         <div id="content" class="loading">Загрузка результатов...</div>
-    </main>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-
         const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
         const TG_CHAT_ID = '1474901393';
 
@@ -425,14 +381,8 @@
         let allQuizzes = [];
         let currentFilter = 'all';
 
-        async function sendToTG(message) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
-                });
-            } catch (e) { console.error('Ошибка ТГ:', e); }
+        async function sendToTG(msg) {
+            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
         }
 
         function applyTheme(themeId) { document.body.className = themeId + '-theme'; }
@@ -442,26 +392,31 @@
             return saved ? JSON.parse(saved) : null;
         }
 
+        function updateNav() {
+            const nav = document.getElementById('mainNav');
+            const role = currentUser?.role;
+            nav.innerHTML = role === 'teacher' 
+                ? `<a href="teacher-menu.html" class="nav-link">Главная</a>
+                   <a href="shop.html" class="nav-link">Магазин</a>
+                   <a href="results.html" class="nav-link active">Результаты</a>
+                   <a href="profile.html" class="nav-link">Профиль</a>`
+                : `<a href="student-menu.html" class="nav-link">Главная</a>
+                   <a href="shop.html" class="nav-link">Магазин</a>
+                   <a href="results.html" class="nav-link active">Результаты</a>
+                   <a href="profile.html" class="nav-link">Профиль</a>`;
+        }
+
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
             const roleEmoji = {
-                'owner': '👑',
-                'mediacoord': '🎥',
-                'chief': '⭐',
-                'curator': '📚',
-                'moderator': '🛡️',
-                'user': '👤'
+                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤'
             }[currentUser.role_title] || '👤';
             
             const roleClass = {
-                'owner': 'role-owner',
-                'mediacoord': 'role-mediacoord',
-                'chief': 'role-chief',
-                'curator': 'role-curator',
-                'moderator': 'role-moderator',
-                'user': ''
+                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 
+                'curator': 'role-curator', 'moderator': 'role-moderator', 'user': ''
             }[currentUser.role_title] || '';
             
             s.innerHTML = `
@@ -476,7 +431,6 @@
         }
 
         function logout() {
-            sendToTG(`🚪 Выход из результатов: ${currentUser?.username}`);
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
@@ -493,6 +447,7 @@
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
 
+            updateNav();
             updateUI();
 
             try {
@@ -562,21 +517,12 @@
                 const quiz = allQuizzes.find(q => q.id === r.quiz_id);
                 
                 const roleEmoji = student?.role_title ? {
-                    'owner': '👑',
-                    'mediacoord': '🎥',
-                    'chief': '⭐',
-                    'curator': '📚',
-                    'moderator': '🛡️',
-                    'user': ''
+                    'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': ''
                 }[student.role_title] || '' : '';
                 
                 const roleClass = student?.role_title ? {
-                    'owner': 'role-owner',
-                    'mediacoord': 'role-mediacoord',
-                    'chief': 'role-chief',
-                    'curator': 'role-curator',
-                    'moderator': 'role-moderator',
-                    'user': ''
+                    'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 
+                    'curator': 'role-curator', 'moderator': 'role-moderator', 'user': ''
                 }[student.role_title] || '' : '';
                 
                 tableRows += `
