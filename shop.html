@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Все стили такие же как в предыдущей версии */
         * {
             margin: 0;
             padding: 0;
@@ -23,10 +22,10 @@
             transition: background 0.3s ease;
         }
 
-        /* ===== ТЕМЫ С ЧЕТКИМИ ГРАНИЦАМИ ===== */
+        /* ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ ===== */
         body.pink-theme { 
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); 
-            color: #2d3436; 
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); 
+            color: white; 
         }
         body.pink-theme .nav-link,
         body.pink-theme .theme-card,
@@ -34,55 +33,111 @@
         body.pink-theme .user-card,
         body.pink-theme .filter-btn,
         body.pink-theme .exchange-card { 
-            background: rgba(255, 255, 255, 0.9);
-            color: #2d3436;
-            border: 2px solid rgba(45, 52, 54, 0.2);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        body.blue-theme { 
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
-            color: #1e3799; 
-        }
-        body.blue-theme .nav-link,
-        body.blue-theme .theme-card,
-        body.blue-theme .store-quiz-card,
-        body.blue-theme .user-card,
-        body.blue-theme .filter-btn,
-        body.blue-theme .exchange-card { 
-            background: rgba(255, 255, 255, 0.9);
-            color: #1e3799;
-            border: 2px solid rgba(30, 55, 153, 0.2);
-        }
-        
-        body.green-theme { 
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
-            color: #145a32; 
-        }
-        body.green-theme .nav-link,
-        body.green-theme .theme-card,
-        body.green-theme .store-quiz-card,
-        body.green-theme .user-card,
-        body.green-theme .filter-btn,
-        body.green-theme .exchange-card { 
-            background: rgba(255, 255, 255, 0.9);
-            color: #145a32;
-            border: 2px solid rgba(20, 90, 50, 0.2);
-        }
-        
-        body.dark-theme { 
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
-            color: white; 
-        }
-        body.dark-theme .nav-link,
-        body.dark-theme .theme-card,
-        body.dark-theme .store-quiz-card,
-        body.dark-theme .user-card,
-        body.dark-theme .filter-btn,
-        body.dark-theme .exchange-card { 
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        body.blue-theme { 
+            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); 
+            color: white; 
+        }
+        
+        body.green-theme { 
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); 
+            color: white; 
+        }
+        
+        body.purple-theme { 
+            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); 
+            color: white; 
+        }
+        
+        body.orange-theme { 
+            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); 
+            color: white; 
+        }
+        
+        body.dark-theme { 
+            background: linear-gradient(135deg, #141e30 0%, #243b55 100%); 
+            color: white; 
+        }
+        
+        body.sunset-theme { 
+            background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); 
+            color: white; 
+        }
+        
+        body.ocean-theme { 
+            background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); 
+            color: white; 
+        }
+        
+        body.forest-theme { 
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); 
+            color: white; 
+        }
+        
+        body.candy-theme { 
+            background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); 
+            color: white; 
+        }
+        
+        body.gold-theme { 
+            background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); 
+            color: #2d3436; 
+        }
+        body.gold-theme .nav-link,
+        body.gold-theme .theme-card,
+        body.gold-theme .store-quiz-card,
+        body.gold-theme .user-card { 
+            background: rgba(255, 255, 255, 0.2);
+            color: #2d3436;
+        }
+        
+        body.diamond-theme { 
+            background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); 
+            color: white; 
+        }
+        
+        body.ruby-theme { 
+            background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); 
+            color: white; 
+        }
+        
+        body.emerald-theme { 
+            background: linear-gradient(135deg, #50c878 0%, #006400 100%); 
+            color: white; 
+        }
+        
+        body.sapphire-theme { 
+            background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); 
+            color: white; 
+        }
+        
+        body.amethyst-theme { 
+            background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); 
+            color: white; 
+        }
+        
+        body.rose-theme { 
+            background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); 
+            color: white; 
+        }
+        
+        body.neon-theme { 
+            background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); 
+            color: #2d3436; 
+        }
+        
+        body.galaxy-theme { 
+            background: linear-gradient(135deg, #000000 0%, #4b0082 100%); 
+            color: white; 
+        }
+        
+        body.lava-theme { 
+            background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); 
+            color: white; 
         }
 
         /* ===== АДАПТИВ ДЛЯ МОБИЛОК ===== */
@@ -688,7 +743,7 @@
                 <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:30px;">
                     <h3 style="color:#6366f1; margin-bottom:10px;">🎨 Текущая тема</h3>
                     <div id="currentTheme" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <div id="currentThemeColor" style="width:35px; height:35px; border-radius:50%; background:#ff758c; border:2px solid white;"></div>
+                        <div id="currentThemeColor" style="width:35px; height:35px; border-radius:50%; background:#ff0844; border:2px solid white;"></div>
                         <span id="currentThemeName">Розовая</span>
                     </div>
                 </div>
@@ -750,17 +805,28 @@
         let userThemes = ['pink'];
         let storeFilter = 'all';
 
+        // ===== 20 ТЕМ С ВЫСОКИМИ ЦЕНАМИ =====
         const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff758c' },
-            { id: 'blue', name: '💙 Синяя', price: 50, color: '#4facfe' },
-            { id: 'green', name: '💚 Зеленая', price: 100, color: '#43e97b' },
-            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#a18cd1' },
-            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#fa709a' },
-            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#fbc2eb' },
-            { id: 'forest', name: '🌲 Лес', price: 225, color: '#38f9d7' },
-            { id: 'sunset', name: '🌅 Закат', price: 250, color: '#fee140' },
-            { id: 'ocean', name: '🌊 Океан', price: 275, color: '#00f2fe' },
-            { id: 'dark', name: '🖤 Темная', price: 300, color: '#2c3e50' }
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
+            { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
+            { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
+            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
+            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
+            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
+            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
+            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
+            { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
+            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
+            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
+            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
+            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
+            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
+            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
+            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
+            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
+            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
         ];
 
         function showToast(message) {
@@ -849,7 +915,6 @@
             
             currentUser = user;
             
-            // Получаем актуальные данные пользователя из БД
             try {
                 const { data: userData, error } = await sb.from('users')
                     .select('*')
@@ -859,7 +924,6 @@
                 if (error) {
                     console.error('Ошибка загрузки данных пользователя:', error);
                 } else if (userData) {
-                    // Обновляем данные из БД
                     currentUser = { ...currentUser, ...userData };
                     userCoins = userData.coins || 0;
                     userThemes = userData.themes || ['pink'];
@@ -975,7 +1039,7 @@
             }
             
             if (userCoins < amount) {
-                alert('Недостаточно монет!');
+                alert(`Недостаточно монет! У вас ${userCoins} монет, нужно ${amount}`);
                 return;
             }
             
@@ -983,11 +1047,7 @@
             
             if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
                 try {
-                    // Обновляем монеты пользователя - используем правильное название колонки из схемы
-                    const newCoins = userCoins - amount;
-                    
-                    // Сначала получаем актуальные данные пользователя
-                    const { data: userData, error: fetchError } = await sb.from('users')
+                    const { data: freshUserData, error: fetchError } = await sb.from('users')
                         .select('*')
                         .eq('id', currentUser.id)
                         .single();
@@ -997,32 +1057,19 @@
                         throw new Error('Не удалось получить данные пользователя');
                     }
                     
-                    console.log('Данные пользователя из БД:', userData);
+                    console.log('Данные пользователя из БД перед обменом:', freshUserData);
                     
-                    // Определяем, какая колонка используется для монет
-                    let coinField = null;
-                    const possibleFields = ['coins', 'balance', 'money', 'points', 'credits'];
+                    const currentBalance = freshUserData.coins || 0;
                     
-                    for (const field of possibleFields) {
-                        if (userData[field] !== undefined) {
-                            coinField = field;
-                            console.log('Найдено поле для монет:', field, '=', userData[field]);
-                            break;
-                        }
+                    if (currentBalance < amount) {
+                        alert(`Недостаточно монет! По данным БД у вас ${currentBalance} монет, нужно ${amount}`);
+                        return;
                     }
                     
-                    if (!coinField) {
-                        throw new Error('Не удалось определить поле с монетами в таблице users');
-                    }
-                    
-                    // Обновляем монеты
-                    const updateData = {};
-                    updateData[coinField] = newCoins;
-                    
-                    console.log('Обновляем поле:', coinField, 'новое значение:', newCoins);
+                    const newBalance = currentBalance - amount;
                     
                     const { error: updateError } = await sb.from('users')
-                        .update(updateData)
+                        .update({ coins: newBalance })
                         .eq('id', currentUser.id);
                         
                     if (updateError) {
@@ -1030,12 +1077,9 @@
                         throw new Error(`Не удалось обновить баланс монет: ${updateError.message}`);
                     }
                     
-                    // Обновляем локально
-                    userCoins = newCoins;
-                    currentUser[coinField] = newCoins;
-                    currentUser.coins = newCoins; // Для совместимости
+                    userCoins = newBalance;
+                    currentUser.coins = newBalance;
                     
-                    // Обновляем токены
                     const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
                         .select('balance')
                         .eq('user_id', currentUser.id)
@@ -1049,14 +1093,12 @@
                     const newTokens = currentTokens + tokensToAdd;
                     
                     if (tokenData) {
-                        // Обновляем существующую запись
                         const { error: updateError } = await sb.from('user_tokens')
                             .update({ balance: newTokens })
                             .eq('user_id', currentUser.id);
                             
                         if (updateError) throw updateError;
                     } else {
-                        // Создаем новую запись
                         const { error: insertError } = await sb.from('user_tokens')
                             .insert({
                                 user_id: currentUser.id,
@@ -1067,7 +1109,6 @@
                         if (insertError) throw insertError;
                     }
                     
-                    // Обновляем локальные данные
                     userTokens = newTokens;
                     
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -1076,7 +1117,6 @@
                     showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
                     sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
                     
-                    // Очищаем поле ввода
                     document.getElementById('exchangeAmount').value = '100';
                     
                 } catch (error) {
@@ -1143,7 +1183,6 @@
             
             if (confirm(`Купить викторину за ${price} токенов?`)) {
                 try {
-                    // Проверяем, существует ли функция в БД
                     try {
                         const { data, error } = await sb.rpc('buy_quiz_with_tokens', { 
                             p_user_id: currentUser.id, 
@@ -1162,10 +1201,8 @@
                             alert('❌ Ошибка при покупке');
                         }
                     } catch (rpcError) {
-                        // Если RPC функция не существует, делаем обновление вручную
                         console.log('RPC функция не найдена, обновляем вручную');
                         
-                        // Уменьшаем токены
                         const newTokens = userTokens - price;
                         
                         const { error: tokenError } = await sb.from('user_tokens')
