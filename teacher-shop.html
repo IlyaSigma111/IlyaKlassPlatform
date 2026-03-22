@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Магазин</title>
+    <title>ИЛЬЯКЛАСС - Магазин учителя</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -119,12 +119,19 @@
             .shop-section { padding: 20px; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .section-title { font-size: 1.2rem; }
+            
             .themes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .theme-card { padding: 10px; }
             .theme-color { width: 35px; height: 35px; }
             .theme-name { font-size: 0.75rem; }
             .theme-price { font-size: 0.65rem; }
             .apply-theme-btn, .buy-theme-btn { padding: 6px; font-size: 0.65rem; }
+            
+            .store-grid { grid-template-columns: 1fr; }
+            .store-quiz-card { padding: 15px; }
+            .store-quiz-title { font-size: 1rem; }
+            .store-quiz-price { font-size: 0.9rem; }
+            .buy-quiz-btn { padding: 10px; font-size: 0.8rem; }
         }
 
         .container {
@@ -211,6 +218,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             padding: 30px;
+            margin-bottom: 20px;
         }
 
         .section-header {
@@ -275,6 +283,57 @@
 
         .buy-theme-btn { background: #10b981; }
 
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .store-quiz-card {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .store-quiz-card:hover { transform: translateY(-5px); }
+        .store-quiz-card.premium { border-left: 5px solid #f59e0b; }
+
+        .store-quiz-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .store-quiz-stats {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .store-quiz-price {
+            color: #ffd700;
+            font-weight: 700;
+            margin: 15px 0;
+            font-size: 1.2rem;
+        }
+
+        .buy-quiz-btn {
+            background: #ffd700;
+            color: #2d3436;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         .empty-state { text-align: center; padding: 40px; opacity: 0.7; }
         .empty-icon { font-size: 60px; margin-bottom: 20px; }
 
@@ -302,15 +361,8 @@
             padding: 12px 25px;
             border-radius: 40px;
             font-weight: 600;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 3000;
             display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
         }
     </style>
 </head>
@@ -322,16 +374,35 @@
             <div class="logo-small" onclick="window.location='index.html'">
                 <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
             </div>
-            <nav class="nav-menu" id="mainNav"></nav>
+            <nav class="nav-menu">
+                <a href="teacher-menu.html" class="nav-link">Главная</a>
+                <a href="teacher-shop.html" class="nav-link active">Магазин</a>
+                <a href="results.html" class="nav-link">Результаты</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </nav>
             <div class="header-right" id="userSection"></div>
         </div>
 
+        <!-- СЕКЦИЯ ТЕМ -->
         <div class="shop-section">
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-palette"></i> Магазин тем</h2>
                 <span class="coins"><i class="fas fa-coins"></i> <span id="userCoins">0</span></span>
             </div>
             <div id="themesList" class="themes-grid"></div>
+        </div>
+
+        <!-- СЕКЦИЯ ПРЕМИУМ ВИКТОРИН -->
+        <div class="shop-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-store"></i> Премиум викторины</h2>
+                <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokens">0</span></span>
+            </div>
+            <div class="store-filters" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="tab-btn active" onclick="filterStore('all')">Все</button>
+                <button class="tab-btn" onclick="filterStore('tokens')">💎 За токены</button>
+            </div>
+            <div id="storeQuizzesList" class="store-grid"></div>
         </div>
     </div>
 
@@ -346,6 +417,7 @@
         let userCoins = 100;
         let userTokens = 0;
         let userThemes = ['pink'];
+        let storeFilter = 'all';
 
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
@@ -391,20 +463,6 @@
             return saved ? JSON.parse(saved) : null;
         }
 
-        function updateNav() {
-            const nav = document.getElementById('mainNav');
-            const role = currentUser?.role;
-            nav.innerHTML = role === 'teacher' 
-                ? `<a href="teacher-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link active">Магазин</a>
-                   <a href="results.html" class="nav-link">Результаты</a>
-                   <a href="profile.html" class="nav-link">Профиль</a>`
-                : `<a href="student-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link active">Магазин</a>
-                   <a href="results.html" class="nav-link">Результаты</a>
-                   <a href="profile.html" class="nav-link">Профиль</a>`;
-        }
-
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
@@ -423,6 +481,7 @@
                 </div>
             `;
             document.getElementById('userCoins').textContent = currentUser.coins || 0;
+            document.getElementById('userTokens').textContent = userTokens || 0;
         }
 
         function logout() {
@@ -433,6 +492,7 @@
         async function loadUser() {
             const user = getCurrentUser();
             if (!user) { window.location.href = 'index.html'; return; }
+            if (user.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
             
             currentUser = user;
             userCoins = user.coins || 100;
@@ -441,9 +501,9 @@
             const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
             userTokens = tokens?.balance || 0;
             
-            updateNav();
             updateUI();
             loadThemes();
+            loadStore();
             
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
@@ -502,6 +562,90 @@
                     alert('Ошибка при покупке: ' + error.message);
                 }
             }
+        };
+
+        async function loadStore() {
+            try {
+                const { data: quizzes, error } = await sb
+                    .from('quizzes')
+                    .select('*, users!quizzes_created_by_fkey(username)')
+                    .eq('published', true)
+                    .eq('type', 'constructed');
+                
+                if (error) throw error;
+                
+                const container = document.getElementById('storeQuizzesList');
+                
+                if (!quizzes || quizzes.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛒</div><p>Премиум викторин пока нет</p></div>';
+                    return;
+                }
+
+                let filtered = storeFilter === 'tokens' ? quizzes.filter(q => q.price_tokens > 0) : quizzes;
+
+                let html = '';
+                for (let q of filtered) {
+                    html += `
+                        <div class="store-quiz-card premium">
+                            <div class="store-quiz-header">
+                                <span class="store-quiz-author">👤 ${q.users?.username || 'Неизвестно'}</span>
+                            </div>
+                            <div class="store-quiz-title">${q.title}</div>
+                            <div class="store-quiz-stats">
+                                <span>${q.subject || ''} • ${q.class || ''} класс</span>
+                                <span><i class="far fa-question-circle"></i> ${q.question_count || 0}</span>
+                            </div>
+                            <div class="store-quiz-price">
+                                <i class="fas fa-gem"></i> ${q.price_tokens} токенов
+                            </div>
+                            <button class="buy-quiz-btn" onclick="buyQuiz('${q.id}', ${q.price_tokens})">
+                                💎 Купить за токены
+                            </button>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки магазина:', error);
+                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state">❌ Ошибка загрузки</div>';
+            }
+        }
+
+        window.buyQuiz = async function(quizId, price) {
+            if (!currentUser) return;
+            
+            if (userTokens < price) {
+                alert('Недостаточно токенов!');
+                return;
+            }
+            
+            if (confirm(`Купить викторину за ${price} токенов?`)) {
+                try {
+                    const newTokens = userTokens - price;
+                    
+                    const { error: tokenError } = await sb.from('user_tokens')
+                        .update({ balance: newTokens })
+                        .eq('user_id', currentUser.id);
+                        
+                    if (tokenError) throw tokenError;
+                    
+                    userTokens = newTokens;
+                    updateUI();
+                    showToast('✅ Викторина куплена!');
+                    sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
+                    
+                } catch (error) {
+                    console.error('Ошибка покупки:', error);
+                    alert('Ошибка: ' + error.message);
+                }
+            }
+        };
+
+        window.filterStore = function(filter) {
+            storeFilter = filter;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            loadStore();
         };
 
         loadUser();
