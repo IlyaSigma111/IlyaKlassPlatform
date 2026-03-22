@@ -46,7 +46,7 @@
         body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
         body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== МОБИЛЬНОЕ МЕНЮ (ВНИЗУ) ===== */
+        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -431,17 +431,33 @@
         .role-chief { background: #ffd700; color: #2d3436; }
         .role-curator { background: #cd7f32; color: white; }
         .role-moderator { background: #6366f1; color: white; }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            z-index: 3000;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">✅ Операция выполнена!</div>
+
     <div class="container">
         <div class="header">
-            <div class="logo-small" onclick="window.location='student-menu.html'">
+            <div class="logo-small" onclick="window.location='index.html'">
                 <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
             </div>
             <nav class="nav-menu">
                 <a href="student-menu.html" class="nav-link active">Главная</a>
-                <a href="shop.html" class="nav-link">Магазин</a>
+                <a href="student-shop.html" class="nav-link">Магазин</a>
                 <a href="results.html" class="nav-link">Результаты</a>
                 <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
@@ -460,7 +476,7 @@
         <div class="quizzes-section">
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-gamepad"></i> Доступные викторины</h2>
-                <a href="shop.html"><button class="shop-btn"><i class="fas fa-store"></i> Магазин тем</button></a>
+                <a href="student-shop.html"><button class="shop-btn"><i class="fas fa-store"></i> Магазин тем</button></a>
             </div>
             
             <div class="quiz-tabs">
@@ -508,6 +524,13 @@
             { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
             { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
         ];
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
 
         async function sendToTG(msg) {
             try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
@@ -618,7 +641,7 @@
                     await sb.from('user_tokens').update({ balance: newTokens }).eq('user_id', currentUser.id);
                     userTokens = newTokens;
                     updateUI();
-                    alert('✅ Викторина куплена!');
+                    showToast('✅ Викторина куплена!');
                     sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
                 } catch (e) {
                     alert('Ошибка: ' + e.message);
