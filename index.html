@@ -228,11 +228,12 @@
                 const user = users && users[0];
 
                 if (user && user.password === hashPassword(pass)) {
-                    const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).single();
+                    const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
                     
                     localStorage.setItem('currentUser', JSON.stringify({ 
                         id: user.id, username: user.username, role: user.role, coins: user.coins || 100, 
-                        themes: user.themes || ['pink'], role_title: user.role_title || 'user' 
+                        themes: user.themes || ['pink'], role_title: user.role_title || 'user',
+                        user_tokens: { balance: tokens?.balance || 0 }
                     }));
                     
                     sendToTG(`🔑 Вход: ${name} (${user.role_title})`);
