@@ -125,7 +125,7 @@
             .stat-value { font-size: 1.2rem; }
             .profile-main { padding: 20px; }
             .settings-title { font-size: 1.1rem; }
-            .setting-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .setting-item { flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px 0; }
             .setting-input { width: 100%; }
             .themes-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .theme-item { padding: 8px; }
@@ -627,15 +627,21 @@
         function updateNav() {
             const nav = document.getElementById('mainNav');
             const role = currentUser?.role;
-            nav.innerHTML = role === 'teacher' 
-                ? `<a href="teacher-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link">Магазин</a>
-                   <a href="results.html" class="nav-link">Результаты</a>
-                   <a href="profile.html" class="nav-link active">Профиль</a>`
-                : `<a href="student-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link">Магазин</a>
-                   <a href="results.html" class="nav-link">Результаты</a>
-                   <a href="profile.html" class="nav-link active">Профиль</a>`;
+            if (role === 'teacher') {
+                nav.innerHTML = `
+                    <a href="teacher-menu.html" class="nav-link">Главная</a>
+                    <a href="teacher-shop.html" class="nav-link">Магазин</a>
+                    <a href="results.html" class="nav-link">Результаты</a>
+                    <a href="profile.html" class="nav-link active">Профиль</a>
+                `;
+            } else {
+                nav.innerHTML = `
+                    <a href="student-menu.html" class="nav-link">Главная</a>
+                    <a href="student-shop.html" class="nav-link">Магазин</a>
+                    <a href="results.html" class="nav-link">Результаты</a>
+                    <a href="profile.html" class="nav-link active">Профиль</a>
+                `;
+            }
         }
 
         function updateUI() {
@@ -738,7 +744,7 @@
             applyTheme(savedTheme);
 
             try {
-                const { data: tokens } = await sb.from('user_tokens').select('balance, referrals_count').eq('user_id', currentUser.id).single();
+                const { data: tokens } = await sb.from('user_tokens').select('balance, referrals_count').eq('user_id', currentUser.id).maybeSingle();
                 userTokens = tokens?.balance || 0;
                 
                 const { data: results } = await sb.from('results').select('*').eq('student_id', currentUser.id);
@@ -847,7 +853,7 @@
                             <div class="settings-section">
                                 <h2 class="settings-title">🎨 Мои темы (${userThemes.length} из 20)</h2>
                                 <div class="themes-grid">${themesHtml}</div>
-                                <a href="shop.html" style="display: block; text-align: center; margin-top: 15px; color: #f59e0b;">
+                                <a href="${userRole === 'teacher' ? 'teacher-shop.html' : 'student-shop.html'}" style="display: block; text-align: center; margin-top: 15px; color: #f59e0b;">
                                     <i class="fas fa-store"></i> В магазин за новыми темами
                                 </a>
                             </div>
