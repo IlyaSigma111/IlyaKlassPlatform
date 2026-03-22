@@ -117,17 +117,19 @@
             .main-screen { padding-top: 70px; }
             
             .results-container { padding: 20px; }
-            .stats-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
             .stat-card { padding: 15px; }
             .stat-value { font-size: 1.8rem; }
-            .section-title { font-size: 1.3rem; }
+            .section-title { font-size: 1.3rem; margin: 20px 0 15px; }
             .filters { 
                 display: grid; 
                 grid-template-columns: ${currentUser?.role === 'teacher' ? 'repeat(3, 1fr)' : '1fr'}; 
                 gap: 6px; 
+                margin: 15px 0;
             }
             .filter-btn { padding: 8px 5px; font-size: 0.7rem; }
-            .results-table { font-size: 0.7rem; display: block; overflow-x: auto; }
+            .results-table { font-size: 0.7rem; display: block; overflow-x: auto; white-space: nowrap; }
+            .results-table th, .results-table td { padding: 8px 10px; }
         }
 
         .container {
@@ -395,15 +397,21 @@
         function updateNav() {
             const nav = document.getElementById('mainNav');
             const role = currentUser?.role;
-            nav.innerHTML = role === 'teacher' 
-                ? `<a href="teacher-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link">Магазин</a>
-                   <a href="results.html" class="nav-link active">Результаты</a>
-                   <a href="profile.html" class="nav-link">Профиль</a>`
-                : `<a href="student-menu.html" class="nav-link">Главная</a>
-                   <a href="shop.html" class="nav-link">Магазин</a>
-                   <a href="results.html" class="nav-link active">Результаты</a>
-                   <a href="profile.html" class="nav-link">Профиль</a>`;
+            if (role === 'teacher') {
+                nav.innerHTML = `
+                    <a href="teacher-menu.html" class="nav-link">Главная</a>
+                    <a href="teacher-shop.html" class="nav-link">Магазин</a>
+                    <a href="results.html" class="nav-link active">Результаты</a>
+                    <a href="profile.html" class="nav-link">Профиль</a>
+                `;
+            } else {
+                nav.innerHTML = `
+                    <a href="student-menu.html" class="nav-link">Главная</a>
+                    <a href="student-shop.html" class="nav-link">Магазин</a>
+                    <a href="results.html" class="nav-link active">Результаты</a>
+                    <a href="profile.html" class="nav-link">Профиль</a>
+                `;
+            }
         }
 
         function updateUI() {
