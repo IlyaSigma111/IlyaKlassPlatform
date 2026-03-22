@@ -817,7 +817,7 @@
                     <span>${currentUser.username}</span>
                     ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
                     <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
-                    <span class="tokens"><i class="fas fa-gem"></i} ${userTokens}</span>
+                    <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
