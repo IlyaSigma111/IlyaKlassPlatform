@@ -119,7 +119,7 @@
             .quizzes-section { padding: 15px; }
             .section-header { flex-direction: column; align-items: stretch; }
             .section-header div { display: flex; gap: 5px; }
-            .create-btn, .shop-btn { flex: 1; padding: 8px; font-size: 0.8rem; }
+            .create-btn, .shop-btn, .exchange-btn { flex: 1; padding: 8px; font-size: 0.8rem; }
             .section-title { font-size: 1.2rem; }
             
             .quiz-tabs { 
@@ -143,6 +143,12 @@
             .constructor-window { padding: 15px; }
             .form-row { grid-template-columns: 1fr; }
             .answers-grid { grid-template-columns: 1fr; }
+            
+            .exchange-section { padding: 15px; }
+            .exchange-rate { font-size: 1.2rem; }
+            .exchange-input-group { flex-direction: column; gap: 10px; }
+            .exchange-input { width: 100%; }
+            .exchange-btn { width: 100%; }
         }
 
         .container {
@@ -503,9 +509,82 @@
             font-weight: 600;
         }
 
+        /* ===== СЕКЦИЯ ОБМЕНА МОНЕТ ===== */
+        .exchange-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .exchange-rate {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .exchange-rate span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .exchange-input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .exchange-input {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #6366f1;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Comfortaa', cursive;
+            width: 200px;
+            text-align: center;
+        }
+
+        .exchange-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px #6366f1;
+        }
+
+        .exchange-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .exchange-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #10b981;
+        }
+
+        .exchange-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+
         .empty-state { text-align: center; padding: 40px; opacity: 0.7; }
         .empty-icon { font-size: 60px; margin-bottom: 20px; }
-        .error-msg { color: #ff6b6b; margin-top: 15px; }
 
         .role-badge {
             display: inline-block;
@@ -636,6 +715,34 @@
                 <div class="empty-state"><div class="empty-icon">🎮</div><p>Загрузка...</p></div>
             </div>
         </div>
+
+        <!-- СЕКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ -->
+        <div class="exchange-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Обмен валюты</h2>
+                <div style="display: flex; gap: 15px;">
+                    <span class="coins"><i class="fas fa-coins"></i> <span id="userCoinsExchange">0</span></span>
+                    <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokensExchange">0</span></span>
+                </div>
+            </div>
+            
+            <div class="exchange-card">
+                <div class="exchange-rate">
+                    <span>100 монет = 1 токен 💎</span>
+                </div>
+                
+                <div class="exchange-input-group">
+                    <input type="number" id="exchangeAmount" class="exchange-input" placeholder="Количество монет" min="100" step="100" value="100">
+                    <button class="exchange-btn" onclick="exchangeCoins()">
+                        <i class="fas fa-sync-alt"></i> Обменять
+                    </button>
+                </div>
+                
+                <div class="exchange-info">
+                    <i class="fas fa-info-circle"></i> Минимальная сумма обмена: 100 монет (1 токен)
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -710,10 +817,12 @@
                     <span>${currentUser.username}</span>
                     ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
                     <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
-                    <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
+                    <span class="tokens"><i class="fas fa-gem"></i} ${userTokens}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
+            document.getElementById('userCoinsExchange').textContent = currentUser.coins || 0;
+            document.getElementById('userTokensExchange').textContent = userTokens || 0;
         }
 
         function logout() {
@@ -900,6 +1009,103 @@
             }
         }
 
+        // ===== ФУНКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ =====
+        window.exchangeCoins = async function() {
+            if (!currentUser) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('exchangeAmount').value);
+            
+            if (isNaN(amount) || amount < 100) {
+                alert('Минимальная сумма обмена: 100 монет');
+                return;
+            }
+            
+            if (amount % 100 !== 0) {
+                alert('Сумма должна быть кратна 100');
+                return;
+            }
+            
+            if (userCoins < amount) {
+                alert(`Недостаточно монет! У вас ${userCoins} монет, нужно ${amount}`);
+                return;
+            }
+            
+            const tokensToAdd = amount / 100;
+            
+            if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
+                try {
+                    // Получаем актуальные данные из БД
+                    const { data: freshUser, error: fetchError } = await sb.from('users')
+                        .select('coins')
+                        .eq('id', currentUser.id)
+                        .single();
+                        
+                    if (fetchError) throw fetchError;
+                    
+                    const currentBalance = freshUser.coins || 0;
+                    
+                    if (currentBalance < amount) {
+                        alert(`Недостаточно монет! По данным БД у вас ${currentBalance} монет, нужно ${amount}`);
+                        return;
+                    }
+                    
+                    const newBalance = currentBalance - amount;
+                    
+                    // Обновляем монеты
+                    const { error: coinsError } = await sb.from('users')
+                        .update({ coins: newBalance })
+                        .eq('id', currentUser.id);
+                        
+                    if (coinsError) throw coinsError;
+                    
+                    // Обновляем токены
+                    const { data: tokenData, error: tokenError } = await sb.from('user_tokens')
+                        .select('balance')
+                        .eq('user_id', currentUser.id)
+                        .maybeSingle();
+                        
+                    if (tokenError && tokenError.code !== 'PGRST116') throw tokenError;
+                    
+                    const currentTokens = tokenData?.balance || 0;
+                    const newTokens = currentTokens + tokensToAdd;
+                    
+                    if (tokenData) {
+                        await sb.from('user_tokens')
+                            .update({ balance: newTokens })
+                            .eq('user_id', currentUser.id);
+                    } else {
+                        await sb.from('user_tokens')
+                            .insert({
+                                user_id: currentUser.id,
+                                balance: newTokens,
+                                referral_code: 'ref_' + currentUser.id + '_' + Math.floor(Math.random() * 1000000)
+                            });
+                    }
+                    
+                    // Обновляем локальные данные
+                    userCoins = newBalance;
+                    userTokens = newTokens;
+                    currentUser.coins = newBalance;
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    updateUI();
+                    showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
+                    sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
+                    
+                    document.getElementById('exchangeAmount').value = '100';
+                    
+                } catch (error) {
+                    console.error('Ошибка обмена:', error);
+                    alert('Ошибка при обмене: ' + error.message);
+                }
+            }
+        };
+
+        // ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ ВИКТОРИНЫ =====
         window.saveQuiz = async function() {
             if (!currentUser) { alert('Ошибка: пользователь не найден'); return; }
 
@@ -934,6 +1140,7 @@
 
             try {
                 if (editingQuizId) {
+                    // Обновление
                     await sb.from('quizzes').update({
                         title, class: quizClass, subject, theme, type, price_tokens: price,
                         question_count: quizQuestions.length, max_score: quizQuestions.length, published: publish
@@ -954,23 +1161,39 @@
                     showToast('✅ Викторина обновлена!');
                     
                 } else {
+                    // Создание новой
                     const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
                     
-                    await sb.from('quizzes').insert({
+                    // ВСТАВЛЯЕМ ВИКТОРИНУ
+                    const { error: quizError } = await sb.from('quizzes').insert({
                         id: quizId, title, class: quizClass, subject, theme, type, price_tokens: price,
                         question_count: quizQuestions.length, max_score: quizQuestions.length,
                         created_by: currentUser.id, published: publish, created_at: Date.now()
                     });
 
+                    if (quizError) {
+                        console.error('Ошибка при вставке викторины:', quizError);
+                        alert('Ошибка БД: ' + quizError.message);
+                        return;
+                    }
+
+                    // ВСТАВЛЯЕМ ВОПРОСЫ
                     for (let i = 0; i < quizQuestions.length; i++) {
-                        await sb.from('questions').insert({
+                        const { error: qError } = await sb.from('questions').insert({
                             quiz_id: quizId, question_index: i,
                             question: quizQuestions[i].question,
                             answers: quizQuestions[i].answers,
                             correct: quizQuestions[i].correct
                         });
+                        
+                        if (qError) {
+                            console.error('Ошибка при вставке вопроса:', qError);
+                            alert('Ошибка при сохранении вопроса: ' + qError.message);
+                            return;
+                        }
                     }
 
+                    // Начисляем монеты
                     if (publish) {
                         await addCoins(100);
                         sendToTG(`📢 ${currentUser.username} опубликовал викторину: ${title} (+100 монет)`);
@@ -983,7 +1206,7 @@
                 }
 
                 closeConstructor();
-                loadQuizzes();
+                await loadQuizzes();
 
             } catch (error) { 
                 console.error('Ошибка сохранения:', error);
