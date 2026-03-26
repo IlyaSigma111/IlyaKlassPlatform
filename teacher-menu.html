@@ -2,127 +2,997 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ИЛЬЯКЛАСС - Панель учителя</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
-        
-        .header { background: white; border-radius: 24px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); flex-wrap: wrap; gap: 16px; }
-        .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
-        .nav { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-link { padding: 10px 20px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 100px; transition: all 0.2s; }
-        .nav-link:hover, .nav-link.active { background: #6366f1; color: white; }
-        .user-card { display: flex; align-items: center; gap: 16px; background: #f1f5f9; padding: 8px 16px; border-radius: 100px; flex-wrap: wrap; }
-        .avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
-        .logout-btn { padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 100px; cursor: pointer; font-weight: 500; }
-        .coins { color: #f59e0b; font-weight: 600; }
-        
-        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
-        .dashboard-card { background: white; padding: 24px; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .dashboard-card h3 { color: #64748b; font-size: 14px; margin-bottom: 12px; }
-        .dashboard-number { font-size: 36px; font-weight: 800; color: #6366f1; }
-        
-        .quizzes-section { background: white; border-radius: 24px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-        .section-title { font-size: 24px; font-weight: 700; }
-        .create-btn { padding: 12px 24px; background: #6366f1; color: white; border: none; border-radius: 100px; cursor: pointer; font-weight: 600; }
-        .quiz-tabs { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-        .tab-btn { padding: 8px 20px; background: #f1f5f9; border: none; border-radius: 100px; cursor: pointer; font-weight: 500; }
-        .tab-btn.active { background: #6366f1; color: white; }
-        .quizzes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-        .quiz-card { background: #f8fafc; border-radius: 20px; padding: 20px; transition: all 0.2s; }
-        .quiz-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .quiz-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-        .quiz-meta { color: #64748b; font-size: 14px; margin-bottom: 16px; }
-        .quiz-actions { display: flex; gap: 12px; margin-top: 16px; }
-        .quiz-action-btn { flex: 1; padding: 8px; border: none; border-radius: 100px; cursor: pointer; font-weight: 500; }
-        .play-btn { background: #10b981; color: white; }
-        .edit-btn { background: #f59e0b; color: white; }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-overlay.active { display: flex; }
-        .constructor-window { background: white; border-radius: 32px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; padding: 32px; }
-        .constructor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .close-btn { width: 36px; height: 36px; background: #f1f5f9; border: none; border-radius: 50%; cursor: pointer; font-size: 20px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-group label { font-weight: 500; color: #475569; }
-        .form-group input, .form-group select { padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; }
-        .question-card { background: #f8fafc; padding: 20px; border-radius: 20px; margin-bottom: 16px; }
-        .question-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-        .remove-question { color: #ef4444; cursor: pointer; }
-        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-        .answer-option { display: flex; align-items: center; gap: 8px; }
-        .answer-option input[type="text"] { flex: 1; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .add-question-btn, .save-quiz-btn { width: 100%; padding: 14px; border: none; border-radius: 100px; font-weight: 600; cursor: pointer; margin-top: 16px; }
-        .add-question-btn { background: #f1f5f9; color: #475569; }
-        .save-quiz-btn { background: #6366f1; color: white; }
-        .empty-state { text-align: center; padding: 60px; color: #94a3b8; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background 0.3s ease;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ===== 20 ТЕМ ===== */
+        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
+
+        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
-            .container { padding: 16px; }
-            .dashboard { grid-template-columns: 1fr; }
+            .container {
+                padding: 10px;
+                padding-bottom: 80px;
+                width: 100%;
+            }
+            
+            .header {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                margin: 10px;
+                width: calc(100% - 20px);
+                z-index: 1000;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                padding: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            
+            .logo-small { display: none; }
+            
+            .nav-menu {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                gap: 5px;
+            }
+            
+            .nav-link {
+                padding: 12px 5px;
+                font-size: 0.75rem;
+                text-align: center;
+                flex: 1;
+                white-space: nowrap;
+                background: rgba(99, 102, 241, 0.1);
+                border-radius: 30px;
+            }
+            
+            .header-right {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: calc(100% - 20px);
+                z-index: 999;
+            }
+            
+            .user-card {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 15px;
+                background: white;
+                border-radius: 40px;
+                border: 1px solid #e2e8f0;
+                font-size: 0.85rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            }
+            
+            .avatar { width: 35px; height: 35px; }
+            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
+            
+            .main-screen { padding-top: 70px; }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .dashboard-card { padding: 15px; }
+            .dashboard-number { font-size: 24px; }
+            
+            .quizzes-section { padding: 20px; }
+            .section-header { flex-direction: column; align-items: stretch; }
+            .section-header div { display: flex; gap: 10px; }
+            .create-btn, .shop-btn { flex: 1; padding: 10px; font-size: 0.85rem; }
+            .section-title { font-size: 1.3rem; }
+            
+            .quiz-tabs { 
+                display: grid; 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 5px; 
+            }
+            
+            .tab-btn { 
+                padding: 8px 2px; 
+                font-size: 0.7rem; 
+                white-space: nowrap;
+            }
+            
+            .quizzes-grid { grid-template-columns: 1fr; }
+            .quiz-card { padding: 15px; }
+            .quiz-title { font-size: 1rem; }
+            .quiz-actions { flex-direction: column; }
+            .quiz-action-btn { width: 100%; }
+            
+            .constructor-window { padding: 20px; }
             .form-row { grid-template-columns: 1fr; }
             .answers-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; }
+            
+            .exchange-section { padding: 20px; }
+            .exchange-rate { font-size: 1.1rem; }
+            .exchange-input-group { flex-direction: column; gap: 10px; }
+            .exchange-input { width: 100%; }
+            .exchange-btn { width: 100%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .header {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-small {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 100px;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .coins {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .tokens {
+            color: #10b981;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* Dashboard Cards */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card h3 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+
+        /* Quizzes Section */
+        .quizzes-section {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .create-btn {
+            padding: 12px 24px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .shop-btn {
+            padding: 12px 24px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .quiz-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .tab-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .quizzes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .quiz-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #6366f1;
+        }
+
+        .quiz-card.free {
+            border-left: 4px solid #10b981;
+        }
+
+        .quiz-card.premium {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .quiz-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .quiz-theme-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .quiz-class {
+            background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .quiz-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .quiz-subject {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .quiz-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .quiz-price {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 20px;
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .quiz-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .quiz-action-btn.play {
+            background: #10b981;
+            color: white;
+        }
+
+        .quiz-action-btn.play:hover {
+            background: #059669;
+        }
+
+        .quiz-action-btn.edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .quiz-action-btn.edit:hover {
+            background: #d97706;
+        }
+
+        /* Modal Constructor */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .constructor-window {
+            background: white;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .constructor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .constructor-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .publish-checkbox {
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .publish-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .publish-checkbox label {
+            cursor: pointer;
+            color: #475569;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .remove-question {
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .remove-question:hover {
+            background: #fee2e2;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .answer-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #10b981;
+            cursor: pointer;
+        }
+
+        .answer-option input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .answer-option input[type="text"]:focus {
+            outline: none;
+        }
+
+        .add-question-btn {
+            width: 100%;
+            padding: 14px;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 100px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .add-question-btn:hover {
+            background: #e2e8f0;
+            border-color: #6366f1;
+        }
+
+        .save-quiz-btn {
+            width: 100%;
+            padding: 14px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .save-quiz-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        /* Exchange Section */
+        .exchange-section {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-top: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .exchange-rate {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 16px;
+            background: #f1f5f9;
+            border-radius: 100px;
+            text-align: center;
+        }
+
+        .exchange-rate span {
+            color: #f59e0b;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .exchange-input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .exchange-input {
+            padding: 14px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 100px;
+            color: #0f172a;
+            font-size: 1rem;
+            font-family: inherit;
+            width: 200px;
+            text-align: center;
+        }
+
+        .exchange-input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .exchange-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .exchange-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .exchange-info {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .role-owner {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #2d3436;
+        }
+
+        .role-mediacoord {
+            background: #c0c0c0;
+            color: #2d3436;
+        }
+
+        .role-chief {
+            background: #ffd700;
+            color: #2d3436;
+        }
+
+        .role-curator {
+            background: #cd7f32;
+            color: white;
+        }
+
+        .role-moderator {
+            background: #6366f1;
+            color: white;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 500;
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">✅ Операция выполнена!</div>
+
+    <div class="modal-overlay" id="constructorOverlay">
+        <div class="constructor-window">
+            <div class="constructor-header">
+                <h2 class="constructor-title" id="constructorTitle">🛠️ Создание викторины</h2>
+                <button class="close-btn" onclick="closeConstructor()">✕</button>
+            </div>
+            
+            <div class="constructor-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Название викторины</label>
+                        <input type="text" id="quizTitle" placeholder="Например: Математика 5 класс">
+                    </div>
+                    <div class="form-group">
+                        <label>Класс</label>
+                        <input type="text" id="quizClass" placeholder="5 класс">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Предмет</label>
+                        <input type="text" id="quizSubject" placeholder="Математика">
+                    </div>
+                    <div class="form-group">
+                        <label>Тема оформления</label>
+                        <select id="quizTheme">
+                            <option value="pink">🌸 Розовая</option>
+                            <option value="blue">💙 Синяя</option>
+                            <option value="green">💚 Зеленая</option>
+                            <option value="purple">💜 Фиолетовая</option>
+                            <option value="orange">🧡 Оранжевая</option>
+                            <option value="dark">🖤 Темная</option>
+                            <option value="sunset">🌅 Закат</option>
+                            <option value="ocean">🌊 Океан</option>
+                            <option value="forest">🌲 Лес</option>
+                            <option value="candy">🍭 Карамель</option>
+                            <option value="gold">👑 Золотая</option>
+                            <option value="diamond">💎 Алмазная</option>
+                            <option value="ruby">🔴 Рубиновая</option>
+                            <option value="emerald">💚 Изумрудная</option>
+                            <option value="sapphire">💙 Сапфировая</option>
+                            <option value="amethyst">🟣 Аметистовая</option>
+                            <option value="rose">🌹 Розовая</option>
+                            <option value="neon">⚡ Неоновая</option>
+                            <option value="galaxy">🌌 Галактика</option>
+                            <option value="lava">🌋 Лава</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Тип викторины</label>
+                        <select id="quizType">
+                            <option value="kahoot">🎁 Бесплатная</option>
+                            <option value="constructed">💎 Премиум</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена в токенах (для премиум)</label>
+                        <input type="number" id="quizPriceTokens" value="0" min="0" step="10">
+                    </div>
+                </div>
+                
+                <div class="publish-checkbox">
+                    <input type="checkbox" id="publishToStore">
+                    <label for="publishToStore">📢 Опубликовать в магазине (+50 монет)</label>
+                </div>
+                
+                <div id="questionsContainer"></div>
+                
+                <button class="add-question-btn" onclick="addQuestion()">
+                    <i class="fas fa-plus"></i> Добавить вопрос
+                </button>
+                <button class="save-quiz-btn" onclick="saveQuiz()">
+                    <i class="fas fa-save"></i> Сохранить викторину
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
-            <div class="logo" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
-            <nav class="nav">
+            <div class="logo-small" onclick="window.location='index.html'">
+                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+            </div>
+            <nav class="nav-menu">
                 <a href="teacher-menu.html" class="nav-link active">Главная</a>
                 <a href="teacher-shop.html" class="nav-link">Магазин</a>
                 <a href="results.html" class="nav-link">Результаты</a>
                 <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
-            <div id="userSection"></div>
+            <div class="header-right" id="userSection"></div>
         </div>
 
         <div class="dashboard">
-            <div class="dashboard-card"><h3>Всего викторин</h3><div class="dashboard-number" id="totalQuizzes">0</div></div>
-            <div class="dashboard-card"><h3>Всего вопросов</h3><div class="dashboard-number" id="totalQuestions">0</div></div>
-            <div class="dashboard-card"><h3>Всего учеников</h3><div class="dashboard-number" id="totalStudents">0</div></div>
+            <div class="dashboard-card">
+                <h3>Всего викторин</h3>
+                <div class="dashboard-number" id="totalQuizzes">0</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Всего вопросов</h3>
+                <div class="dashboard-number" id="totalQuestions">0</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Всего учеников</h3>
+                <div class="dashboard-number" id="totalStudents">0</div>
+            </div>
         </div>
 
         <div class="quizzes-section">
             <div class="section-header">
-                <h2 class="section-title">Мои викторины</h2>
-                <button class="create-btn" onclick="openConstructor()">+ Создать викторину</button>
+                <h2 class="section-title"><i class="fas fa-gamepad"></i> Мои викторины</h2>
+                <div>
+                    <a href="teacher-shop.html"><button class="shop-btn"><i class="fas fa-store"></i> Магазин</button></a>
+                    <button class="create-btn" onclick="openConstructor()"><i class="fas fa-plus"></i> Создать</button>
+                </div>
             </div>
+            
             <div class="quiz-tabs">
                 <button class="tab-btn active" onclick="filterQuizzes('all')">Все</button>
-                <button class="tab-btn" onclick="filterQuizzes('free')">Бесплатные</button>
-                <button class="tab-btn" onclick="filterQuizzes('premium')">Премиум</button>
+                <button class="tab-btn" onclick="filterQuizzes('free')">🎁 Бесплатные</button>
+                <button class="tab-btn" onclick="filterQuizzes('premium')">💎 Премиум</button>
             </div>
-            <div id="quizzesList" class="quizzes-grid"><div class="empty-state">Загрузка...</div></div>
+            
+            <div id="quizzesList" class="quizzes-grid">
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <p>Загрузка викторин...</p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="modal-overlay" id="constructorOverlay">
-        <div class="constructor-window">
-            <div class="constructor-header">
-                <h2 id="constructorTitle">Создание викторины</h2>
-                <button class="close-btn" onclick="closeConstructor()">✕</button>
+        <!-- СЕКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ -->
+        <div class="exchange-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Обмен валюты</h2>
+                <div style="display: flex; gap: 15px;">
+                    <span class="coins"><i class="fas fa-coins"></i> <span id="userCoinsExchange">0</span></span>
+                    <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokensExchange">0</span></span>
+                </div>
             </div>
-            <div class="form-row">
-                <div class="form-group"><label>Название викторины</label><input type="text" id="quizTitle" placeholder="Например: Математика 5 класс"></div>
-                <div class="form-group"><label>Класс</label><input type="text" id="quizClass" placeholder="5 класс"></div>
+            
+            <div class="exchange-card">
+                <div class="exchange-rate">
+                    <span>💰 100 монет = 1 токен 💎</span>
+                </div>
+                
+                <div class="exchange-input-group">
+                    <input type="number" id="exchangeAmount" class="exchange-input" placeholder="Количество монет" min="100" step="100" value="100">
+                    <button class="exchange-btn" onclick="exchangeCoins()">
+                        <i class="fas fa-sync-alt"></i> Обменять
+                    </button>
+                </div>
+                
+                <div class="exchange-info">
+                    <i class="fas fa-info-circle"></i> Минимальная сумма обмена: 100 монет (1 токен)
+                </div>
             </div>
-            <div class="form-row">
-                <div class="form-group"><label>Предмет</label><input type="text" id="quizSubject" placeholder="Математика"></div>
-                <div class="form-group"><label>Тип викторины</label><select id="quizType"><option value="kahoot">Бесплатная</option><option value="constructed">Премиум</option></select></div>
-            </div>
-            <div id="questionsContainer"></div>
-            <button class="add-question-btn" onclick="addQuestion()">+ Добавить вопрос</button>
-            <button class="save-quiz-btn" onclick="saveQuiz()">Сохранить викторину</button>
         </div>
     </div>
 
@@ -130,135 +1000,628 @@
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        let currentUser = null, allQuizzes = [], quizQuestions = [], editingQuizId = null, currentFilter = 'all';
+        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
+        const TG_CHAT_ID = '1474901393';
 
-        function getCurrentUser() { const saved = localStorage.getItem('currentUser'); return saved ? JSON.parse(saved) : null; }
-        
-        async function loadUser() {
-            currentUser = getCurrentUser();
-            if (!currentUser) { window.location.href = 'index.html'; return; }
-            if (currentUser.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
-            updateUI();
-            await loadQuizzes();
+        let currentUser = null;
+        let userCoins = 100;
+        let userTokens = 0;
+        let userThemes = ['pink'];
+        let quizQuestions = [];
+        let editingQuizId = null;
+        let allQuizzes = [];
+        let currentFilter = 'all';
+
+        const allThemes = [
+            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
+            { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
+            { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
+            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
+            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
+            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
+            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
+            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
+            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
+            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
+            { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
+            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
+            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
+            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
+            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
+            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
+            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
+            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
+            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
+            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
+        ];
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
         }
-        
+
+        async function sendToTG(msg) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+            localStorage.setItem('currentTheme', themeId);
+        }
+
+        function getCurrentUser() {
+            const saved = localStorage.getItem('currentUser');
+            return saved ? JSON.parse(saved) : null;
+        }
+
+        function hashPassword(p) {
+            let h = 0;
+            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
+            return h.toString(16);
+        }
+
+        function updateNav() {
+            const nav = document.getElementById('mainNav');
+            if (nav) {
+                if (currentUser?.role === 'teacher') {
+                    nav.innerHTML = `
+                        <a href="teacher-menu.html" class="nav-link active">Главная</a>
+                        <a href="teacher-shop.html" class="nav-link">Магазин</a>
+                        <a href="results.html" class="nav-link">Результаты</a>
+                        <a href="profile.html" class="nav-link">Профиль</a>
+                    `;
+                } else {
+                    nav.innerHTML = `
+                        <a href="student-menu.html" class="nav-link">Главная</a>
+                        <a href="student-shop.html" class="nav-link">Магазин</a>
+                        <a href="results.html" class="nav-link">Результаты</a>
+                        <a href="profile.html" class="nav-link">Профиль</a>
+                    `;
+                }
+            }
+        }
+
         function updateUI() {
-            const section = document.getElementById('userSection');
-            if (!section) return;
-            section.innerHTML = `<div class="user-card"><div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div><span>${currentUser.username}</span><span class="coins">💰 ${currentUser.coins || 0}</span><button onclick="logout()" class="logout-btn">Выйти</button></div>`;
+            const s = document.getElementById('userSection');
+            if (!s || !currentUser) return;
+            
+            const roleEmoji = {
+                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
+                'curator': '📚', 'moderator': '🛡️', 'user': '👤'
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = {
+                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 'curator': 'role-curator', 
+                'moderator': 'role-moderator', 'user': ''
+            }[currentUser.role_title] || '';
+            
+            s.innerHTML = `
+                <div class="user-card">
+                    <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
+                    <span>${escapeHtml(currentUser.username)}</span>
+                    ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
+                    <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
+                    <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
+                    <button onclick="logout()" class="logout-btn">Выйти</button>
+                </div>
+            `;
+            
+            document.getElementById('userCoinsExchange').textContent = userCoins;
+            document.getElementById('userTokensExchange').textContent = userTokens;
         }
-        
-        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
-        
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
         async function loadQuizzes() {
             try {
-                const { data: quizzes, error } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id).order('created_at', { ascending: false });
+                const { data: quizzes, error } = await sb
+                    .from('quizzes')
+                    .select('*')
+                    .eq('created_by', currentUser.id)
+                    .order('created_at', { ascending: false });
+                
                 if (error) throw error;
+                
                 allQuizzes = quizzes || [];
                 renderQuizzes();
                 updateDashboard();
-            } catch (error) { console.error('Ошибка:', error); document.getElementById('quizzesList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>'; }
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('quizzesList').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки викторин</p></div>';
+            }
         }
-        
+
         function updateDashboard() {
-            document.getElementById('totalQuizzes').textContent = allQuizzes.length;
-            document.getElementById('totalQuestions').textContent = allQuizzes.reduce((sum, q) => sum + (q.question_count || 0), 0);
+            const totalQuizzes = allQuizzes.length;
+            const totalQuestions = allQuizzes.reduce((sum, q) => sum + (q.question_count || 0), 0);
+            
+            document.getElementById('totalQuizzes').textContent = totalQuizzes;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
         }
-        
+
         function renderQuizzes() {
             const container = document.getElementById('quizzesList');
+            
             let filtered = allQuizzes;
-            if (currentFilter === 'free') filtered = allQuizzes.filter(q => q.type === 'kahoot');
-            else if (currentFilter === 'premium') filtered = allQuizzes.filter(q => q.type === 'constructed');
-            if (filtered.length === 0) { container.innerHTML = '<div class="empty-state">📚 У вас пока нет викторин. Создайте первую!</div>'; return; }
-            container.innerHTML = filtered.map(quiz => `<div class="quiz-card"><div class="quiz-title">${escapeHtml(quiz.title)}</div><div class="quiz-meta">${quiz.class || 'Любой класс'} • ${quiz.subject || 'Без предмета'} • ${quiz.question_count || 0} вопросов${quiz.type === 'constructed' ? ' • 💎 Премиум' : ' • 🎁 Бесплатная'}</div><div class="quiz-actions"><button class="quiz-action-btn play-btn" onclick="playQuiz(\'${quiz.id}\')">▶ Играть</button><button class="quiz-action-btn edit-btn" onclick="editQuiz(\'${quiz.id}\')">✏ Редактировать</button></div></div>`).join('');
+            if (currentFilter === 'free') {
+                filtered = allQuizzes.filter(q => q.type === 'kahoot');
+            } else if (currentFilter === 'premium') {
+                filtered = allQuizzes.filter(q => q.type === 'constructed');
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div><p>У вас пока нет викторин. Создайте первую!</p><button class="create-btn" style="margin-top:16px;" onclick="openConstructor()">+ Создать викторину</button></div>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(quiz => {
+                const theme = allThemes.find(t => t.id === quiz.theme) || allThemes[0];
+                return `
+                    <div class="quiz-card ${quiz.type === 'kahoot' ? 'free' : 'premium'}">
+                        <div class="quiz-card-header">
+                            <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
+                            <div class="quiz-class">${escapeHtml(quiz.class) || 'Любой класс'}</div>
+                        </div>
+                        <div class="quiz-title">${escapeHtml(quiz.title)}</div>
+                        <div class="quiz-subject">${escapeHtml(quiz.subject) || 'Без предмета'}</div>
+                        <div class="quiz-stats">
+                            <span><i class="far fa-question-circle"></i> ${quiz.question_count || 0} вопросов</span>
+                            ${quiz.type === 'constructed' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${quiz.price_tokens || 0} токенов</span>` : '<span class="quiz-price"><i class="fas fa-gift"></i> Бесплатно</span>'}
+                        </div>
+                        <div class="quiz-actions">
+                            <button class="quiz-action-btn play" onclick="playQuiz('${quiz.id}')"><i class="fas fa-play"></i> Играть</button>
+                            <button class="quiz-action-btn edit" onclick="editQuiz('${quiz.id}')"><i class="fas fa-edit"></i> Редактировать</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-        
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-        
-        window.filterQuizzes = function(type) { currentFilter = type; document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); renderQuizzes(); };
-        window.playQuiz = function(quizId) { window.location.href = `teacher.html?quiz=${quizId}`; };
-        
+
+        window.filterQuizzes = function(type) {
+            currentFilter = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderQuizzes();
+        };
+
+        window.playQuiz = function(quizId) {
+            window.location.href = `teacher.html?quiz=${quizId}`;
+        };
+
         window.editQuiz = async function(quizId) {
             editingQuizId = quizId;
-            document.getElementById('constructorTitle').textContent = 'Редактирование викторины';
+            document.getElementById('constructorTitle').innerHTML = '✏️ Редактирование викторины';
+            
             try {
-                const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-                const { data: questions } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+                const { data: quiz, error: quizError } = await sb
+                    .from('quizzes')
+                    .select('*')
+                    .eq('id', quizId)
+                    .single();
+                    
+                if (quizError) throw quizError;
+                
+                const { data: questions, error: qError } = await sb
+                    .from('questions')
+                    .select('*')
+                    .eq('quiz_id', quizId)
+                    .order('question_index');
+                    
+                if (qError) throw qError;
+                
                 document.getElementById('quizTitle').value = quiz.title || '';
                 document.getElementById('quizClass').value = quiz.class || '';
                 document.getElementById('quizSubject').value = quiz.subject || '';
+                document.getElementById('quizTheme').value = quiz.theme || 'pink';
                 document.getElementById('quizType').value = quiz.type || 'kahoot';
-                quizQuestions = (questions || []).map(q => ({ id: q.id, question: q.question, answers: q.answers || ['', '', '', ''], correct: q.correct || 0 }));
+                document.getElementById('quizPriceTokens').value = quiz.price_tokens || 0;
+                document.getElementById('publishToStore').checked = quiz.published || false;
+                
+                quizQuestions = (questions || []).map(q => ({
+                    id: q.id,
+                    question: q.question,
+                    answers: q.answers || ['', '', '', ''],
+                    correct: q.correct || 0
+                }));
+                
                 renderQuestions();
                 document.getElementById('constructorOverlay').classList.add('active');
-            } catch (error) { console.error('Ошибка:', error); alert('Ошибка загрузки викторины'); }
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                alert('Ошибка загрузки викторины: ' + error.message);
+            }
         };
-        
+
         window.openConstructor = function() {
             editingQuizId = null;
-            document.getElementById('constructorTitle').textContent = 'Создание викторины';
+            document.getElementById('constructorTitle').innerHTML = '🛠️ Создание викторины';
             document.getElementById('quizTitle').value = '';
             document.getElementById('quizClass').value = '';
             document.getElementById('quizSubject').value = '';
+            document.getElementById('quizTheme').value = 'pink';
             document.getElementById('quizType').value = 'kahoot';
+            document.getElementById('quizPriceTokens').value = '0';
+            document.getElementById('publishToStore').checked = false;
             quizQuestions = [];
             renderQuestions();
             document.getElementById('constructorOverlay').classList.add('active');
         };
-        
-        window.closeConstructor = function() { document.getElementById('constructorOverlay').classList.remove('active'); editingQuizId = null; };
-        
-        window.addQuestion = function() { quizQuestions.push({ id: Date.now(), question: '', answers: ['', '', '', ''], correct: 0 }); renderQuestions(); };
-        window.removeQuestion = function(index) { if (quizQuestions.length <= 1) { alert('Должен быть хотя бы один вопрос'); return; } quizQuestions.splice(index, 1); renderQuestions(); };
-        
+
+        window.closeConstructor = function() {
+            document.getElementById('constructorOverlay').classList.remove('active');
+            editingQuizId = null;
+        };
+
+        window.addQuestion = function() {
+            quizQuestions.push({
+                id: Date.now(),
+                question: '',
+                answers: ['', '', '', ''],
+                correct: 0
+            });
+            renderQuestions();
+        };
+
+        window.removeQuestion = function(index) {
+            if (quizQuestions.length <= 1) {
+                alert('Должен быть хотя бы один вопрос');
+                return;
+            }
+            quizQuestions.splice(index, 1);
+            renderQuestions();
+        };
+
         function renderQuestions() {
             const container = document.getElementById('questionsContainer');
-            if (quizQuestions.length === 0) { container.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">Нажмите "Добавить вопрос" чтобы начать</div>'; return; }
-            container.innerHTML = quizQuestions.map((q, idx) => `<div class="question-card"><div class="question-header"><strong>Вопрос ${idx + 1}</strong><span class="remove-question" onclick="removeQuestion(${idx})">🗑 Удалить</span></div><div class="form-group" style="margin-bottom: 12px;"><input type="text" class="input-field" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:12px;" placeholder="Текст вопроса" value="${escapeHtml(q.question)}" onchange="updateQuestion(${idx}, 'question', this.value)"></div><div class="answers-grid">${[0,1,2,3].map(opt => `<div class="answer-option"><input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} onchange="updateQuestion(${idx}, 'correct', ${opt})"><input type="text" placeholder="Вариант ${opt + 1}" value="${escapeHtml(q.answers[opt])}" onchange="updateQuestion(${idx}, 'answer${opt}', this.value)"></div>`).join('')}</div></div>`).join('');
+            
+            if (quizQuestions.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;"><i class="fas fa-plus-circle"></i> Нажмите "Добавить вопрос" чтобы начать</div>';
+                return;
+            }
+            
+            container.innerHTML = quizQuestions.map((q, idx) => `
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">Вопрос ${idx + 1}</span>
+                        <span class="remove-question" onclick="removeQuestion(${idx})"><i class="fas fa-trash"></i> Удалить</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <input type="text" class="input-field" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:12px;" 
+                               placeholder="Текст вопроса" value="${escapeHtml(q.question)}" 
+                               onchange="updateQuestion(${idx}, 'question', this.value)">
+                    </div>
+                    <div class="answers-grid">
+                        ${[0, 1, 2, 3].map(opt => `
+                            <div class="answer-option">
+                                <input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} 
+                                       onchange="updateQuestion(${idx}, 'correct', ${opt})">
+                                <input type="text" placeholder="Вариант ${opt + 1}" 
+                                       value="${escapeHtml(q.answers[opt])}" 
+                                       onchange="updateQuestion(${idx}, 'answer${opt}', this.value)">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
         }
-        
+
         window.updateQuestion = function(index, field, value) {
-            if (field === 'question') quizQuestions[index].question = value;
-            else if (field.startsWith('answer')) quizQuestions[index].answers[parseInt(field.replace('answer', ''))] = value;
-            else if (field === 'correct') quizQuestions[index].correct = parseInt(value);
+            if (field === 'question') {
+                quizQuestions[index].question = value;
+            } else if (field.startsWith('answer')) {
+                const answerIndex = parseInt(field.replace('answer', ''));
+                quizQuestions[index].answers[answerIndex] = value;
+            } else if (field === 'correct') {
+                quizQuestions[index].correct = parseInt(value);
+            }
         };
-        
+
+        async function addCoins(amount) {
+            try {
+                const newCoins = (currentUser.coins || 0) + amount;
+                await sb.from('users').update({ coins: newCoins }).eq('id', currentUser.id);
+                currentUser.coins = newCoins;
+                userCoins = newCoins;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateUI();
+                return true;
+            } catch (error) {
+                console.error('Ошибка добавления монет:', error);
+                return false;
+            }
+        }
+
         window.saveQuiz = async function() {
+            if (!currentUser) {
+                alert('Ошибка: пользователь не найден');
+                return;
+            }
+
             const title = document.getElementById('quizTitle').value.trim();
             const quizClass = document.getElementById('quizClass').value.trim();
             const subject = document.getElementById('quizSubject').value.trim();
+            const theme = document.getElementById('quizTheme').value;
             const type = document.getElementById('quizType').value;
-            if (!title) { alert('Введите название викторины'); return; }
-            if (quizQuestions.length === 0) { alert('Добавьте хотя бы один вопрос'); return; }
+            const priceTokens = parseInt(document.getElementById('quizPriceTokens').value) || 0;
+            const publish = document.getElementById('publishToStore').checked;
+
+            if (!title) {
+                alert('Введите название викторины');
+                return;
+            }
+            
+            if (quizQuestions.length === 0) {
+                alert('Добавьте хотя бы один вопрос');
+                return;
+            }
+
+            // Проверка заполнения всех полей
             for (let i = 0; i < quizQuestions.length; i++) {
                 const q = quizQuestions[i];
-                if (!q.question || q.question.trim() === '') { alert(`Заполните текст вопроса ${i+1}`); return; }
-                for (let j = 0; j < 4; j++) { if (!q.answers[j] || q.answers[j].trim() === '') { alert(`Заполните вариант ${j+1} в вопросе ${i+1}`); return; } }
+                if (!q.question || q.question.trim() === '') {
+                    alert(`Заполните текст вопроса ${i + 1}`);
+                    return;
+                }
+                for (let j = 0; j < 4; j++) {
+                    if (!q.answers[j] || q.answers[j].trim() === '') {
+                        alert(`Заполните вариант ${j + 1} в вопросе ${i + 1}`);
+                        return;
+                    }
+                }
             }
+
             try {
                 if (editingQuizId) {
-                    await sb.from('quizzes').update({ title: title, class: quizClass, subject: subject, type: type, question_count: quizQuestions.length, max_score: quizQuestions.length, updated_at: new Date().toISOString() }).eq('id', editingQuizId);
+                    // Обновление существующей викторины
+                    const { error: updateError } = await sb
+                        .from('quizzes')
+                        .update({
+                            title: title,
+                            class: quizClass,
+                            subject: subject,
+                            theme: theme,
+                            type: type,
+                            price_tokens: priceTokens,
+                            question_count: quizQuestions.length,
+                            max_score: quizQuestions.length,
+                            published: publish,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id', editingQuizId);
+                        
+                    if (updateError) throw updateError;
+                    
+                    // Удаляем старые вопросы
                     await sb.from('questions').delete().eq('quiz_id', editingQuizId);
-                    for (let i = 0; i < quizQuestions.length; i++) { await sb.from('questions').insert({ quiz_id: editingQuizId, question_index: i, question: quizQuestions[i].question, answers: quizQuestions[i].answers, correct: quizQuestions[i].correct }); }
-                    alert('✅ Викторина обновлена!');
+                    
+                    // Добавляем новые вопросы
+                    for (let i = 0; i < quizQuestions.length; i++) {
+                        const { error: qError } = await sb.from('questions').insert({
+                            quiz_id: editingQuizId,
+                            question_index: i,
+                            question: quizQuestions[i].question,
+                            answers: quizQuestions[i].answers,
+                            correct: quizQuestions[i].correct
+                        });
+                        if (qError) throw qError;
+                    }
+                    
+                    sendToTG(`✏️ ${currentUser.username} отредактировал викторину: ${title}`);
+                    showToast('✅ Викторина обновлена!');
+                    
                 } else {
+                    // Создание новой викторины
                     const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-                    const { error: quizError } = await sb.from('quizzes').insert({ id: quizId, title: title, class: quizClass, subject: subject, type: type, question_count: quizQuestions.length, max_score: quizQuestions.length, created_by: currentUser.id, published: true, created_at: new Date().toISOString() });
-                    if (quizError) { alert('Ошибка сохранения: ' + quizError.message); return; }
-                    for (let i = 0; i < quizQuestions.length; i++) { await sb.from('questions').insert({ quiz_id: quizId, question_index: i, question: quizQuestions[i].question, answers: quizQuestions[i].answers, correct: quizQuestions[i].correct }); }
-                    const newCoins = (currentUser.coins || 0) + 50;
-                    await sb.from('users').update({ coins: newCoins }).eq('id', currentUser.id);
-                    currentUser.coins = newCoins;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    updateUI();
-                    alert('✅ Викторина создана! +50 монет');
+                    
+                    const { error: quizError } = await sb.from('quizzes').insert({
+                        id: quizId,
+                        title: title,
+                        class: quizClass,
+                        subject: subject,
+                        theme: theme,
+                        type: type,
+                        price_tokens: priceTokens,
+                        question_count: quizQuestions.length,
+                        max_score: quizQuestions.length,
+                        created_by: currentUser.id,
+                        published: publish,
+                        created_at: new Date().toISOString()
+                    });
+                    
+                    if (quizError) {
+                        console.error('Ошибка при вставке викторины:', quizError);
+                        alert('Ошибка БД: ' + quizError.message);
+                        return;
+                    }
+                    
+                    // Вставляем вопросы
+                    for (let i = 0; i < quizQuestions.length; i++) {
+                        const { error: qError } = await sb.from('questions').insert({
+                            quiz_id: quizId,
+                            question_index: i,
+                            question: quizQuestions[i].question,
+                            answers: quizQuestions[i].answers,
+                            correct: quizQuestions[i].correct
+                        });
+                        
+                        if (qError) {
+                            console.error('Ошибка при вставке вопроса:', qError);
+                            alert('Ошибка при сохранении вопроса: ' + qError.message);
+                            return;
+                        }
+                    }
+                    
+                    // Начисляем монеты
+                    if (publish) {
+                        await addCoins(50);
+                        sendToTG(`📢 ${currentUser.username} опубликовал викторину: ${title} (+50 монет)`);
+                        showToast('✅ Викторина опубликована! +50 монет');
+                    } else {
+                        await addCoins(30);
+                        sendToTG(`📝 ${currentUser.username} создал викторину: ${title} (+30 монет)`);
+                        showToast('✅ Викторина сохранена! +30 монет');
+                    }
                 }
+                
                 closeConstructor();
                 await loadQuizzes();
-            } catch (error) { console.error('Ошибка:', error); alert('Ошибка: ' + error.message); }
+                
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                alert('Ошибка: ' + error.message);
+            }
         };
-        
+
+        // Обмен монет на токены
+        window.exchangeCoins = async function() {
+            if (!currentUser) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('exchangeAmount').value);
+            
+            if (isNaN(amount) || amount < 100) {
+                alert('Минимальная сумма обмена: 100 монет');
+                return;
+            }
+            
+            if (amount % 100 !== 0) {
+                alert('Сумма должна быть кратна 100');
+                return;
+            }
+            
+            if (userCoins < amount) {
+                alert(`Недостаточно монет! У вас ${userCoins} монет, нужно ${amount}`);
+                return;
+            }
+            
+            const tokensToAdd = amount / 100;
+            
+            if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
+                try {
+                    // Получаем актуальные данные из БД
+                    const { data: freshUser, error: fetchError } = await sb
+                        .from('users')
+                        .select('coins')
+                        .eq('id', currentUser.id)
+                        .single();
+                        
+                    if (fetchError) throw fetchError;
+                    
+                    const currentBalance = freshUser.coins || 0;
+                    
+                    if (currentBalance < amount) {
+                        alert(`Недостаточно монет! По данным БД у вас ${currentBalance} монет, нужно ${amount}`);
+                        return;
+                    }
+                    
+                    const newBalance = currentBalance - amount;
+                    
+                    // Обновляем монеты
+                    const { error: coinsError } = await sb
+                        .from('users')
+                        .update({ coins: newBalance })
+                        .eq('id', currentUser.id);
+                        
+                    if (coinsError) throw coinsError;
+                    
+                    // Обновляем токены
+                    const { data: tokenData, error: tokenError } = await sb
+                        .from('user_tokens')
+                        .select('balance')
+                        .eq('user_id', currentUser.id)
+                        .maybeSingle();
+                        
+                    if (tokenError && tokenError.code !== 'PGRST116') throw tokenError;
+                    
+                    const currentTokens = tokenData?.balance || 0;
+                    const newTokens = currentTokens + tokensToAdd;
+                    
+                    if (tokenData) {
+                        await sb
+                            .from('user_tokens')
+                            .update({ balance: newTokens })
+                            .eq('user_id', currentUser.id);
+                    } else {
+                        await sb.from('user_tokens').insert({
+                            user_id: currentUser.id,
+                            balance: newTokens,
+                            referral_code: 'ref_' + currentUser.id + '_' + Math.floor(Math.random() * 1000000)
+                        });
+                    }
+                    
+                    // Обновляем локальные данные
+                    userCoins = newBalance;
+                    userTokens = newTokens;
+                    currentUser.coins = newBalance;
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    updateUI();
+                    showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
+                    sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
+                    
+                    document.getElementById('exchangeAmount').value = '100';
+                    
+                } catch (error) {
+                    console.error('Ошибка обмена:', error);
+                    alert('Ошибка при обмене: ' + error.message);
+                }
+            }
+        };
+
+        async function loadUser() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            if (user.role !== 'teacher') {
+                window.location.href = 'student-menu.html';
+                return;
+            }
+            
+            currentUser = user;
+            userCoins = user.coins || 100;
+            userThemes = user.themes || ['pink'];
+            
+            const { data: tokens } = await sb
+                .from('user_tokens')
+                .select('balance')
+                .eq('user_id', user.id)
+                .maybeSingle();
+            userTokens = tokens?.balance || 0;
+            
+            updateUI();
+            await loadQuizzes();
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+        }
+
         loadUser();
     </script>
 </body>
