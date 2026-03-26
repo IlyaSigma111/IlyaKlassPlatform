@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ИЛЬЯКЛАСС - Магазин ученика</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -15,10 +15,9 @@
         }
 
         body {
-            font-family: 'Comfortaa', cursive;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
             transition: background 0.3s ease;
             overflow-x: hidden;
             width: 100%;
@@ -46,14 +45,8 @@
         body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
         body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-                padding-bottom: 80px;
-                width: 100%;
-            }
-            
+            .container { padding: 10px; padding-bottom: 80px; }
             .header {
                 position: fixed;
                 bottom: 0;
@@ -63,32 +56,15 @@
                 margin: 10px;
                 width: calc(100% - 20px);
                 z-index: 1000;
-                background: rgba(255, 255, 255, 0.25);
+                background: rgba(255,255,255,0.95);
                 backdrop-filter: blur(15px);
                 border-radius: 40px;
                 padding: 10px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
+                border: 1px solid #e2e8f0;
             }
-            
             .logo-small { display: none; }
-            
-            .nav-menu {
-                width: 100%;
-                display: flex;
-                justify-content: space-around;
-                gap: 5px;
-            }
-            
-            .nav-link {
-                padding: 12px 5px;
-                font-size: 0.75rem;
-                text-align: center;
-                flex: 1;
-                white-space: nowrap;
-                background: rgba(255, 255, 255, 0.15);
-                border-radius: 30px;
-            }
-            
+            .nav-menu { width: 100%; display: flex; justify-content: space-around; gap: 5px; }
+            .nav-link { padding: 12px 5px; font-size: 0.75rem; text-align: center; flex: 1; background: rgba(99,102,241,0.1); border-radius: 30px; }
             .header-right {
                 position: fixed;
                 top: 10px;
@@ -97,35 +73,12 @@
                 width: calc(100% - 20px);
                 z-index: 999;
             }
-            
-            .user-card {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px 15px;
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(15px);
-                border-radius: 40px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                font-size: 0.85rem;
-            }
-            
+            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
             .avatar { width: 35px; height: 35px; }
             .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
-            
-            .main-screen { padding-top: 70px; }
-            
-            .shop-section { padding: 20px; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .section-title { font-size: 1.2rem; }
-            
             .themes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .theme-card { padding: 10px; }
-            .theme-color { width: 35px; height: 35px; }
-            .theme-name { font-size: 0.75rem; }
-            .theme-price { font-size: 0.65rem; }
-            .apply-theme-btn, .buy-theme-btn { padding: 6px; font-size: 0.65rem; }
+            .theme-card { padding: 12px; }
+            .theme-color { width: 40px; height: 40px; }
         }
 
         .container {
@@ -136,49 +89,55 @@
         }
 
         .header {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            margin-bottom: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .logo-small {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             cursor: pointer;
         }
 
         .nav-menu {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .nav-link {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            color: white;
             text-decoration: none;
-            font-weight: 600;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: all 0.2s;
         }
 
-        .nav-link.active { background: #6366f1; }
+        .nav-link:hover, .nav-link.active {
+            background: #6366f1;
+            color: white;
+        }
 
         .user-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 15px 5px 5px;
-            border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            gap: 16px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 100px;
+            flex-wrap: wrap;
         }
 
         .avatar {
@@ -194,37 +153,46 @@
         }
 
         .logout-btn {
-            padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
+            padding: 8px 16px;
+            background: #ef4444;
             color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        .coins { color: #ffd700; font-weight: 600; }
-        .tokens { color: #00ffff; font-weight: 600; margin-left: 10px; }
+        .coins {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .tokens {
+            color: #10b981;
+            font-weight: 600;
+            margin-left: 8px;
+        }
 
         .shop-section {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 30px;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 16px;
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 24px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -233,60 +201,102 @@
         .themes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+            gap: 20px;
         }
 
         .theme-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 15px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
         }
 
-        .theme-card:hover { transform: translateY(-5px); }
-        .theme-card.owned { border-color: #10b981; border-width: 3px; }
-        .theme-card.active { border-color: #6366f1; border-width: 3px; box-shadow: 0 0 20px #6366f1; }
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .theme-card.owned {
+            border-color: #10b981;
+        }
+
+        .theme-card.active {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+        }
 
         .theme-color {
-            width: 45px;
-            height: 45px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            margin: 0 auto 10px;
-            border: 2px solid white;
+            margin: 0 auto 12px;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .theme-name { font-size: 0.95rem; margin-bottom: 5px; font-weight: 600; }
-        .theme-price { font-size: 0.85rem; opacity: 0.8; }
+        .theme-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .theme-price {
+            font-size: 14px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
 
         .apply-theme-btn, .buy-theme-btn {
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: #6366f1;
-            border: none;
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.85rem;
             width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
             font-weight: 600;
+            transition: all 0.2s;
         }
 
-        .buy-theme-btn { background: #10b981; }
+        .apply-theme-btn {
+            background: #6366f1;
+            color: white;
+        }
 
-        .empty-state { text-align: center; padding: 40px; opacity: 0.7; }
-        .empty-icon { font-size: 60px; margin-bottom: 20px; }
+        .apply-theme-btn:hover {
+            background: #4f46e5;
+        }
+
+        .buy-theme-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .buy-theme-btn:hover {
+            background: #d97706;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
 
         .role-badge {
             display: inline-block;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
-            margin-left: 5px;
+            margin-left: 6px;
         }
+
         .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
         .role-mediacoord { background: #c0c0c0; color: #2d3436; }
         .role-chief { background: #ffd700; color: #2d3436; }
@@ -300,9 +310,9 @@
             transform: translateX(-50%);
             background: #10b981;
             color: white;
-            padding: 12px 25px;
-            border-radius: 40px;
-            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 500;
             z-index: 3000;
             display: none;
             animation: slideUp 0.3s ease;
@@ -331,7 +341,6 @@
             <div class="header-right" id="userSection"></div>
         </div>
 
-        <!-- СЕКЦИЯ ТЕМ -->
         <div class="shop-section">
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-palette"></i> Магазин тем</h2>
@@ -380,16 +389,23 @@
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 2000);
+            setTimeout(() => t.style.display = 'none', 3000);
         }
 
         async function sendToTG(msg) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+                });
+            } catch(e) { console.error(e); }
         }
 
         function applyTheme(themeId) {
             document.body.className = themeId + '-theme';
             localStorage.setItem('currentTheme', themeId);
+            showToast('🎨 Тема применена!');
         }
 
         function getCurrentUser() {
@@ -397,24 +413,42 @@
             return saved ? JSON.parse(saved) : null;
         }
 
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
             
-            const roleEmoji = { 'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤' }[currentUser.role_title] || '👤';
-            const roleClass = { 'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 'curator': 'role-curator', 'moderator': 'role-moderator', 'user': '' }[currentUser.role_title] || '';
+            const roleEmoji = {
+                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
+                'curator': '📚', 'moderator': '🛡️', 'user': '👤'
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = {
+                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 'curator': 'role-curator', 
+                'moderator': 'role-moderator', 'user': ''
+            }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
                     <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
-                    <span>${currentUser.username}</span>
+                    <span>${escapeHtml(currentUser.username)}</span>
                     ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
-                    <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
+                    <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                     <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
-            document.getElementById('userCoins').textContent = currentUser.coins || 0;
+            document.getElementById('userCoins').textContent = userCoins;
         }
 
         function logout() {
@@ -424,14 +458,24 @@
 
         async function loadUser() {
             const user = getCurrentUser();
-            if (!user) { window.location.href = 'index.html'; return; }
-            if (user.role !== 'student') { window.location.href = 'teacher-menu.html'; return; }
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            if (user.role !== 'student') {
+                window.location.href = 'teacher-menu.html';
+                return;
+            }
             
             currentUser = user;
             userCoins = user.coins || 100;
             userThemes = user.themes || ['pink'];
             
-            const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
+            const { data: tokens } = await sb
+                .from('user_tokens')
+                .select('balance')
+                .eq('user_id', user.id)
+                .maybeSingle();
             userTokens = tokens?.balance || 0;
             
             updateUI();
@@ -445,22 +489,22 @@
             const container = document.getElementById('themesList');
             const currentTheme = localStorage.getItem('currentTheme') || 'pink';
             
-            let html = '';
-            for (let theme of allThemes) {
+            container.innerHTML = allThemes.map(theme => {
                 const owned = userThemes.includes(theme.id);
-                html += `
+                return `
                     <div class="theme-card ${owned ? 'owned' : ''} ${currentTheme === theme.id ? 'active' : ''}">
                         <div class="theme-color" style="background: ${theme.color};"></div>
                         <div class="theme-name">${theme.name}</div>
                         <div class="theme-price">
-                            ${owned ? '✓ В наличии' : `<span class="coins">${theme.price}</span> монет`}
+                            ${owned ? '✓ В наличии' : `<i class="fas fa-coins"></i> ${theme.price} монет`}
                         </div>
-                        ${owned ? `<button class="apply-theme-btn" onclick="applyTheme('${theme.id}')">Применить</button>` : ''}
-                        ${!owned ? `<button class="buy-theme-btn" onclick="buyTheme('${theme.id}')">Купить</button>` : ''}
+                        ${owned ? 
+                            `<button class="apply-theme-btn" onclick="applyTheme('${theme.id}')">Применить</button>` : 
+                            `<button class="buy-theme-btn" onclick="buyTheme('${theme.id}')">Купить</button>`
+                        }
                     </div>
                 `;
-            }
-            container.innerHTML = html;
+            }).join('');
         }
 
         window.buyTheme = async function(themeId) {
@@ -468,27 +512,31 @@
             if (!theme) return;
             
             if (userCoins < theme.price) {
-                alert('Недостаточно монет!');
+                alert(`Недостаточно монет! Нужно ${theme.price}, у вас ${userCoins}`);
                 return;
             }
             
-            if (confirm(`Купить тему ${theme.name} за ${theme.price} монет?`)) {
+            if (confirm(`Купить тему "${theme.name}" за ${theme.price} монет?`)) {
                 try {
-                    userCoins -= theme.price;
-                    userThemes.push(themeId);
+                    const newCoins = userCoins - theme.price;
+                    const newThemes = [...userThemes, themeId];
                     
-                    await sb.from('users').update({ coins: userCoins, themes: userThemes }).eq('id', currentUser.id);
+                    await sb
+                        .from('users')
+                        .update({ coins: newCoins, themes: newThemes })
+                        .eq('id', currentUser.id);
                     
-                    currentUser.coins = userCoins;
-                    currentUser.themes = userThemes;
+                    userCoins = newCoins;
+                    userThemes = newThemes;
+                    currentUser.coins = newCoins;
+                    currentUser.themes = newThemes;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     
                     sendToTG(`💰 ${currentUser.username} купил тему ${theme.name} за ${theme.price} монет`);
                     
                     updateUI();
                     loadThemes();
-                    
-                    showToast('✅ Тема куплена!');
+                    showToast(`✅ Тема "${theme.name}" куплена!`);
                 } catch (error) {
                     console.error('Ошибка покупки:', error);
                     alert('Ошибка при покупке: ' + error.message);
