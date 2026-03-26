@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>👩‍🏫 Игра | ИЛЬЯКЛАСС</title>
+    <title>ИЛЬЯКЛАСС - Игровой режим учителя</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -15,10 +15,9 @@
         }
 
         body {
-            font-family: 'Comfortaa', cursive;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
             overflow: hidden;
             transition: background 0.3s ease;
         }
@@ -53,9 +52,13 @@
                 height: auto;
             }
             .left-column, .right-column { width: 100%; }
-            .big-code { font-size: 2.5rem; }
+            .big-code { font-size: 2rem; }
             .link-container { flex-direction: column; }
             .copy-btn { width: 100%; }
+            .players-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+            .questions-list { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
+            .presentation-question { padding: 20px; }
+            .presentation-question h2 { font-size: 20px; }
         }
 
         .container {
@@ -66,161 +69,223 @@
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            padding: 15px 30px;
+            background: white;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
             padding: 10px 20px;
-            color: white;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
             text-decoration: none;
-            display: flex;
+            color: #475569;
+            font-weight: 500;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 600;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e2e8f0;
         }
 
         .code-display {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #10b981;
-            border-radius: 40px;
-            padding: 10px 25px;
-            font-size: 1.8rem;
+            background: #f1f5f9;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-size: 28px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             color: #10b981;
+            font-family: monospace;
         }
 
         .main-content {
             display: flex;
             flex: 1;
-            padding: 20px;
-            gap: 20px;
+            padding: 24px;
+            gap: 24px;
             overflow: hidden;
+            flex-wrap: wrap;
         }
 
-        .left-column { width: 35%; display: flex; flex-direction: column; gap: 20px; }
-        .right-column { width: 65%; display: flex; flex-direction: column; gap: 20px; }
+        .left-column {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .right-column {
+            flex: 2;
+            min-width: 300px;
+        }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 25px;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
+        .glass-panel h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
         .big-code {
-            font-size: 4rem;
+            font-size: 56px;
             font-weight: 800;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 30px;
-            border-radius: 40px;
-            margin: 20px 0;
-            border: 3px solid #10b981;
             text-align: center;
+            padding: 24px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            margin: 16px 0;
+            letter-spacing: 8px;
+            color: #10b981;
+            font-family: monospace;
         }
 
         .players-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
             max-height: 300px;
+            overflow-y: auto;
+            padding: 4px;
         }
 
         .player-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 15px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 16px;
             text-align: center;
+            border: 1px solid #e2e8f0;
         }
 
         .player-avatar {
-            width: 50px;
-            height: 50px;
-            background: #6366f1;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 1.5rem;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            font-size: 18px;
             color: white;
         }
 
-        .player-score { color: #ffd700; font-weight: 600; }
+        .player-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
 
-        .start-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 60px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
+        .player-score {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 12px;
         }
 
         .control-buttons {
-            display: grid;
-            gap: 10px;
-            margin: 15px 0;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .control-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 15px;
+            flex: 1;
+            padding: 12px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 100px;
             cursor: pointer;
-            font-weight: 600;
-            color: inherit;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        .control-btn.primary { background: #10b981; color: white; }
+        .control-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .control-btn.primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .control-btn.primary:hover {
+            background: #4f46e5;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #64748b;
+        }
 
         .questions-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            overflow-y: auto;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
             max-height: 400px;
+            overflow-y: auto;
+            padding: 4px;
         }
 
         .question-item {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
             padding: 12px;
+            background: #f1f5f9;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        .question-item.active { border-color: #10b981; border-width: 3px; }
+        .question-item:hover {
+            background: #e2e8f0;
+        }
+
+        .question-item.active {
+            background: #10b981;
+            color: white;
+        }
+
+        .question-item.completed {
+            background: #e2e8f0;
+            opacity: 0.6;
+            cursor: default;
+        }
 
         .link-container {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin: 20px 0;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #6366f1;
-            border-radius: 40px;
-            padding: 5px 5px 5px 20px;
+            background: #f1f5f9;
+            border-radius: 100px;
+            padding: 4px 4px 4px 20px;
             align-items: center;
         }
 
@@ -228,32 +293,81 @@
             flex: 1;
             background: transparent;
             border: none;
-            color: inherit;
-            font-family: 'Comfortaa', cursive;
-            padding: 10px 0;
+            padding: 12px 0;
+            font-family: inherit;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .link-input:focus {
+            outline: none;
         }
 
         .copy-btn {
+            padding: 10px 20px;
             background: #6366f1;
             color: white;
             border: none;
-            border-radius: 35px;
-            padding: 12px 25px;
+            border-radius: 100px;
             cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
+        .copy-btn:hover {
+            background: #4f46e5;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .quiz-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        /* Presentation Mode */
         .presentation-mode {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 1000;
             display: none;
             flex-direction: column;
         }
 
-        .presentation-mode.active { display: flex; }
+        .presentation-mode.active {
+            display: flex;
+        }
+
+        .presentation-header {
+            background: rgba(0,0,0,0.2);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
 
         .presentation-content {
             flex: 1;
@@ -264,25 +378,44 @@
         }
 
         .presentation-question {
-            max-width: 900px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(20px);
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 60px;
-            padding: 50px;
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255,255,255,0.95);
+            border-radius: 48px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .presentation-question h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 30px;
+            font-size: 32px;
+            color: #0f172a;
+            line-height: 1.4;
         }
 
         .correct-answer {
-            color: #10b981;
-            font-size: 2rem;
-            text-align: center;
             margin-top: 30px;
+            padding: 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 100px;
+            font-size: 20px;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .presentation-footer {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .toast {
@@ -292,10 +425,35 @@
             transform: translateX(-50%);
             background: #10b981;
             color: white;
-            padding: 12px 25px;
-            border-radius: 40px;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 500;
+            z-index: 2000;
             display: none;
+            animation: slideUp 0.3s ease;
         }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
     </style>
 </head>
 <body>
@@ -303,27 +461,26 @@
 
     <div class="container" id="mainInterface">
         <header class="header">
-            <a href="teacher-menu.html" class="back-btn">← В меню</a>
+            <a href="teacher-menu.html" class="back-btn"><i class="fas fa-arrow-left"></i> В меню</a>
             <div id="codeDisplay" class="code-display" style="display: none;">----</div>
         </header>
-
-        <div class="main-content" id="dynamicContent">
-            <!-- Содержимое загружается динамически -->
-        </div>
+        <div class="main-content" id="dynamicContent"></div>
     </div>
 
     <div class="presentation-mode" id="presentationMode">
-        <div class="presentation-header" style="padding:20px; background:rgba(255,255,255,0.2); display:flex; justify-content:space-between;">
-            <span>🎯 РЕЖИМ ПРЕЗЕНТАЦИИ</span>
+        <div class="presentation-header">
+            <span><i class="fas fa-chalkboard-teacher"></i> РЕЖИМ ПРЕЗЕНТАЦИИ</span>
             <span id="presentationCounter">Вопрос 1/0</span>
         </div>
         <div class="presentation-content">
-            <div id="presentationQuestion" class="presentation-question"><h2>Вопрос появится здесь</h2></div>
+            <div id="presentationQuestion" class="presentation-question">
+                <h2>Вопрос появится здесь</h2>
+            </div>
         </div>
-        <div style="padding:20px; text-align:center;">
-            <button onclick="exitPresentation()" class="control-btn">← Назад</button>
-            <button onclick="showAnswer()" class="control-btn primary">✅ Ответ</button>
-            <button onclick="nextQuestion()" class="control-btn">⏩ Далее</button>
+        <div class="presentation-footer">
+            <button onclick="exitPresentation()" class="control-btn"><i class="fas fa-arrow-left"></i> Назад</button>
+            <button onclick="showAnswer()" class="control-btn primary"><i class="fas fa-check-circle"></i> Ответ</button>
+            <button onclick="nextQuestion()" class="control-btn"><i class="fas fa-forward"></i> Далее</button>
         </div>
     </div>
 
@@ -346,7 +503,13 @@
         const lobbyId = urlParams.get('lobby');
 
         async function sendToTG(msg) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+                });
+            } catch(e) { console.error(e); }
         }
 
         function showToast(msg) {
@@ -360,40 +523,85 @@
             document.body.className = themeId + '-theme';
         }
 
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
         async function init() {
             const saved = localStorage.getItem('currentUser');
-            if (!saved) { window.location.href = 'index.html'; return; }
-            
+            if (!saved) {
+                window.location.href = 'index.html';
+                return;
+            }
             currentUser = JSON.parse(saved);
-            if (currentUser.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
+            if (currentUser.role !== 'teacher') {
+                window.location.href = 'student-menu.html';
+                return;
+            }
 
             const savedTheme = localStorage.getItem('currentTheme') || 'pink';
             applyTheme(savedTheme);
 
-            if (lobbyId) await loadGame(lobbyId);
-            else if (quizId) await createLobby(quizId);
-            else window.location.href = 'teacher-menu.html';
+            if (lobbyId) {
+                await loadGame(lobbyId);
+            } else if (quizId) {
+                await createLobby(quizId);
+            } else {
+                window.location.href = 'teacher-menu.html';
+            }
         }
 
         async function createLobby(quizId) {
-            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', quizId).single();
-            if (!quiz) { window.location.href = 'teacher-menu.html'; return; }
+            const { data: quiz, error: quizError } = await sb
+                .from('quizzes')
+                .select('*')
+                .eq('id', quizId)
+                .single();
+                
+            if (quizError || !quiz) {
+                alert('Викторина не найдена');
+                window.location.href = 'teacher-menu.html';
+                return;
+            }
 
             quizData = quiz;
             lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
-            const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
+            const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
 
-            await sb.from('lobbies').insert({
-                id: newLobbyId, quiz_id: quizId, teacher_id: currentUser.id,
-                teacher_name: currentUser.username, code: lobbyCode, status: 'waiting',
-                created_at: Date.now(), players: {}, current_question: 0
+            const { error: insertError } = await sb.from('lobbies').insert({
+                id: newLobbyId,
+                quiz_id: quizId,
+                teacher_id: currentUser.id,
+                teacher_name: currentUser.username,
+                code: lobbyCode,
+                status: 'waiting',
+                created_at: new Date().toISOString(),
+                players: {},
+                current_question: 0
             });
 
+            if (insertError) {
+                console.error('Ошибка создания лобби:', insertError);
+                alert('Ошибка создания игры');
+                return;
+            }
+
             currentLobby = { id: newLobbyId, quiz_id: quizId, code: lobbyCode };
-            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            
+            const { data: qs } = await sb
+                .from('questions')
+                .select('*')
+                .eq('quiz_id', quizId)
+                .order('question_index');
             questions = qs || [];
 
-            sendToTG(`🎮 ${currentUser.username} создал лобби для "${quiz.title}" (код:${lobbyCode})`);
+            sendToTG(`🎮 ${currentUser.username} создал лобби для "${quizData.title}" (код: ${lobbyCode})`);
 
             showLobbyUI();
             listenToLobby(newLobbyId);
@@ -402,141 +610,228 @@
         function showLobbyUI() {
             document.getElementById('codeDisplay').style.display = 'block';
             document.getElementById('codeDisplay').textContent = lobbyCode;
-            const studentLink = window.location.origin + '/student.html?lobby=' + currentLobby.id;
+            const studentLink = window.location.origin + window.location.pathname.replace('teacher.html', 'student.html') + '?lobby=' + currentLobby.id;
 
             document.getElementById('dynamicContent').innerHTML = `
                 <div class="left-column">
                     <div class="glass-panel">
-                        <h2>ℹ️ ИНФОРМАЦИЯ</h2>
-                        <div class="lobby-info">
-                            <div class="quiz-title">${quizData.title}</div>
-                            <div>${questions.length} вопросов</div>
-                            <div class="big-code">${lobbyCode}</div>
-                            <div style="margin:30px 0;">
-                                <h3 style="color:#6366f1;">🔗 Ссылка для учеников</h3>
-                                <div class="link-container">
-                                    <input type="text" class="link-input" id="studentLink" value="${studentLink}" readonly>
-                                    <button class="copy-btn" onclick="copyStudentLink()">Копировать</button>
-                                </div>
-                            </div>
-                            <button class="start-btn" onclick="startGame()" id="startGameBtn" disabled>🚀 НАЧАТЬ</button>
+                        <h2><i class="fas fa-info-circle"></i> ИНФОРМАЦИЯ</h2>
+                        <div class="quiz-title">${escapeHtml(quizData.title)}</div>
+                        <div style="color: #64748b; margin-bottom: 16px;">${questions.length} вопросов</div>
+                        <div class="big-code">${lobbyCode}</div>
+                        <div class="link-container">
+                            <input type="text" class="link-input" id="studentLink" value="${studentLink}" readonly>
+                            <button class="copy-btn" onclick="copyStudentLink()"><i class="fas fa-copy"></i> Копировать</button>
                         </div>
+                        <button class="start-btn" onclick="startGame()" id="startGameBtn"><i class="fas fa-play"></i> НАЧАТЬ ИГРУ</button>
                     </div>
                 </div>
                 <div class="right-column">
-                    <div class="glass-panel"><h2>👥 УЧАСТНИКИ</h2><div id="playersList" class="players-grid"></div></div>
-                </div>`;
+                    <div class="glass-panel">
+                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
+                        <div id="playersList" class="players-grid">
+                            <div class="empty-state">Ожидание игроков...</div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        window.copyStudentLink = () => {
-            document.getElementById('studentLink').select();
+        window.copyStudentLink = function() {
+            const input = document.getElementById('studentLink');
+            input.select();
             document.execCommand('copy');
             showToast('🔗 Ссылка скопирована!');
         };
 
         async function loadGame(lobbyId) {
-            const { data: lobby } = await sb.from('lobbies').select('*').eq('id', lobbyId).single();
-            if (!lobby) return;
+            const { data: lobby, error: lobbyError } = await sb
+                .from('lobbies')
+                .select('*')
+                .eq('id', lobbyId)
+                .single();
+                
+            if (lobbyError || !lobby) {
+                window.location.href = 'teacher-menu.html';
+                return;
+            }
 
             currentLobby = lobby;
             lobbyCode = lobby.code;
-            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', lobby.quiz_id).single();
-            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', lobby.quiz_id).order('question_index');
+            
+            const { data: quiz } = await sb
+                .from('quizzes')
+                .select('*')
+                .eq('id', lobby.quiz_id)
+                .single();
+                
+            const { data: qs } = await sb
+                .from('questions')
+                .select('*')
+                .eq('quiz_id', lobby.quiz_id)
+                .order('question_index');
             
             quizData = quiz;
             questions = qs || [];
+            currentQuestionIndex = lobby.current_question || 0;
 
             document.getElementById('codeDisplay').style.display = 'block';
             document.getElementById('codeDisplay').textContent = lobbyCode;
             showGameUI();
             listenToLobby(lobbyId);
-            sendToTG(`▶️ ${currentUser.username} загрузил игру (код:${lobbyCode})`);
+            sendToTG(`▶️ ${currentUser.username} загрузил игру (код: ${lobbyCode})`);
         }
 
         function showGameUI() {
             document.getElementById('dynamicContent').innerHTML = `
                 <div class="left-column">
                     <div class="glass-panel">
-                        <h2>🎮 УПРАВЛЕНИЕ</h2>
+                        <h2><i class="fas fa-gamepad"></i> УПРАВЛЕНИЕ</h2>
                         <div class="control-buttons">
-                            <button onclick="startNextQuestion()" class="control-btn primary">📢 ПОКАЗАТЬ ВОПРОС</button>
-                            <button onclick="nextQuestion()" class="control-btn">⏩ СЛЕДУЮЩИЙ</button>
+                            <button onclick="startNextQuestion()" class="control-btn primary"><i class="fas fa-tv"></i> ПОКАЗАТЬ ВОПРОС</button>
+                            <button onclick="nextQuestion()" class="control-btn"><i class="fas fa-forward"></i> СЛЕДУЮЩИЙ</button>
                         </div>
-                        <div>Текущий: <span id="currentQ">${currentQuestionIndex}/${questions.length}</span><br>Игроков: <span id="playerCount">0</span></div>
+                        <div class="game-info">
+                            <span><i class="fas fa-question-circle"></i> Вопрос: <span id="currentQ">${currentQuestionIndex + 1}/${questions.length}</span></span>
+                            <span><i class="fas fa-users"></i> Игроков: <span id="playerCount">0</span></span>
+                        </div>
                     </div>
-                    <div class="glass-panel"><h2>👥 УЧАСТНИКИ</h2><div id="playersList" class="players-grid"></div></div>
+                    <div class="glass-panel">
+                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
+                        <div id="playersList" class="players-grid"></div>
+                    </div>
                 </div>
                 <div class="right-column">
-                    <div class="glass-panel"><h2>📋 ВОПРОСЫ</h2><div id="questionsList" class="questions-list"></div></div>
-                </div>`;
+                    <div class="glass-panel">
+                        <h2><i class="fas fa-list"></i> ВОПРОСЫ</h2>
+                        <div id="questionsList" class="questions-list"></div>
+                    </div>
+                </div>
+            `;
             renderQuestionsList();
         }
 
         function listenToLobby(id) {
-            sb.channel('lobby-'+id).on('postgres_changes', { event:'*', schema:'public', table:'lobbies', filter:`id=eq.${id}` }, payload => {
-                if (payload.new) { updatePlayersList(payload.new.players); currentLobby = payload.new; }
+            const channel = sb.channel('lobby-teacher-' + id);
+            channel.on('postgres_changes', {
+                event: '*',
+                schema: 'public',
+                table: 'lobbies',
+                filter: `id=eq.${id}`
+            }, payload => {
+                if (payload.new) {
+                    updatePlayersList(payload.new.players);
+                    currentLobby = payload.new;
+                    if (payload.new.current_question !== undefined) {
+                        currentQuestionIndex = payload.new.current_question;
+                        renderQuestionsList();
+                    }
+                }
             }).subscribe();
 
-            sb.from('lobbies').select('*').eq('id', id).then(({data}) => {
+            sb.from('lobbies').select('*').eq('id', id).then(({ data }) => {
                 if (data?.[0]) updatePlayersList(data[0].players);
             });
         }
 
         function updatePlayersList(players) {
-            const c = document.getElementById('playersList'), pc = document.getElementById('playerCount'), sb = document.getElementById('startGameBtn');
-            if (!players || !Object.keys(players).length) {
-                if (c) c.innerHTML = '<div class="empty-state">Ожидание игроков...</div>';
-                if (pc) pc.textContent = '0';
-                if (sb) sb.disabled = true;
+            const container = document.getElementById('playersList');
+            const countSpan = document.getElementById('playerCount');
+            const startBtn = document.getElementById('startGameBtn');
+            
+            if (!players || Object.keys(players).length === 0) {
+                if (container) container.innerHTML = '<div class="empty-state"><i class="fas fa-user-plus"></i> Ожидание игроков...</div>';
+                if (countSpan) countSpan.textContent = '0';
+                if (startBtn) startBtn.disabled = true;
                 return;
             }
-            const arr = Object.entries(players).map(([id,d]) => d);
-            if (pc) pc.textContent = arr.length;
-            if (sb) sb.disabled = false;
-            if (c) c.innerHTML = arr.map(p => `<div class="player-card"><div class="player-avatar">${p.name[0].toUpperCase()}</div><div>${p.name}</div><div>🎯 ${p.score||0}</div></div>`).join('');
+            
+            const playersArray = Object.values(players);
+            if (countSpan) countSpan.textContent = playersArray.length;
+            if (startBtn) startBtn.disabled = false;
+            
+            if (container) {
+                container.innerHTML = playersArray.map(p => `
+                    <div class="player-card">
+                        <div class="player-avatar">${(p.name || '?')[0].toUpperCase()}</div>
+                        <div class="player-name">${escapeHtml(p.name)}</div>
+                        <div class="player-score"><i class="fas fa-star"></i> ${p.score || 0}</div>
+                    </div>
+                `).join('');
+            }
         }
 
         function renderQuestionsList() {
-            const c = document.getElementById('questionsList');
-            if (!c) return;
-            c.innerHTML = questions.map((q,i) => `<div class="question-item ${i===currentQuestionIndex?'active': i<currentQuestionIndex?'completed':''}" onclick="jumpToQuestion(${i})"><div>${i+1}</div></div>`).join('');
+            const container = document.getElementById('questionsList');
+            if (!container) return;
+            
+            container.innerHTML = questions.map((q, i) => `
+                <div class="question-item ${i === currentQuestionIndex ? 'active' : (i < currentQuestionIndex ? 'completed' : '')}" 
+                     onclick="jumpToQuestion(${i})">
+                    ${i + 1}
+                </div>
+            `).join('');
         }
 
-        window.startGame = () => window.location.href = `teacher.html?lobby=${currentLobby.id}`;
-
-        window.startNextQuestion = () => {
-            if (currentQuestionIndex >= questions.length) { alert('Викторина завершена!'); return; }
-            document.getElementById('presentationMode').classList.add('active');
-            document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex+1}/${questions.length}`;
-            document.getElementById('presentationQuestion').innerHTML = `<h2>${questions[currentQuestionIndex].question}</h2>`;
-            sb.from('lobbies').update({ current_question:currentQuestionIndex, status:'active' }).eq('id', currentLobby.id);
-            renderQuestionsList();
-            sendToTG(`❓ ${currentUser.username} показал вопрос ${currentQuestionIndex+1}`);
+        window.startGame = function() {
+            window.location.href = `teacher.html?lobby=${currentLobby.id}`;
         };
 
-        window.showAnswer = () => {
+        window.startNextQuestion = function() {
+            if (currentQuestionIndex >= questions.length) {
+                alert('🎉 Викторина завершена!');
+                return;
+            }
+            
+            document.getElementById('presentationMode').classList.add('active');
+            document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex + 1}/${questions.length}`;
+            document.getElementById('presentationQuestion').innerHTML = `<h2>${escapeHtml(questions[currentQuestionIndex].question)}</h2>`;
+            
+            sb.from('lobbies')
+                .update({ current_question: currentQuestionIndex, status: 'active' })
+                .eq('id', currentLobby.id);
+            
+            renderQuestionsList();
+            sendToTG(`❓ ${currentUser.username} показал вопрос ${currentQuestionIndex + 1}`);
+        };
+
+        window.showAnswer = function() {
             const q = questions[currentQuestionIndex];
             if (!q) return;
+            
             const el = document.getElementById('presentationQuestion');
-            el.innerHTML += `<div class="correct-answer">✅ ${q.answers[q.correct]}</div>`;
-            sendToTG(`🔓 ${currentUser.username} показал ответ на вопрос ${currentQuestionIndex+1}`);
+            el.innerHTML += `<div class="correct-answer"><i class="fas fa-check-circle"></i> ${escapeHtml(q.answers[q.correct])}</div>`;
+            sendToTG(`🔓 ${currentUser.username} показал ответ на вопрос ${currentQuestionIndex + 1}`);
         };
 
-        window.nextQuestion = () => {
-            if (currentQuestionIndex < questions.length-1) {
+        window.nextQuestion = function() {
+            if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
                 exitPresentation();
                 renderQuestionsList();
             } else {
-                sb.from('lobbies').update({ status:'finished' }).eq('id', currentLobby.id);
+                sb.from('lobbies')
+                    .update({ status: 'finished' })
+                    .eq('id', currentLobby.id);
                 exitPresentation();
                 alert('🎉 Викторина завершена!');
                 sendToTG(`🏁 ${currentUser.username} завершил викторину`);
             }
         };
 
-        window.exitPresentation = () => document.getElementById('presentationMode').classList.remove('active');
-        window.jumpToQuestion = (i) => { if (i < currentQuestionIndex && confirm('Перейти к пройденному вопросу?')) { currentQuestionIndex = i; renderQuestionsList(); } };
+        window.exitPresentation = function() {
+            document.getElementById('presentationMode').classList.remove('active');
+        };
+
+        window.jumpToQuestion = function(index) {
+            if (index < currentQuestionIndex && confirm('Перейти к пройденному вопросу? Это может повлиять на ход игры.')) {
+                currentQuestionIndex = index;
+                renderQuestionsList();
+                sb.from('lobbies')
+                    .update({ current_question: currentQuestionIndex })
+                    .eq('id', currentLobby.id);
+            }
+        };
 
         init();
     </script>
