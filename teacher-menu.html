@@ -45,14 +45,8 @@
         body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
         body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-                padding-bottom: 80px;
-                width: 100%;
-            }
-            
+            .container { padding: 10px; padding-bottom: 80px; }
             .header {
                 position: fixed;
                 bottom: 0;
@@ -62,33 +56,15 @@
                 margin: 10px;
                 width: calc(100% - 20px);
                 z-index: 1000;
-                background: rgba(255, 255, 255, 0.95);
+                background: rgba(255,255,255,0.95);
                 backdrop-filter: blur(15px);
                 border-radius: 40px;
                 padding: 10px;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border: 1px solid #e2e8f0;
             }
-            
             .logo-small { display: none; }
-            
-            .nav-menu {
-                width: 100%;
-                display: flex;
-                justify-content: space-around;
-                gap: 5px;
-            }
-            
-            .nav-link {
-                padding: 12px 5px;
-                font-size: 0.75rem;
-                text-align: center;
-                flex: 1;
-                white-space: nowrap;
-                background: rgba(99, 102, 241, 0.1);
-                border-radius: 30px;
-            }
-            
+            .nav-menu { width: 100%; display: flex; justify-content: space-around; gap: 5px; }
+            .nav-link { padding: 12px 5px; font-size: 0.75rem; text-align: center; flex: 1; background: rgba(99,102,241,0.1); border-radius: 30px; }
             .header-right {
                 position: fixed;
                 top: 10px;
@@ -97,64 +73,25 @@
                 width: calc(100% - 20px);
                 z-index: 999;
             }
-            
-            .user-card {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px 15px;
-                background: white;
-                border-radius: 40px;
-                border: 1px solid #e2e8f0;
-                font-size: 0.85rem;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            }
-            
+            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
             .avatar { width: 35px; height: 35px; }
             .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
-            
-            .main-screen { padding-top: 70px; }
-            
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
+            .dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .dashboard-card { padding: 15px; }
             .dashboard-number { font-size: 24px; }
-            
             .quizzes-section { padding: 20px; }
             .section-header { flex-direction: column; align-items: stretch; }
             .section-header div { display: flex; gap: 10px; }
             .create-btn, .shop-btn { flex: 1; padding: 10px; font-size: 0.85rem; }
-            .section-title { font-size: 1.3rem; }
-            
-            .quiz-tabs { 
-                display: grid; 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 5px; 
-            }
-            
-            .tab-btn { 
-                padding: 8px 2px; 
-                font-size: 0.7rem; 
-                white-space: nowrap;
-            }
-            
+            .quiz-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+            .tab-btn { padding: 8px 2px; font-size: 0.7rem; }
             .quizzes-grid { grid-template-columns: 1fr; }
             .quiz-card { padding: 15px; }
-            .quiz-title { font-size: 1rem; }
-            .quiz-actions { flex-direction: column; }
-            .quiz-action-btn { width: 100%; }
-            
             .constructor-window { padding: 20px; }
             .form-row { grid-template-columns: 1fr; }
             .answers-grid { grid-template-columns: 1fr; }
-            
             .exchange-section { padding: 20px; }
-            .exchange-rate { font-size: 1.1rem; }
-            .exchange-input-group { flex-direction: column; gap: 10px; }
+            .exchange-input-group { flex-direction: column; }
             .exchange-input { width: 100%; }
             .exchange-btn { width: 100%; }
         }
@@ -251,7 +188,6 @@
             margin-left: 8px;
         }
 
-        /* Dashboard Cards */
         .dashboard {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -278,7 +214,6 @@
             color: #6366f1;
         }
 
-        /* Quizzes Section */
         .quizzes-section {
             background: white;
             border-radius: 24px;
@@ -337,10 +272,6 @@
             font-weight: 500;
         }
 
-        .tab-btn:hover {
-            background: #e2e8f0;
-        }
-
         .tab-btn.active {
             background: #6366f1;
             color: white;
@@ -360,7 +291,6 @@
             border-radius: 20px;
             padding: 20px;
             transition: all 0.2s;
-            cursor: pointer;
             border: 1px solid #e2e8f0;
         }
 
@@ -378,36 +308,13 @@
             border-left: 4px solid #f59e0b;
         }
 
-        .quiz-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .quiz-theme-badge {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .quiz-class {
-            background: #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #475569;
-        }
-
         .quiz-title {
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .quiz-subject {
+        .quiz-meta {
             color: #64748b;
             font-size: 14px;
             margin-bottom: 12px;
@@ -452,20 +359,11 @@
             color: white;
         }
 
-        .quiz-action-btn.play:hover {
-            background: #059669;
-        }
-
         .quiz-action-btn.edit {
             background: #f59e0b;
             color: white;
         }
 
-        .quiz-action-btn.edit:hover {
-            background: #d97706;
-        }
-
-        /* Modal Constructor */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -518,11 +416,6 @@
             border-radius: 50%;
             cursor: pointer;
             font-size: 20px;
-            transition: all 0.2s;
-        }
-
-        .close-btn:hover {
-            background: #e2e8f0;
         }
 
         .form-row {
@@ -551,7 +444,6 @@
             border-radius: 12px;
             font-family: inherit;
             font-size: 14px;
-            transition: all 0.2s;
         }
 
         .form-group input:focus,
@@ -565,17 +457,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .publish-checkbox input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .publish-checkbox label {
-            cursor: pointer;
-            color: #475569;
         }
 
         .question-card {
@@ -604,11 +485,6 @@
             font-size: 14px;
             padding: 4px 8px;
             border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .remove-question:hover {
-            background: #fee2e2;
         }
 
         .answers-grid {
@@ -644,10 +520,6 @@
             font-size: 14px;
         }
 
-        .answer-option input[type="text"]:focus {
-            outline: none;
-        }
-
         .add-question-btn {
             width: 100%;
             padding: 14px;
@@ -657,12 +529,6 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 20px;
-            transition: all 0.2s;
-        }
-
-        .add-question-btn:hover {
-            background: #e2e8f0;
-            border-color: #6366f1;
         }
 
         .save-quiz-btn {
@@ -675,15 +541,8 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 20px;
-            transition: all 0.2s;
         }
 
-        .save-quiz-btn:hover {
-            background: #4f46e5;
-            transform: translateY(-1px);
-        }
-
-        /* Exchange Section */
         .exchange-section {
             background: white;
             border-radius: 24px;
@@ -704,7 +563,6 @@
         .exchange-rate span {
             color: #f59e0b;
             font-weight: 700;
-            font-size: 1.3rem;
         }
 
         .exchange-input-group {
@@ -721,40 +579,19 @@
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 100px;
-            color: #0f172a;
-            font-size: 1rem;
-            font-family: inherit;
             width: 200px;
             text-align: center;
-        }
-
-        .exchange-input:focus {
-            outline: none;
-            border-color: #6366f1;
+            font-family: inherit;
         }
 
         .exchange-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #10b981;
             color: white;
             border: none;
             padding: 14px 30px;
             border-radius: 100px;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .exchange-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .exchange-info {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            color: #64748b;
-            text-align: center;
         }
 
         .empty-state {
@@ -777,30 +614,11 @@
             margin-left: 6px;
         }
 
-        .role-owner {
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #2d3436;
-        }
-
-        .role-mediacoord {
-            background: #c0c0c0;
-            color: #2d3436;
-        }
-
-        .role-chief {
-            background: #ffd700;
-            color: #2d3436;
-        }
-
-        .role-curator {
-            background: #cd7f32;
-            color: white;
-        }
-
-        .role-moderator {
-            background: #6366f1;
-            color: white;
-        }
+        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
+        .role-mediacoord { background: #c0c0c0; color: #2d3436; }
+        .role-chief { background: #ffd700; color: #2d3436; }
+        .role-curator { background: #cd7f32; color: white; }
+        .role-moderator { background: #6366f1; color: white; }
 
         .toast {
             position: fixed;
@@ -811,22 +629,8 @@
             color: white;
             padding: 12px 24px;
             border-radius: 100px;
-            font-weight: 500;
             z-index: 3000;
             display: none;
-            animation: slideUp 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translate(-50%, 100px);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, 0);
-                opacity: 1;
-            }
         }
     </style>
 </head>
@@ -858,43 +662,18 @@
                         <input type="text" id="quizSubject" placeholder="Математика">
                     </div>
                     <div class="form-group">
-                        <label>Тема оформления</label>
-                        <select id="quizTheme">
-                            <option value="pink">🌸 Розовая</option>
-                            <option value="blue">💙 Синяя</option>
-                            <option value="green">💚 Зеленая</option>
-                            <option value="purple">💜 Фиолетовая</option>
-                            <option value="orange">🧡 Оранжевая</option>
-                            <option value="dark">🖤 Темная</option>
-                            <option value="sunset">🌅 Закат</option>
-                            <option value="ocean">🌊 Океан</option>
-                            <option value="forest">🌲 Лес</option>
-                            <option value="candy">🍭 Карамель</option>
-                            <option value="gold">👑 Золотая</option>
-                            <option value="diamond">💎 Алмазная</option>
-                            <option value="ruby">🔴 Рубиновая</option>
-                            <option value="emerald">💚 Изумрудная</option>
-                            <option value="sapphire">💙 Сапфировая</option>
-                            <option value="amethyst">🟣 Аметистовая</option>
-                            <option value="rose">🌹 Розовая</option>
-                            <option value="neon">⚡ Неоновая</option>
-                            <option value="galaxy">🌌 Галактика</option>
-                            <option value="lava">🌋 Лава</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
                         <label>Тип викторины</label>
                         <select id="quizType">
                             <option value="kahoot">🎁 Бесплатная</option>
                             <option value="constructed">💎 Премиум</option>
                         </select>
                     </div>
+                </div>
+                
+                <div class="form-row" id="priceRow" style="display: none;">
                     <div class="form-group">
                         <label>Цена в токенах (для премиум)</label>
-                        <input type="number" id="quizPriceTokens" value="0" min="0" step="10">
+                        <input type="number" id="quizPriceTokens" value="10" min="0" step="10">
                     </div>
                 </div>
                 
@@ -930,18 +709,9 @@
         </div>
 
         <div class="dashboard">
-            <div class="dashboard-card">
-                <h3>Всего викторин</h3>
-                <div class="dashboard-number" id="totalQuizzes">0</div>
-            </div>
-            <div class="dashboard-card">
-                <h3>Всего вопросов</h3>
-                <div class="dashboard-number" id="totalQuestions">0</div>
-            </div>
-            <div class="dashboard-card">
-                <h3>Всего учеников</h3>
-                <div class="dashboard-number" id="totalStudents">0</div>
-            </div>
+            <div class="dashboard-card"><h3>Всего викторин</h3><div class="dashboard-number" id="totalQuizzes">0</div></div>
+            <div class="dashboard-card"><h3>Всего вопросов</h3><div class="dashboard-number" id="totalQuestions">0</div></div>
+            <div class="dashboard-card"><h3>Всего учеников</h3><div class="dashboard-number" id="totalStudents">0</div></div>
         </div>
 
         <div class="quizzes-section">
@@ -960,14 +730,10 @@
             </div>
             
             <div id="quizzesList" class="quizzes-grid">
-                <div class="empty-state">
-                    <div class="empty-icon">📚</div>
-                    <p>Загрузка викторин...</p>
-                </div>
+                <div class="empty-state"><div class="empty-icon">📚</div><p>Загрузка викторин...</p></div>
             </div>
         </div>
 
-        <!-- СЕКЦИЯ ОБМЕНА МОНЕТ НА ТОКЕНЫ -->
         <div class="exchange-section">
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Обмен валюты</h2>
@@ -989,7 +755,7 @@
                     </button>
                 </div>
                 
-                <div class="exchange-info">
+                <div class="exchange-info" style="font-size: 12px; color: #64748b; text-align: center; margin-top: 12px;">
                     <i class="fas fa-info-circle"></i> Минимальная сумма обмена: 100 монет (1 токен)
                 </div>
             </div>
@@ -1004,36 +770,12 @@
         const TG_CHAT_ID = '1474901393';
 
         let currentUser = null;
-        let userCoins = 100;
+        let userCoins = 0;
         let userTokens = 0;
-        let userThemes = ['pink'];
         let quizQuestions = [];
         let editingQuizId = null;
         let allQuizzes = [];
         let currentFilter = 'all';
-
-        const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
-            { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
-            { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
-            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
-            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
-            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
-            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
-            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
-            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
-            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
-            { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
-            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
-            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
-            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
-            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
-            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
-            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
-            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
-            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
-            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
-        ];
 
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -1062,31 +804,14 @@
             return saved ? JSON.parse(saved) : null;
         }
 
-        function hashPassword(p) {
-            let h = 0;
-            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
-            return h.toString(16);
-        }
-
-        function updateNav() {
-            const nav = document.getElementById('mainNav');
-            if (nav) {
-                if (currentUser?.role === 'teacher') {
-                    nav.innerHTML = `
-                        <a href="teacher-menu.html" class="nav-link active">Главная</a>
-                        <a href="teacher-shop.html" class="nav-link">Магазин</a>
-                        <a href="results.html" class="nav-link">Результаты</a>
-                        <a href="profile.html" class="nav-link">Профиль</a>
-                    `;
-                } else {
-                    nav.innerHTML = `
-                        <a href="student-menu.html" class="nav-link">Главная</a>
-                        <a href="student-shop.html" class="nav-link">Магазин</a>
-                        <a href="results.html" class="nav-link">Результаты</a>
-                        <a href="profile.html" class="nav-link">Профиль</a>
-                    `;
-                }
-            }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
         }
 
         function updateUI() {
@@ -1114,7 +839,6 @@
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
-            
             document.getElementById('userCoinsExchange').textContent = userCoins;
             document.getElementById('userTokensExchange').textContent = userTokens;
         }
@@ -1124,15 +848,14 @@
             window.location.href = 'index.html';
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
+        document.getElementById('quizType').addEventListener('change', function() {
+            const priceRow = document.getElementById('priceRow');
+            if (this.value === 'constructed') {
+                priceRow.style.display = 'grid';
+            } else {
+                priceRow.style.display = 'none';
+            }
+        });
 
         async function loadQuizzes() {
             try {
@@ -1156,7 +879,6 @@
         function updateDashboard() {
             const totalQuizzes = allQuizzes.length;
             const totalQuestions = allQuizzes.reduce((sum, q) => sum + (q.question_count || 0), 0);
-            
             document.getElementById('totalQuizzes').textContent = totalQuizzes;
             document.getElementById('totalQuestions').textContent = totalQuestions;
         }
@@ -1176,27 +898,22 @@
                 return;
             }
             
-            container.innerHTML = filtered.map(quiz => {
-                const theme = allThemes.find(t => t.id === quiz.theme) || allThemes[0];
-                return `
-                    <div class="quiz-card ${quiz.type === 'kahoot' ? 'free' : 'premium'}">
-                        <div class="quiz-card-header">
-                            <div class="quiz-theme-badge" style="background: ${theme.color};"></div>
-                            <div class="quiz-class">${escapeHtml(quiz.class) || 'Любой класс'}</div>
-                        </div>
-                        <div class="quiz-title">${escapeHtml(quiz.title)}</div>
-                        <div class="quiz-subject">${escapeHtml(quiz.subject) || 'Без предмета'}</div>
-                        <div class="quiz-stats">
-                            <span><i class="far fa-question-circle"></i> ${quiz.question_count || 0} вопросов</span>
-                            ${quiz.type === 'constructed' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${quiz.price_tokens || 0} токенов</span>` : '<span class="quiz-price"><i class="fas fa-gift"></i> Бесплатно</span>'}
-                        </div>
-                        <div class="quiz-actions">
-                            <button class="quiz-action-btn play" onclick="playQuiz('${quiz.id}')"><i class="fas fa-play"></i> Играть</button>
-                            <button class="quiz-action-btn edit" onclick="editQuiz('${quiz.id}')"><i class="fas fa-edit"></i> Редактировать</button>
-                        </div>
+            container.innerHTML = filtered.map(quiz => `
+                <div class="quiz-card ${quiz.type === 'kahoot' ? 'free' : 'premium'}">
+                    <div class="quiz-title">${escapeHtml(quiz.title)}</div>
+                    <div class="quiz-meta">
+                        ${escapeHtml(quiz.class) || 'Любой класс'} • ${escapeHtml(quiz.subject) || 'Без предмета'}
                     </div>
-                `;
-            }).join('');
+                    <div class="quiz-stats">
+                        <span><i class="far fa-question-circle"></i> ${quiz.question_count || 0} вопросов</span>
+                        ${quiz.type === 'constructed' ? `<span class="quiz-price"><i class="fas fa-gem"></i> ${quiz.price_tokens || 0} токенов</span>` : '<span class="quiz-price"><i class="fas fa-gift"></i> Бесплатно</span>'}
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="quiz-action-btn play" onclick="playQuiz('${quiz.id}')"><i class="fas fa-play"></i> Играть</button>
+                        <button class="quiz-action-btn edit" onclick="editQuiz('${quiz.id}')"><i class="fas fa-edit"></i> Редактировать</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         window.filterQuizzes = function(type) {
@@ -1234,10 +951,16 @@
                 document.getElementById('quizTitle').value = quiz.title || '';
                 document.getElementById('quizClass').value = quiz.class || '';
                 document.getElementById('quizSubject').value = quiz.subject || '';
-                document.getElementById('quizTheme').value = quiz.theme || 'pink';
                 document.getElementById('quizType').value = quiz.type || 'kahoot';
                 document.getElementById('quizPriceTokens').value = quiz.price_tokens || 0;
                 document.getElementById('publishToStore').checked = quiz.published || false;
+                
+                const priceRow = document.getElementById('priceRow');
+                if (quiz.type === 'constructed') {
+                    priceRow.style.display = 'grid';
+                } else {
+                    priceRow.style.display = 'none';
+                }
                 
                 quizQuestions = (questions || []).map(q => ({
                     id: q.id,
@@ -1260,10 +983,10 @@
             document.getElementById('quizTitle').value = '';
             document.getElementById('quizClass').value = '';
             document.getElementById('quizSubject').value = '';
-            document.getElementById('quizTheme').value = 'pink';
             document.getElementById('quizType').value = 'kahoot';
             document.getElementById('quizPriceTokens').value = '0';
             document.getElementById('publishToStore').checked = false;
+            document.getElementById('priceRow').style.display = 'none';
             quizQuestions = [];
             renderQuestions();
             document.getElementById('constructorOverlay').classList.add('active');
@@ -1308,7 +1031,7 @@
                         <span class="remove-question" onclick="removeQuestion(${idx})"><i class="fas fa-trash"></i> Удалить</span>
                     </div>
                     <div class="form-group" style="margin-bottom: 16px;">
-                        <input type="text" class="input-field" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:12px;" 
+                        <input type="text" style="width:100%; padding:12px; border:2px solid #e2e8f0; border-radius:12px;" 
                                placeholder="Текст вопроса" value="${escapeHtml(q.question)}" 
                                onchange="updateQuestion(${idx}, 'question', this.value)">
                     </div>
@@ -1362,7 +1085,6 @@
             const title = document.getElementById('quizTitle').value.trim();
             const quizClass = document.getElementById('quizClass').value.trim();
             const subject = document.getElementById('quizSubject').value.trim();
-            const theme = document.getElementById('quizTheme').value;
             const type = document.getElementById('quizType').value;
             const priceTokens = parseInt(document.getElementById('quizPriceTokens').value) || 0;
             const publish = document.getElementById('publishToStore').checked;
@@ -1377,7 +1099,6 @@
                 return;
             }
 
-            // Проверка заполнения всех полей
             for (let i = 0; i < quizQuestions.length; i++) {
                 const q = quizQuestions[i];
                 if (!q.question || q.question.trim() === '') {
@@ -1401,7 +1122,6 @@
                             title: title,
                             class: quizClass,
                             subject: subject,
-                            theme: theme,
                             type: type,
                             price_tokens: priceTokens,
                             question_count: quizQuestions.length,
@@ -1413,19 +1133,16 @@
                         
                     if (updateError) throw updateError;
                     
-                    // Удаляем старые вопросы
                     await sb.from('questions').delete().eq('quiz_id', editingQuizId);
                     
-                    // Добавляем новые вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
-                        const { error: qError } = await sb.from('questions').insert({
+                        await sb.from('questions').insert({
                             quiz_id: editingQuizId,
                             question_index: i,
                             question: quizQuestions[i].question,
                             answers: quizQuestions[i].answers,
                             correct: quizQuestions[i].correct
                         });
-                        if (qError) throw qError;
                     }
                     
                     sendToTG(`✏️ ${currentUser.username} отредактировал викторину: ${title}`);
@@ -1440,14 +1157,15 @@
                         title: title,
                         class: quizClass,
                         subject: subject,
-                        theme: theme,
+                        theme: 'pink',
                         type: type,
                         price_tokens: priceTokens,
                         question_count: quizQuestions.length,
                         max_score: quizQuestions.length,
                         created_by: currentUser.id,
                         published: publish,
-                        created_at: new Date().toISOString()
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
                     });
                     
                     if (quizError) {
@@ -1456,7 +1174,6 @@
                         return;
                     }
                     
-                    // Вставляем вопросы
                     for (let i = 0; i < quizQuestions.length; i++) {
                         const { error: qError } = await sb.from('questions').insert({
                             quiz_id: quizId,
@@ -1473,7 +1190,6 @@
                         }
                     }
                     
-                    // Начисляем монеты
                     if (publish) {
                         await addCoins(50);
                         sendToTG(`📢 ${currentUser.username} опубликовал викторину: ${title} (+50 монет)`);
@@ -1494,7 +1210,6 @@
             }
         };
 
-        // Обмен монет на токены
         window.exchangeCoins = async function() {
             if (!currentUser) {
                 alert('Сначала войдите в систему');
@@ -1522,7 +1237,6 @@
             
             if (confirm(`Обменять ${amount} монет на ${tokensToAdd} токенов?`)) {
                 try {
-                    // Получаем актуальные данные из БД
                     const { data: freshUser, error: fetchError } = await sb
                         .from('users')
                         .select('coins')
@@ -1540,15 +1254,8 @@
                     
                     const newBalance = currentBalance - amount;
                     
-                    // Обновляем монеты
-                    const { error: coinsError } = await sb
-                        .from('users')
-                        .update({ coins: newBalance })
-                        .eq('id', currentUser.id);
-                        
-                    if (coinsError) throw coinsError;
+                    await sb.from('users').update({ coins: newBalance }).eq('id', currentUser.id);
                     
-                    // Обновляем токены
                     const { data: tokenData, error: tokenError } = await sb
                         .from('user_tokens')
                         .select('balance')
@@ -1561,10 +1268,7 @@
                     const newTokens = currentTokens + tokensToAdd;
                     
                     if (tokenData) {
-                        await sb
-                            .from('user_tokens')
-                            .update({ balance: newTokens })
-                            .eq('user_id', currentUser.id);
+                        await sb.from('user_tokens').update({ balance: newTokens }).eq('user_id', currentUser.id);
                     } else {
                         await sb.from('user_tokens').insert({
                             user_id: currentUser.id,
@@ -1573,17 +1277,13 @@
                         });
                     }
                     
-                    // Обновляем локальные данные
                     userCoins = newBalance;
                     userTokens = newTokens;
                     currentUser.coins = newBalance;
-                    
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
                     updateUI();
                     showToast(`✅ Обменяно ${amount} монет на ${tokensToAdd} токенов!`);
                     sendToTG(`💱 ${currentUser.username} обменял ${amount} монет на ${tokensToAdd} токенов`);
-                    
                     document.getElementById('exchangeAmount').value = '100';
                     
                 } catch (error) {
@@ -1606,7 +1306,6 @@
             
             currentUser = user;
             userCoins = user.coins || 100;
-            userThemes = user.themes || ['pink'];
             
             const { data: tokens } = await sb
                 .from('user_tokens')
