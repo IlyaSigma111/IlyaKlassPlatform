@@ -23,7 +23,6 @@
             width: 100%;
         }
 
-        /* ===== 20 ТЕМ ===== */
         body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
         body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
         body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
@@ -704,10 +703,10 @@
 
         async function loadStore() {
             try {
-                // Загружаем ВСЕ опубликованные викторины (и бесплатные, и премиум)
+                // Простой запрос без join, так как внешний ключ удален
                 const { data: quizzes, error } = await sb
                     .from('quizzes')
-                    .select('*, users!quizzes_created_by_fkey(username)')
+                    .select('*')
                     .eq('published', true)
                     .order('created_at', { ascending: false });
                 
@@ -734,13 +733,26 @@
                     return;
                 }
 
+                // Получаем данные об авторах отдельно
+                const userIds = [...new Set(filtered.map(q => q.created_by))];
+                const { data: users } = await sb
+                    .from('users')
+                    .select('id, username')
+                    .in('id', userIds);
+                
+                const userMap = {};
+                if (users) {
+                    users.forEach(u => { userMap[u.id] = u.username; });
+                }
+
                 container.innerHTML = filtered.map(q => {
                     const isFree = q.type === 'kahoot';
+                    const authorName = userMap[q.created_by] || 'Неизвестно';
                     return `
                         <div class="store-quiz-card ${isFree ? 'free' : 'premium'}">
                             <div class="store-quiz-header">
-                                <span class="store-quiz-author"><i class="fas fa-user"></i> ${escapeHtml(q.users?.username || 'Неизвестно')}</span>
-                                <span class="${isFree ? 'free' : 'premium'}" style="font-size: 12px; padding: 2px 10px; border-radius: 20px; background: ${isFree ? '#d1fae5' : '#fed7aa'}; color: ${isFree ? '#065f46' : '#9b2c1d'};">${isFree ? '🎁 Бесплатно' : '💎 Премиум'}</span>
+                                <span class="store-quiz-author"><i class="fas fa-user"></i> ${escapeHtml(authorName)}</span>
+                                <span style="font-size: 12px; padding: 2px 10px; border-radius: 20px; background: ${isFree ? '#d1fae5' : '#fed7aa'}; color: ${isFree ? '#065f46' : '#9b2c1d'};">${isFree ? '🎁 Бесплатно' : '💎 Премиум'}</span>
                             </div>
                             <div class="store-quiz-title">${escapeHtml(q.title)}</div>
                             <div class="store-quiz-stats">
@@ -759,7 +771,7 @@
                 }).join('');
             } catch (error) {
                 console.error('Ошибка загрузки магазина:', error);
-                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки</p></div>';
+                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки: ' + error.message + '</p></div>';
             }
         }
 
