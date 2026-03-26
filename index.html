@@ -2,245 +2,195 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Вход</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИЛЬЯКЛАСС - Цифровой образовательный ресурс</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Comfortaa', cursive;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50px;
-            padding: 50px;
-            width: 500px;
-            max-width: 100%;
-            text-align: center;
-        }
-
-        .login-title {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .login-subtitle {
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        .role-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .role-btn {
-            flex: 1;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .role-btn.active {
-            background: #6366f1;
-            border-color: white;
-            box-shadow: 0 0 20px #6366f1;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            color: white;
-            font-size: 1rem;
-            font-family: 'Comfortaa', cursive;
-        }
-
-        .login-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
-
-        .login-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px #6366f1;
-        }
-
-        .register-link {
-            margin-top: 20px;
-            color: white;
-            cursor: pointer;
-            text-decoration: underline;
-            opacity: 0.8;
-        }
-
-        .error-msg {
-            color: #ff6b6b;
-            margin-top: 15px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header */
+        .header { background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; height: 72px; }
+        .logo { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; cursor: pointer; }
+        .nav { display: flex; gap: 32px; align-items: center; }
+        .nav-link { text-decoration: none; color: #475569; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover { color: #6366f1; }
+        .btn { padding: 10px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-size: 14px; }
+        .btn-primary { background: #6366f1; color: white; }
+        .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 2px solid #6366f1; color: #6366f1; }
+        .btn-outline:hover { background: #6366f1; color: white; }
+        
+        /* Hero */
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0; margin-bottom: 60px; }
+        .hero-content { text-align: center; }
+        .hero h1 { font-size: 56px; font-weight: 800; margin-bottom: 24px; }
+        .hero p { font-size: 20px; opacity: 0.95; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; }
+        
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin: -40px 0 60px; }
+        .stat-card { background: white; padding: 32px; border-radius: 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-number { font-size: 48px; font-weight: 800; color: #6366f1; margin-bottom: 8px; }
+        .stat-label { color: #64748b; font-weight: 500; }
+        
+        /* How it works */
+        .section-title { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px; color: #0f172a; }
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 60px; }
+        .step { text-align: center; padding: 32px; background: white; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .step-number { width: 48px; height: 48px; background: #6366f1; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; margin: 0 auto 20px; }
+        .step h3 { font-size: 20px; margin-bottom: 12px; }
+        .step p { color: #64748b; line-height: 1.6; }
+        
+        /* Testimonials */
+        .testimonials { background: #f1f5f9; padding: 60px 0; margin: 60px 0; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+        .testimonial { background: white; padding: 32px; border-radius: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .testimonial-text { font-size: 18px; line-height: 1.6; color: #334155; margin-bottom: 20px; font-style: italic; }
+        .testimonial-author { font-weight: 600; color: #0f172a; }
+        .testimonial-role { color: #64748b; font-size: 14px; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 32px; padding: 40px; max-width: 450px; width: 90%; position: relative; }
+        .modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; color: #94a3b8; }
+        .modal-title { font-size: 28px; font-weight: 700; margin-bottom: 24px; text-align: center; }
+        .role-selector { display: flex; gap: 12px; margin-bottom: 24px; }
+        .role-btn { flex: 1; padding: 12px; border: 2px solid #e2e8f0; background: white; border-radius: 100px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .role-btn.active { background: #6366f1; color: white; border-color: #6366f1; }
+        .input-field { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 100px; font-size: 16px; margin-bottom: 16px; font-family: inherit; }
+        .input-field:focus { outline: none; border-color: #6366f1; }
+        .error-msg { color: #ef4444; font-size: 14px; margin-top: 12px; text-align: center; }
+        .register-link { text-align: center; margin-top: 20px; color: #6366f1; cursor: pointer; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .stats { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .nav { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <div class="login-title">ИЛЬЯКЛАСС</div>
-        <div class="login-subtitle">Войдите или зарегистрируйтесь</div>
-        
-        <div class="role-selector">
-            <button class="role-btn active" onclick="selectRole('teacher')">👨‍🏫 Учитель</button>
-            <button class="role-btn" onclick="selectRole('student')">👨‍🎓 Ученик</button>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
+                <nav class="nav">
+                    <a href="#" class="nav-link">Главная</a>
+                    <a href="#" class="nav-link">О проекте</a>
+                    <a href="#" class="nav-link">Для учителей</a>
+                    <a href="#" class="nav-link">Для учеников</a>
+                </nav>
+                <div>
+                    <button class="btn btn-outline" onclick="openLoginModal()">Войти</button>
+                </div>
+            </div>
         </div>
-        
-        <input type="text" id="loginName" class="login-input" placeholder="Имя">
-        <input type="password" id="loginPass" class="login-input" placeholder="Пароль">
-        
-        <button class="login-btn" onclick="doLogin()">🚀 Войти</button>
-        <div class="register-link" onclick="showRegister()">Нет аккаунта? Зарегистрироваться</div>
-        <div id="errorMsg" class="error-msg"></div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Цифровой образовательный ресурс для школ</h1>
+                <p>Избавьтесь от рутины проверки тетрадей. Система проверит работы автоматически.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="openRegisterModal()">Зарегистрироваться</button>
+                    <button class="btn btn-outline" style="background: white;" onclick="openLoginModal()">Войти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card"><div class="stat-number">1.6 млн</div><div class="stat-label">заданий в базе</div></div>
+            <div class="stat-card"><div class="stat-number">1000+</div><div class="stat-label">викторин создано</div></div>
+            <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">активных учителей</div></div>
+        </div>
+
+        <h2 class="section-title">Как это работает?</h2>
+        <div class="steps">
+            <div class="step"><div class="step-number">1</div><h3>Учитель создаёт викторину</h3><p>Создайте интерактивную викторину с вопросами и ответами за несколько минут</p></div>
+            <div class="step"><div class="step-number">2</div><h3>Ученик проходит тест</h3><p>Ученик заходит по коду и отвечает на вопросы в удобном формате</p></div>
+            <div class="step"><div class="step-number">3</div><h3>Автоматическая проверка</h3><p>Система моментально проверяет ответы и формирует подробный отчёт</p></div>
+        </div>
+    </div>
+
+    <div class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Отзывы педагогов</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial"><div class="testimonial-text">«Считаю ИЛЬЯКЛАСС одним из своих самых незаменимых помощников. Огромная экономия времени, а также возможность работать с детьми в режиме онлайн.»</div><div class="testimonial-author">Михаил Петрович</div><div class="testimonial-role">Учитель математики</div></div>
+                <div class="testimonial"><div class="testimonial-text">«Ученики с удовольствием проходят викторины. Система сама проверяет, а я вижу статистику каждого ребёнка. Очень удобно!»</div><div class="testimonial-author">Анна Сергеевна</div><div class="testimonial-role">Учитель русского языка</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeLoginModal()">&times;</div>
+            <div class="modal-title">Вход в систему</div>
+            <div class="role-selector">
+                <button class="role-btn active" onclick="selectRole('teacher')">👨‍🏫 Учитель</button>
+                <button class="role-btn" onclick="selectRole('student')">👨‍🎓 Ученик</button>
+            </div>
+            <input type="text" id="loginName" class="input-field" placeholder="Имя пользователя">
+            <input type="password" id="loginPass" class="input-field" placeholder="Пароль">
+            <button class="btn btn-primary" style="width: 100%;" onclick="doLogin()">Войти</button>
+            <div class="register-link" onclick="showRegister()">Нет аккаунта? Зарегистрироваться</div>
+            <div id="errorMsg" class="error-msg"></div>
+        </div>
     </div>
 
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-
-        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
-        const TG_CHAT_ID = '1474901393';
-
         let selectedRole = 'teacher';
 
-        async function sendToTG(msg) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
-        }
-
-        function hashPassword(p) {
-            let h = 0;
-            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
-            return h.toString(16);
-        }
-
-        window.selectRole = function(role) {
-            selectedRole = role;
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-        };
-
-        window.showRegister = function() {
-            const name = prompt('Введите имя:');
-            if (!name) return;
-            const pass = prompt('Введите пароль (мин. 3 символа):');
-            if (!pass || pass.length < 3) { alert('Пароль должен быть минимум 3 символа'); return; }
-            registerUser(name, pass);
-        };
+        function hashPassword(p) { let h = 0; for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i); return h.toString(16); }
+        window.selectRole = function(role) { selectedRole = role; document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); };
+        window.openLoginModal = () => { document.getElementById('loginModal').classList.add('active'); };
+        window.closeLoginModal = () => { document.getElementById('loginModal').classList.remove('active'); };
+        window.openRegisterModal = () => { closeLoginModal(); showRegister(); };
+        window.showRegister = function() { const name = prompt('Введите имя:'); if (!name) return; const pass = prompt('Введите пароль (мин. 3 символа):'); if (!pass || pass.length < 3) { alert('Пароль должен быть минимум 3 символа'); return; } registerUser(name, pass); };
 
         async function registerUser(name, pass) {
             try {
                 const { data: existing } = await sb.from('users').select('*').eq('username', name);
                 if (existing?.length) { document.getElementById('errorMsg').textContent = 'Имя занято'; return; }
-
                 const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-                
-                await sb.from('users').insert({
-                    id: userId, username: name, password: hashPassword(pass),
-                    role: selectedRole, coins: 100, themes: ['pink'],
-                    liked_quizzes: [], role_title: 'user', created_at: new Date().toISOString()
-                });
-
-                await sb.from('user_tokens').insert({
-                    user_id: userId, balance: 0,
-                    referral_code: 'ref_' + userId + '_' + Math.floor(Math.random() * 1000000)
-                });
-
-                localStorage.setItem('currentUser', JSON.stringify({ 
-                    id: userId, username: name, role: selectedRole, coins: 100, themes: ['pink'], role_title: 'user' 
-                }));
-                
-                sendToTG(`🆕 Новый пользователь: ${name} (${selectedRole})`);
-                
+                await sb.from('users').insert({ id: userId, username: name, password: hashPassword(pass), role: selectedRole, coins: 100, themes: ['pink'], liked_quizzes: [], role_title: 'user', created_at: new Date().toISOString() });
+                await sb.from('user_tokens').insert({ user_id: userId, balance: 0, referral_code: 'ref_' + userId + '_' + Math.floor(Math.random() * 1000000) });
+                localStorage.setItem('currentUser', JSON.stringify({ id: userId, username: name, role: selectedRole, coins: 100, themes: ['pink'], role_title: 'user' }));
                 if (selectedRole === 'teacher') window.location.href = 'teacher-menu.html';
                 else window.location.href = 'student-menu.html';
-
             } catch (error) { document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; }
         }
 
         window.doLogin = async function() {
             const name = document.getElementById('loginName').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-
             if (!name || !pass) { document.getElementById('errorMsg').textContent = 'Введите имя и пароль'; return; }
-
             if (name === 'Ильяблоко' && pass === 'JojoTop1') {
-                localStorage.setItem('currentUser', JSON.stringify({ 
-                    id: 'owner', username: 'Ильяблоко', role: 'teacher', coins: 99999, 
-                    themes: ['pink','blue','green','purple','orange','dark','gold','diamond','ruby'], 
-                    role_title: 'owner' 
-                }));
-                sendToTG(`👑 Вход: Ильяблоко (Владелец)`);
-                window.location.href = 'teacher-menu.html';
-                return;
+                localStorage.setItem('currentUser', JSON.stringify({ id: 'owner', username: 'Ильяблоко', role: 'teacher', coins: 99999, themes: ['pink','blue','green','purple','orange','dark','gold','diamond','ruby'], role_title: 'owner' }));
+                window.location.href = 'teacher-menu.html'; return;
             }
-
             try {
                 const { data: users } = await sb.from('users').select('*').eq('username', name);
                 const user = users && users[0];
-
                 if (user && user.password === hashPassword(pass)) {
-                    const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
-                    
-                    localStorage.setItem('currentUser', JSON.stringify({ 
-                        id: user.id, username: user.username, role: user.role, coins: user.coins || 100, 
-                        themes: user.themes || ['pink'], role_title: user.role_title || 'user',
-                        user_tokens: { balance: tokens?.balance || 0 }
-                    }));
-                    
-                    sendToTG(`🔑 Вход: ${name} (${user.role_title})`);
-                    
+                    localStorage.setItem('currentUser', JSON.stringify({ id: user.id, username: user.username, role: user.role, coins: user.coins || 100, themes: user.themes || ['pink'], role_title: user.role_title || 'user' }));
                     if (user.role === 'teacher') window.location.href = 'teacher-menu.html';
                     else window.location.href = 'student-menu.html';
-                    
                 } else { document.getElementById('errorMsg').textContent = 'Неверное имя или пароль'; }
             } catch (error) { document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message; }
         };
