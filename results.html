@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Результаты</title>
+    <title>ИЛЬЯКЛАСС - Результаты и статистика</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -15,11 +15,10 @@
         }
 
         body {
-            font-family: 'Comfortaa', cursive;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background 0.3s ease;
             overflow-x: hidden;
             width: 100%;
         }
@@ -46,14 +45,8 @@
         body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
         body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
 
-        /* ===== МОБИЛЬНОЕ МЕНЮ ===== */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-                padding-bottom: 80px;
-                width: 100%;
-            }
-            
+            .container { padding: 10px; padding-bottom: 80px; }
             .header {
                 position: fixed;
                 bottom: 0;
@@ -63,32 +56,15 @@
                 margin: 10px;
                 width: calc(100% - 20px);
                 z-index: 1000;
-                background: rgba(255, 255, 255, 0.25);
+                background: rgba(255,255,255,0.95);
                 backdrop-filter: blur(15px);
                 border-radius: 40px;
                 padding: 10px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
+                border: 1px solid #e2e8f0;
             }
-            
             .logo-small { display: none; }
-            
-            .nav-menu {
-                width: 100%;
-                display: flex;
-                justify-content: space-around;
-                gap: 5px;
-            }
-            
-            .nav-link {
-                padding: 12px 5px;
-                font-size: 0.75rem;
-                text-align: center;
-                flex: 1;
-                white-space: nowrap;
-                background: rgba(255, 255, 255, 0.15);
-                border-radius: 30px;
-            }
-            
+            .nav-menu { width: 100%; display: flex; justify-content: space-around; gap: 5px; }
+            .nav-link { padding: 12px 5px; font-size: 0.75rem; text-align: center; flex: 1; background: rgba(99,102,241,0.1); border-radius: 30px; }
             .header-right {
                 position: fixed;
                 top: 10px;
@@ -97,103 +73,75 @@
                 width: calc(100% - 20px);
                 z-index: 999;
             }
-            
-            .user-card {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px 15px;
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(15px);
-                border-radius: 40px;
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                font-size: 0.85rem;
-            }
-            
+            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
             .avatar { width: 35px; height: 35px; }
             .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
-            
-            .main-screen { padding-top: 70px; }
-            
-            .results-container { padding: 20px; }
-            .stats-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
+            .stats-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .stat-card { padding: 15px; }
-            .stat-value { font-size: 1.8rem; }
-            .section-title { font-size: 1.3rem; margin: 20px 0 15px; }
-            .filters { 
-                display: grid; 
-                grid-template-columns: ${currentUser?.role === 'teacher' ? 'repeat(3, 1fr)' : '1fr'}; 
-                gap: 6px; 
-                margin: 15px 0;
-            }
-            .filter-btn { padding: 8px 5px; font-size: 0.7rem; }
-            .results-table { font-size: 0.7rem; display: block; overflow-x: auto; white-space: nowrap; }
-            .results-table th, .results-table td { padding: 8px 10px; }
+            .stat-value { font-size: 24px; }
+            .filters { gap: 8px; }
+            .filter-btn { padding: 6px 12px; font-size: 12px; }
+            .results-table { font-size: 12px; }
+            .results-table th, .results-table td { padding: 8px; }
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             width: 100%;
-            overflow-x: hidden;
         }
 
         .header {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            margin-bottom: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .logo-small {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             cursor: pointer;
-            white-space: nowrap;
         }
 
         .nav-menu {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .nav-link {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            color: white;
             text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 600;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: all 0.2s;
         }
 
-        .nav-link:hover { background: rgba(255, 255, 255, 0.3); }
-        .nav-link.active { background: #6366f1; color: white; }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .nav-link:hover, .nav-link.active {
+            background: #6366f1;
+            color: white;
         }
 
         .user-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 15px 5px 5px;
-            border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            gap: 16px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 100px;
+            flex-wrap: wrap;
         }
 
         .avatar {
@@ -209,27 +157,25 @@
         }
 
         .logout-btn {
-            padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            padding: 8px 16px;
+            background: #ef4444;
             color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        .logout-btn:hover { background: rgba(255, 255, 255, 0.3); }
-
-        .coins { color: #ffd700; font-weight: 600; font-size: 1.1rem; }
+        .coins {
+            color: #f59e0b;
+            font-weight: 600;
+        }
 
         .results-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 30px;
-            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .stats-cards {
@@ -240,121 +186,145 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 25px;
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 20px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
             color: #6366f1;
         }
 
         .section-title {
-            font-size: 1.8rem;
-            color: #6366f1;
+            font-size: 24px;
+            font-weight: 700;
             margin: 30px 0 20px;
-            word-break: break-word;
+            color: #0f172a;
         }
-
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 30px;
-            overflow: hidden;
-        }
-
-        .results-table th {
-            background: rgba(99, 102, 241, 0.3);
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .results-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .results-table tr:last-child td { border-bottom: none; }
-        .results-table tr:hover { background: rgba(255, 255, 255, 0.05); }
-
-        .score-cell { color: #10b981; font-weight: 700; }
-        .glow-name { color: #6366f1; font-weight: 700; text-shadow: 0 0 10px #6366f1; }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #6366f1;
-            font-size: 1.2rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 40px;
-        }
-
-        .empty-icon { font-size: 60px; margin-bottom: 20px; opacity: 0.5; }
 
         .filters {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             margin: 20px 0;
             flex-wrap: wrap;
         }
 
         .filter-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
+            padding: 8px 20px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 100px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
         .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: #e2e8f0;
         }
 
-        .filter-btn.active { background: #6366f1; color: white; border-color: white; }
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+        }
 
-        .error-state {
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .results-table th {
+            background: #f8fafc;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .results-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .results-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .score-cell {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .glow-name {
+            color: #6366f1;
+            font-weight: 700;
+        }
+
+        .empty-state {
             text-align: center;
-            padding: 50px;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 40px;
+            padding: 60px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
 
         .role-badge {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 16px;
-            font-size: 0.6rem;
-            margin-left: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
         }
+
         .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
         .role-mediacoord { background: #c0c0c0; color: #2d3436; }
         .role-chief { background: #ffd700; color: #2d3436; }
         .role-curator { background: #cd7f32; color: white; }
         .role-moderator { background: #6366f1; color: white; }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 500;
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast">✅ Операция выполнена!</div>
+
     <div class="container">
         <div class="header">
             <div class="logo-small" onclick="window.location='index.html'">
@@ -364,8 +334,17 @@
             <div class="header-right" id="userSection"></div>
         </div>
 
-        <div id="content" class="loading">Загрузка результатов...</div>
+        <div id="content" style="text-align: center; padding: 50px;">
+            <div class="loader" style="margin: 0 auto; width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 16px;">Загрузка результатов...</p>
+        </div>
     </div>
+
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
@@ -375,29 +354,43 @@
         const TG_CHAT_ID = '1474901393';
 
         let currentUser = null;
-        let userName = '';
-        let userCoins = 0;
-        let userRole = '';
         let allResults = [];
         let allUsers = [];
         let allQuizzes = [];
         let currentFilter = 'all';
-
-        async function sendToTG(msg) {
-            try { await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ chat_id:TG_CHAT_ID, text:msg, parse_mode:'HTML' }) }); } catch(e) { console.error(e); }
-        }
-
-        function applyTheme(themeId) { document.body.className = themeId + '-theme'; }
 
         function getCurrentUser() {
             const saved = localStorage.getItem('currentUser');
             return saved ? JSON.parse(saved) : null;
         }
 
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function applyTheme(themeId) {
+            document.body.className = themeId + '-theme';
+        }
+
+        async function sendToTG(msg) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+                });
+            } catch(e) { console.error(e); }
+        }
+
         function updateNav() {
             const nav = document.getElementById('mainNav');
-            const role = currentUser?.role;
-            if (role === 'teacher') {
+            if (currentUser.role === 'teacher') {
                 nav.innerHTML = `
                     <a href="teacher-menu.html" class="nav-link">Главная</a>
                     <a href="teacher-shop.html" class="nav-link">Магазин</a>
@@ -419,20 +412,22 @@
             if (!s || !currentUser) return;
             
             const roleEmoji = {
-                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': '👤'
+                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
+                'curator': '📚', 'moderator': '🛡️', 'user': '👤'
             }[currentUser.role_title] || '👤';
             
             const roleClass = {
-                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 
-                'curator': 'role-curator', 'moderator': 'role-moderator', 'user': ''
+                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 'curator': 'role-curator', 
+                'moderator': 'role-moderator', 'user': ''
             }[currentUser.role_title] || '';
             
             s.innerHTML = `
                 <div class="user-card">
-                    <div class="avatar">${userName.charAt(0).toUpperCase()}</div>
-                    <span>${userName}</span>
+                    <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
+                    <span>${escapeHtml(currentUser.username)}</span>
                     ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
-                    <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
+                    <span class="coins"><i class="fas fa-coins"></i> ${currentUser.coins || 0}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
                 </div>
             `;
@@ -444,20 +439,18 @@
         }
 
         async function loadResults() {
-            const user = getCurrentUser();
-            if (!user) { window.location.href = 'index.html'; return; }
-
-            currentUser = user;
-            userName = user.username;
-            userCoins = user.coins || 0;
-            userRole = user.role;
-
-            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-            applyTheme(savedTheme);
-
+            currentUser = getCurrentUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
             updateNav();
             updateUI();
-
+            
+            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
+            applyTheme(savedTheme);
+            
             try {
                 const { data: results } = await sb.from('results').select('*');
                 const { data: users } = await sb.from('users').select('*');
@@ -466,45 +459,43 @@
                 allResults = results || [];
                 allUsers = users || [];
                 allQuizzes = quizzes || [];
-
-                sendToTG(`📊 ${userName} просмотрел статистику (${allResults.length} результатов)`);
-
+                
+                sendToTG(`📊 ${currentUser.username} просмотрел статистику (${allResults.length} результатов)`);
+                
                 renderContent();
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
-                document.getElementById('content').innerHTML = '<div class="error-state">❌ Ошибка загрузки результатов</div>';
+                document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки результатов</p></div>';
             }
         }
 
         function renderContent() {
-            const c = document.getElementById('content');
-
             if (allResults.length === 0) {
-                c.innerHTML = `
+                document.getElementById('content').innerHTML = `
                     <div class="results-container">
-                        <h2 style="color: #6366f1; margin-bottom: 30px;">📊 Результаты</h2>
+                        <h2 style="color: #6366f1; margin-bottom: 20px;">📊 Результаты</h2>
                         <div class="empty-state">
                             <div class="empty-icon">📭</div>
                             <p>Пока нет результатов</p>
-                            <p style="margin-top: 10px; opacity: 0.7;">Пройдите викторину, чтобы увидеть статистику</p>
+                            <p style="margin-top: 8px; font-size: 14px;">Пройдите викторину, чтобы увидеть статистику</p>
                         </div>
                     </div>
                 `;
                 return;
             }
-
+            
             const totalResults = allResults.length;
             const totalScore = allResults.reduce((sum, r) => sum + (r.score || 0), 0);
             const avgScore = (totalScore / totalResults).toFixed(1);
             const uniqueQuizzes = new Set(allResults.map(r => r.quiz_id)).size;
             const uniqueStudents = new Set(allResults.map(r => r.student_id)).size;
-
+            
             const myResults = allResults.filter(r => r.student_id === currentUser.id);
             const myTotalScore = myResults.reduce((sum, r) => sum + (r.score || 0), 0);
             const myAvgScore = myResults.length ? (myTotalScore / myResults.length).toFixed(1) : 0;
-
+            
             let filteredResults = [];
-            if (userRole === 'teacher') {
+            if (currentUser.role === 'teacher') {
                 if (currentFilter === 'my') {
                     filteredResults = myResults;
                 } else if (currentFilter === 'best') {
@@ -515,40 +506,42 @@
             } else {
                 filteredResults = myResults;
             }
-
+            
             let tableRows = '';
             for (let r of filteredResults.slice(0, 50)) {
-                const date = r.date ? new Date(r.date).toLocaleString() : '';
+                const date = r.date ? new Date(r.date).toLocaleString('ru-RU') : '';
                 const student = allUsers.find(u => u.id === r.student_id);
                 const studentName = student?.username || r.student_name || 'Неизвестно';
                 const isMe = r.student_id === currentUser.id;
                 const quiz = allQuizzes.find(q => q.id === r.quiz_id);
                 
                 const roleEmoji = student?.role_title ? {
-                    'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 'curator': '📚', 'moderator': '🛡️', 'user': ''
+                    'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
+                    'curator': '📚', 'moderator': '🛡️', 'user': ''
                 }[student.role_title] || '' : '';
                 
                 const roleClass = student?.role_title ? {
-                    'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 'chief': 'role-chief', 
-                    'curator': 'role-curator', 'moderator': 'role-moderator', 'user': ''
+                    'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
+                    'chief': 'role-chief', 'curator': 'role-curator', 
+                    'moderator': 'role-moderator', 'user': ''
                 }[student.role_title] || '' : '';
                 
                 tableRows += `
                     <tr>
                         <td class="${isMe ? 'glow-name' : ''}">
-                            ${studentName} ${isMe ? '⭐' : ''}
+                            ${escapeHtml(studentName)} ${isMe ? '⭐' : ''}
                             ${student?.role_title && student.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${student.role_title}</span>` : ''}
                         </td>
-                        <td>${quiz?.title || r.quiz_title || '?'}</td>
+                        <td>${escapeHtml(quiz?.title || r.quiz_title || '?')}</td>
                         <td class="score-cell">${r.score || 0}/${r.max_score || 0}</td>
                         <td>${date}</td>
                     </tr>
                 `;
             }
-
+            
             let statsHtml = '';
-
-            if (userRole === 'teacher') {
+            
+            if (currentUser.role === 'teacher') {
                 statsHtml = `
                     <div class="stats-cards">
                         <div class="stat-card"><div class="stat-value">${totalResults}</div><div>Всего результатов</div></div>
@@ -563,7 +556,7 @@
                         <div class="stat-card"><div class="stat-value">${myTotalScore}</div><div>Мои баллы</div></div>
                         <div class="stat-card"><div class="stat-value">${myAvgScore}</div><div>Мой средний</div></div>
                     </div>
-
+                    
                     <div style="display: flex; justify-content: space-between; align-items: center; margin: 30px 0 20px; flex-wrap: wrap; gap: 15px;">
                         <h3 class="section-title" style="margin:0;">📋 Все результаты</h3>
                         <div class="filters">
@@ -584,14 +577,14 @@
                     <h3 class="section-title" style="margin-top: 30px;">📋 Моя статистика</h3>
                 `;
             }
-
-            c.innerHTML = `
+            
+            document.getElementById('content').innerHTML = `
                 <div class="results-container">
-                    <h2 style="color: #6366f1; margin-bottom: 30px;">📊 Статистика</h2>
+                    <h2 style="color: #6366f1; margin-bottom: 20px;">📊 Статистика</h2>
                     
                     ${statsHtml}
-
-                    <div style="overflow-x: auto;">
+                    
+                    <div class="table-wrapper">
                         <table class="results-table">
                             <thead>
                                 <tr>
@@ -602,21 +595,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${tableRows || '<tr><td colspan="4" style="text-align:center;">Нет результатов</td></tr>'}
+                                ${tableRows || '<tr><td colspan="4" style="text-align: center;">Нет результатов</td></tr>'}
                             </tbody>
                         </table>
                     </div>
                     
-                    ${filteredResults.length > 50 ? '<p style="text-align: center; margin-top: 15px; opacity: 0.7;">Показаны последние 50 результатов</p>' : ''}
+                    ${filteredResults.length > 50 ? '<p style="text-align: center; margin-top: 15px; font-size: 13px; color: #94a3b8;">📌 Показаны последние 50 результатов</p>' : ''}
                 </div>
             `;
         }
-
+        
         window.filterResults = function(filter) {
             currentFilter = filter;
             renderContent();
         };
-
+        
         loadResults();
     </script>
 </body>
