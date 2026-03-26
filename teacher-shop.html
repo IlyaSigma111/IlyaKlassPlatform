@@ -8,86 +8,583 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; transition: background 0.3s; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background 0.3s ease;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ===== 20 ТЕМ ===== */
         body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
         body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
+        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
+        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
+        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
+        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
+        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
+        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
+        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
+        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
+        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
+        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
+        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
+        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
+        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
+
         @media (max-width: 768px) {
             .container { padding: 10px; padding-bottom: 80px; }
             .header {
-                position: fixed; bottom: 0; left: 0; right: 0; top: auto; margin: 10px;
-                width: calc(100% - 20px); z-index: 1000; background: rgba(255,255,255,0.95);
-                border-radius: 40px; padding: 10px; border: 1px solid #e2e8f0;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                margin: 10px;
+                width: calc(100% - 20px);
+                z-index: 1000;
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(15px);
+                border-radius: 40px;
+                padding: 10px;
+                border: 1px solid #e2e8f0;
             }
             .logo-small { display: none; }
             .nav-menu { width: 100%; display: flex; justify-content: space-around; gap: 5px; }
             .nav-link { padding: 12px 5px; font-size: 0.75rem; text-align: center; flex: 1; background: rgba(99,102,241,0.1); border-radius: 30px; }
-            .header-right { position: fixed; top: 10px; left: 10px; right: 10px; width: calc(100% - 20px); z-index: 999; }
-            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; font-size: 0.85rem; }
+            .header-right {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: calc(100% - 20px);
+                z-index: 999;
+            }
+            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
             .avatar { width: 35px; height: 35px; }
+            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
+            .shop-section { padding: 20px; }
+            .section-title { font-size: 1.2rem; }
+            .store-filters { gap: 8px; }
+            .filter-btn { padding: 6px 12px; font-size: 0.7rem; }
             .store-grid { grid-template-columns: 1fr; }
-            .themes-grid { grid-template-columns: repeat(2, 1fr); }
+            .themes-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .theme-card { padding: 12px; }
+            .theme-color { width: 40px; height: 40px; }
         }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .header { background: white; border-radius: 24px; padding: 16px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .logo-small { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
-        .nav-menu { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-link { padding: 10px 20px; text-decoration: none; color: #475569; font-weight: 500; border-radius: 100px; transition: all 0.2s; }
-        .nav-link:hover, .nav-link.active { background: #6366f1; color: white; }
-        .user-card { display: flex; align-items: center; gap: 16px; background: #f1f5f9; padding: 8px 16px; border-radius: 100px; flex-wrap: wrap; }
-        .avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
-        .logout-btn { padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 100px; cursor: pointer; }
-        .coins { color: #f59e0b; font-weight: 600; }
-        .tokens { color: #10b981; font-weight: 600; margin-left: 8px; }
-        .shop-section { background: white; border-radius: 24px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-        .section-title { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .store-filters { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 24px; background: #f1f5f9; border: none; border-radius: 100px; cursor: pointer; font-weight: 600; }
-        .filter-btn.active { background: #6366f1; color: white; }
-        .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; max-height: 600px; overflow-y: auto; padding: 4px; margin-bottom: 32px; }
-        .store-quiz-card { background: #f8fafc; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; transition: all 0.2s; }
-        .store-quiz-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .store-quiz-card.free { border-left: 4px solid #10b981; }
-        .store-quiz-card.premium { border-left: 4px solid #f59e0b; }
-        .store-quiz-card.purchased { opacity: 0.6; background: #f1f5f9; }
-        .store-quiz-author { font-size: 12px; color: #64748b; background: #e2e8f0; padding: 4px 12px; border-radius: 20px; display: inline-block; }
-        .store-quiz-title { font-size: 18px; font-weight: 700; margin: 12px 0 8px; }
-        .store-quiz-stats { display: flex; gap: 16px; margin: 12px 0; font-size: 13px; color: #64748b; flex-wrap: wrap; }
-        .store-quiz-price { font-weight: 700; margin: 12px 0; font-size: 18px; }
-        .store-quiz-price.free { color: #10b981; }
-        .store-quiz-price.premium { color: #f59e0b; }
-        .buy-quiz-btn { width: 100%; padding: 12px; border: none; border-radius: 100px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .buy-quiz-btn.free { background: #10b981; color: white; }
-        .buy-quiz-btn.premium { background: #f59e0b; color: white; }
-        .buy-quiz-btn.purchased { background: #94a3b8; cursor: default; }
-        .themes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-        .theme-card { background: #f8fafc; border-radius: 20px; padding: 16px; text-align: center; border: 2px solid transparent; cursor: pointer; }
-        .theme-card.owned { border-color: #10b981; }
-        .theme-card.active { border-color: #6366f1; }
-        .theme-color { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 12px; border: 3px solid white; }
-        .theme-name { font-weight: 600; margin-bottom: 8px; }
-        .theme-price { font-size: 12px; color: #f59e0b; margin-bottom: 12px; }
-        .apply-theme-btn, .buy-theme-btn { width: 100%; padding: 8px; border: none; border-radius: 100px; cursor: pointer; font-weight: 500; }
-        .apply-theme-btn { background: #6366f1; color: white; }
-        .buy-theme-btn { background: #f59e0b; color: white; }
-        .empty-state { text-align: center; padding: 60px; color: #94a3b8; }
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 12px 24px; border-radius: 100px; z-index: 3000; display: none; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .header {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-small {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .nav-link.home {
+            background: #10b981;
+            color: white;
+        }
+
+        .nav-link.home:hover {
+            background: #059669;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 100px;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .coins {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .tokens {
+            color: #10b981;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .shop-section {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .store-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 4px;
+            margin-bottom: 32px;
+        }
+
+        .store-quiz-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .store-quiz-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #6366f1;
+        }
+
+        .store-quiz-card.free {
+            border-left: 4px solid #10b981;
+        }
+
+        .store-quiz-card.premium {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .store-quiz-card.purchased {
+            opacity: 0.7;
+            background: #f1f5f9;
+        }
+
+        .store-quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .store-quiz-author {
+            font-size: 12px;
+            color: #64748b;
+            background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .store-quiz-badge {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .store-quiz-badge.free {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .store-quiz-badge.premium {
+            background: #fed7aa;
+            color: #9b2c1d;
+        }
+
+        .store-quiz-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+
+        .store-quiz-stats {
+            display: flex;
+            gap: 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: #64748b;
+            flex-wrap: wrap;
+        }
+
+        .store-quiz-price {
+            font-weight: 700;
+            margin: 12px 0;
+            font-size: 18px;
+        }
+
+        .store-quiz-price.free {
+            color: #10b981;
+        }
+
+        .store-quiz-price.premium {
+            color: #f59e0b;
+        }
+
+        .buy-quiz-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .buy-quiz-btn.free {
+            background: #10b981;
+            color: white;
+        }
+
+        .buy-quiz-btn.free:hover {
+            background: #059669;
+        }
+
+        .buy-quiz-btn.premium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .buy-quiz-btn.premium:hover {
+            background: #d97706;
+        }
+
+        .buy-quiz-btn.purchased {
+            background: #94a3b8;
+            cursor: default;
+        }
+
+        .buy-quiz-btn.purchased:hover {
+            background: #94a3b8;
+            transform: none;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .theme-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .theme-card.owned {
+            border-color: #10b981;
+        }
+
+        .theme-card.active {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+        }
+
+        .theme-color {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .theme-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .theme-price {
+            font-size: 12px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .apply-theme-btn, .buy-theme-btn {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .apply-theme-btn {
+            background: #6366f1;
+            color: white;
+        }
+
+        .apply-theme-btn:hover {
+            background: #4f46e5;
+        }
+
+        .buy-theme-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .buy-theme-btn:hover {
+            background: #d97706;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
+        .role-mediacoord { background: #c0c0c0; color: #2d3436; }
+        .role-chief { background: #ffd700; color: #2d3436; }
+        .role-curator { background: #cd7f32; color: white; }
+        .role-moderator { background: #6366f1; color: white; }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 500;
+            z-index: 3000;
+            display: none;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-window {
+            background: white;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .modal-btn.cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .modal-btn.confirm {
+            background: #10b981;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="toast" id="toast">✅ Операция выполнена!</div>
 
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-window">
+            <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+            <h3 id="modalTitle" style="margin-bottom: 12px;">Викторина добавлена!</h3>
+            <p id="modalText" style="margin-bottom: 20px; color: #64748b;">Викторина успешно добавлена в вашу коллекцию</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Остаться в магазине</button>
+                <button class="modal-btn confirm" onclick="goToMain()">На главную</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
-            <div class="logo-small" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
+            <div class="logo-small" onclick="window.location='index.html'">
+                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
+            </div>
             <nav class="nav-menu">
+                <a href="teacher-menu.html" class="nav-link home">🏠 На главную</a>
                 <a href="teacher-menu.html" class="nav-link">Главная</a>
                 <a href="teacher-shop.html" class="nav-link active">Магазин</a>
                 <a href="results.html" class="nav-link">Результаты</a>
                 <a href="profile.html" class="nav-link">Профиль</a>
             </nav>
-            <div id="userSection"></div>
+            <div class="header-right" id="userSection"></div>
         </div>
 
         <!-- ВИКТОРИНЫ -->
@@ -96,13 +593,17 @@
                 <h2 class="section-title"><i class="fas fa-store"></i> Магазин викторин</h2>
                 <span class="tokens"><i class="fas fa-gem"></i> <span id="userTokens">0</span></span>
             </div>
+            
             <div class="store-filters">
                 <button class="filter-btn active" onclick="filterStore('all')">Все</button>
                 <button class="filter-btn" onclick="filterStore('free')">🎁 Бесплатные</button>
                 <button class="filter-btn" onclick="filterStore('premium')">💎 Премиум</button>
                 <button class="filter-btn" onclick="filterStore('my')">📚 Мои</button>
             </div>
-            <div id="storeQuizzesList" class="store-grid"><div class="empty-state">Загрузка...</div></div>
+            
+            <div id="storeQuizzesList" class="store-grid">
+                <div class="empty-state"><div class="empty-icon">🔄</div><p>Загрузка...</p></div>
+            </div>
         </div>
 
         <!-- ТЕМЫ -->
@@ -119,6 +620,8 @@
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
+        const TG_CHAT_ID = '1474901393';
 
         let currentUser = null;
         let userCoins = 0;
@@ -127,6 +630,7 @@
         let purchasedQuizzes = [];
         let storeFilter = 'all';
         let allQuizzes = [];
+        let pendingQuizId = null;
 
         const allThemes = [
             { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
@@ -134,8 +638,21 @@
             { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
             { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
             { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
+            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
+            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
+            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
+            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
+            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
             { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
-            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' }
+            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
+            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
+            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
+            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
+            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
+            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
+            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
+            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
+            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
         ];
 
         function showToast(msg) {
@@ -145,10 +662,36 @@
             setTimeout(() => t.style.display = 'none', 3000);
         }
 
+        function showModal(title, text, quizId) {
+            pendingQuizId = quizId;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            pendingQuizId = null;
+        }
+
+        function goToMain() {
+            window.location.href = 'teacher-menu.html';
+        }
+
+        async function sendToTG(msg) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+                });
+            } catch(e) { console.error(e); }
+        }
+
         function applyTheme(themeId) {
             document.body.className = themeId + '-theme';
             localStorage.setItem('currentTheme', themeId);
-            showToast('🎨 Тема применена');
+            showToast('🎨 Тема применена!');
         }
 
         function getCurrentUser() {
@@ -169,10 +712,23 @@
         function updateUI() {
             const s = document.getElementById('userSection');
             if (!s || !currentUser) return;
+            
+            const roleEmoji = {
+                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
+                'curator': '📚', 'moderator': '🛡️', 'user': '👤'
+            }[currentUser.role_title] || '👤';
+            
+            const roleClass = {
+                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
+                'chief': 'role-chief', 'curator': 'role-curator', 
+                'moderator': 'role-moderator', 'user': ''
+            }[currentUser.role_title] || '';
+            
             s.innerHTML = `
                 <div class="user-card">
                     <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
                     <span>${escapeHtml(currentUser.username)}</span>
+                    ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
                     <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
                     <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
                     <button onclick="logout()" class="logout-btn">Выйти</button>
@@ -187,7 +743,6 @@
             window.location.href = 'index.html';
         }
 
-        // Загрузка купленных викторин
         async function loadPurchased() {
             try {
                 const { data, error } = await sb
@@ -196,11 +751,12 @@
                     .eq('user_id', currentUser.id);
                 
                 if (error) {
-                    console.log('Таблица teacher_purchased_quizzes не найдена, создаем...');
+                    console.log('Таблица teacher_purchased_quizzes не найдена');
+                    purchasedQuizzes = [];
                     return;
                 }
                 purchasedQuizzes = data ? data.map(p => p.quiz_id) : [];
-                console.log('Купленные викторины:', purchasedQuizzes);
+                console.log('Купленные викторины:', purchasedQuizzes.length);
             } catch(e) {
                 console.log('Ошибка загрузки купленных:', e);
                 purchasedQuizzes = [];
@@ -218,9 +774,8 @@
                 
                 if (error) throw error;
                 allQuizzes = quizzes || [];
-                console.log('Все викторины в магазине:', allQuizzes.length);
+                console.log('Всего викторин в магазине:', allQuizzes.length);
                 
-                // Получаем авторов
                 const userIds = [...new Set(allQuizzes.map(q => q.created_by))];
                 const { data: users } = await sb.from('users').select('id, username').in('id', userIds);
                 const userMap = {};
@@ -230,7 +785,7 @@
                 
             } catch (error) {
                 console.error('Ошибка:', error);
-                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state">❌ Ошибка: ' + error.message + '</div>';
+                document.getElementById('storeQuizzesList').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки: ' + error.message + '</p></div>';
             }
         }
 
@@ -242,7 +797,13 @@
             
             const container = document.getElementById('storeQuizzesList');
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="empty-state">Нет викторин</div>`;
+                const messages = {
+                    'free': 'Бесплатных викторин пока нет',
+                    'premium': 'Премиум викторин пока нет',
+                    'my': 'У вас пока нет купленных викторин. Перейдите в магазин и добавьте!',
+                    'all': 'Викторин пока нет. Создайте свою первую викторину!'
+                };
+                container.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>${messages[storeFilter] || 'Нет викторин'}</p></div>`;
                 return;
             }
             
@@ -253,31 +814,30 @@
                 
                 return `
                     <div class="store-quiz-card ${isFree ? 'free' : 'premium'} ${isPurchased ? 'purchased' : ''}">
-                        <div>
+                        <div class="store-quiz-header">
                             <span class="store-quiz-author"><i class="fas fa-user"></i> ${escapeHtml(authorName)}</span>
-                            <span style="float:right; font-size:12px; padding:2px 10px; border-radius:20px; background:${isFree ? '#d1fae5' : '#fed7aa'};">${isFree ? '🎁 Бесплатно' : '💎 Премиум'}</span>
+                            <span class="store-quiz-badge ${isFree ? 'free' : 'premium'}">${isFree ? '🎁 Бесплатно' : '💎 Премиум'}</span>
                         </div>
                         <div class="store-quiz-title">${escapeHtml(q.title)}</div>
                         <div class="store-quiz-stats">
-                            <span>${escapeHtml(q.subject) || 'Без предмета'}</span>
-                            <span>${escapeHtml(q.class) || 'Любой класс'}</span>
-                            <span>${q.question_count || 0} вопросов</span>
+                            <span><i class="fas fa-book"></i> ${escapeHtml(q.subject) || 'Без предмета'}</span>
+                            <span><i class="fas fa-graduation-cap"></i> ${escapeHtml(q.class) || 'Любой класс'}</span>
+                            <span><i class="far fa-question-circle"></i> ${q.question_count || 0} вопросов</span>
                         </div>
                         <div class="store-quiz-price ${isFree ? 'free' : 'premium'}">
-                            ${isFree ? '🎁 Бесплатно!' : `💎 ${q.price_tokens || 0} токенов`}
+                            ${isFree ? '<i class="fas fa-gift"></i> Бесплатно!' : `<i class="fas fa-gem"></i> ${q.price_tokens || 0} токенов`}
                         </div>
                         <button class="buy-quiz-btn ${isFree ? 'free' : 'premium'} ${isPurchased ? 'purchased' : ''}" 
-                                onclick="purchaseQuiz('${q.id}', ${q.price_tokens || 0}, ${isFree})"
+                                onclick="purchaseQuiz('${q.id}', '${escapeHtml(q.title)}', ${q.price_tokens || 0}, ${isFree})"
                                 ${isPurchased ? 'disabled' : ''}>
-                            ${isPurchased ? '✓ Уже в коллекции' : (isFree ? '📥 Добавить в мои викторины' : '💎 Купить')}
+                            ${isPurchased ? '✓ Уже в коллекции' : (isFree ? '📥 Добавить в мои викторины' : '💎 Купить за токены')}
                         </button>
                     </div>
                 `;
             }).join('');
         }
 
-        // Функция добавления викторины
-        window.purchaseQuiz = async function(quizId, price, isFree) {
+        window.purchaseQuiz = async function(quizId, quizTitle, price, isFree) {
             if (!currentUser) {
                 alert('Сначала войдите в систему');
                 return;
@@ -293,16 +853,10 @@
                 return;
             }
             
-            if (!confirm(`Добавить викторину в коллекцию?`)) return;
+            if (!confirm(`Добавить викторину "${quizTitle}" в вашу коллекцию?`)) return;
             
             try {
-                // Сначала создаем таблицу, если её нет
-                try {
-                    const { error: createError } = await sb.rpc('create_teacher_purchased_table');
-                    if (createError) console.log('RPC не найден, используем прямую вставку');
-                } catch(e) {}
-                
-                // Прямая вставка
+                // Проверяем существование таблицы
                 const { error: insertError } = await sb
                     .from('teacher_purchased_quizzes')
                     .insert({
@@ -312,8 +866,6 @@
                     });
                 
                 if (insertError) {
-                    console.error('Ошибка вставки:', insertError);
-                    // Если таблицы нет, показываем SQL для создания
                     if (insertError.message.includes('does not exist')) {
                         alert('❌ Таблица teacher_purchased_quizzes не существует!\n\nВыполните этот SQL в Supabase:\n\nCREATE TABLE teacher_purchased_quizzes (\n  id SERIAL PRIMARY KEY,\n  user_id TEXT NOT NULL,\n  quiz_id TEXT NOT NULL,\n  purchased_at TIMESTAMP DEFAULT NOW(),\n  UNIQUE(user_id, quiz_id)\n);');
                         return;
@@ -339,10 +891,10 @@
                 if (users) users.forEach(u => { userMap[u.id] = u.username; });
                 renderQuizzes(userMap);
                 
-                showToast('✅ Викторина добавлена в коллекцию!');
+                sendToTG(`${isFree ? '📥' : '💎'} ${currentUser.username} ${isFree ? 'добавил' : 'купил'} викторину: ${quizTitle}`);
                 
-                // Обновляем главную страницу учителя при следующем заходе
-                localStorage.setItem('needRefresh', 'true');
+                // Показываем модальное окно с предложением перейти на главную
+                showModal('🎉 Викторина добавлена!', `"${quizTitle}" успешно добавлена в вашу коллекцию`, quizId);
                 
             } catch (error) {
                 console.error('Ошибка:', error);
@@ -350,18 +902,23 @@
             }
         };
 
-        // Темы
         function loadThemes() {
             const container = document.getElementById('themesList');
             const currentTheme = localStorage.getItem('currentTheme') || 'pink';
+            
             container.innerHTML = allThemes.map(theme => {
                 const owned = userThemes.includes(theme.id);
                 return `
                     <div class="theme-card ${owned ? 'owned' : ''} ${currentTheme === theme.id ? 'active' : ''}">
                         <div class="theme-color" style="background: ${theme.color};"></div>
                         <div class="theme-name">${theme.name}</div>
-                        <div class="theme-price">${owned ? '✓ В наличии' : theme.price + ' монет'}</div>
-                        ${owned ? `<button class="apply-theme-btn" onclick="applyTheme('${theme.id}')">Применить</button>` : `<button class="buy-theme-btn" onclick="buyTheme('${theme.id}')">Купить</button>`}
+                        <div class="theme-price">
+                            ${owned ? '✓ В наличии' : `<i class="fas fa-coins"></i> ${theme.price} монет`}
+                        </div>
+                        ${owned ? 
+                            `<button class="apply-theme-btn" onclick="applyTheme('${theme.id}')">Применить</button>` : 
+                            `<button class="buy-theme-btn" onclick="buyTheme('${theme.id}')">Купить</button>`
+                        }
                     </div>
                 `;
             }).join('');
@@ -370,21 +927,37 @@
         window.buyTheme = async function(themeId) {
             const theme = allThemes.find(t => t.id === themeId);
             if (!theme) return;
-            if (userCoins < theme.price) { alert('Недостаточно монет'); return; }
+            
+            if (userCoins < theme.price) {
+                alert(`Недостаточно монет! Нужно ${theme.price}, у вас ${userCoins}`);
+                return;
+            }
+            
             if (confirm(`Купить тему "${theme.name}" за ${theme.price} монет?`)) {
                 try {
                     const newCoins = userCoins - theme.price;
                     const newThemes = [...userThemes, themeId];
-                    await sb.from('users').update({ coins: newCoins, themes: newThemes }).eq('id', currentUser.id);
+                    
+                    await sb
+                        .from('users')
+                        .update({ coins: newCoins, themes: newThemes })
+                        .eq('id', currentUser.id);
+                    
                     userCoins = newCoins;
                     userThemes = newThemes;
                     currentUser.coins = newCoins;
                     currentUser.themes = newThemes;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    sendToTG(`💰 ${currentUser.username} купил тему ${theme.name} за ${theme.price} монет`);
+                    
                     updateUI();
                     loadThemes();
                     showToast(`✅ Тема "${theme.name}" куплена!`);
-                } catch (error) { alert('Ошибка: ' + error.message); }
+                } catch (error) {
+                    console.error('Ошибка покупки:', error);
+                    alert('Ошибка при покупке: ' + error.message);
+                }
             }
         };
 
@@ -397,14 +970,24 @@
 
         async function loadUser() {
             const user = getCurrentUser();
-            if (!user) { window.location.href = 'index.html'; return; }
-            if (user.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            if (user.role !== 'teacher') {
+                window.location.href = 'student-menu.html';
+                return;
+            }
             
             currentUser = user;
             userCoins = user.coins || 100;
             userThemes = user.themes || ['pink'];
             
-            const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
+            const { data: tokens } = await sb
+                .from('user_tokens')
+                .select('balance')
+                .eq('user_id', user.id)
+                .maybeSingle();
             userTokens = tokens?.balance || 0;
             
             updateUI();
