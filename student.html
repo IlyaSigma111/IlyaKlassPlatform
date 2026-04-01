@@ -2,617 +2,99 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Игровой режим</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ученик - Викторины</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            transition: background 0.3s ease;
-        }
-
-        /* ===== 20 ТЕМ ===== */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
-        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
-        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
-        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
-        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
-        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
-        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
-        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
-        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
-        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
-        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
-
-        @media (max-width: 768px) {
-            .game-container { padding: 24px; margin: 10px; }
-            .question-text { font-size: 18px; padding: 20px; }
-            .option { padding: 12px 16px; }
-            .option-letter { width: 32px; height: 32px; font-size: 14px; }
-            .players-list { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
-            .final-score { font-size: 36px; }
-            .presentation-question h2 { font-size: 20px; }
-        }
-
-        .game-container {
-            width: 100%;
-            max-width: 700px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 48px;
-            padding: 32px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            color: #0f172a;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .back-btn {
-            padding: 10px 20px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #f1f5f9;
-            padding: 8px 20px;
-            border-radius: 100px;
-        }
-
-        .player-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: white;
-        }
-
-        .score {
-            background: #10b981;
-            padding: 8px 20px;
-            border-radius: 100px;
-            color: white;
-            font-weight: 700;
-        }
-
-        .question-text {
-            font-size: 24px;
-            margin: 30px 0;
-            text-align: center;
-            line-height: 1.4;
-            background: #f8fafc;
-            padding: 30px;
-            border-radius: 32px;
-            font-weight: 500;
-        }
-
-        .options-grid {
-            display: grid;
-            gap: 12px;
-            margin: 30px 0;
-        }
-
-        .option {
-            background: #f1f5f9;
-            border: 2px solid #e2e8f0;
-            border-radius: 100px;
-            padding: 16px 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .option:hover {
-            background: #e2e8f0;
-            transform: translateX(4px);
-        }
-
-        .option.selected {
-            background: #10b981;
-            color: white;
-            border-color: #10b981;
-        }
-
-        .option-letter {
-            width: 36px;
-            height: 36px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .status-message {
-            text-align: center;
-            padding: 12px;
-            border-radius: 100px;
-            margin: 20px 0;
-            font-weight: 500;
-        }
-
-        .status-correct {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-wrong {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid #e2e8f0;
-            border-top: 3px solid #6366f1;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .players-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .player-mini-card {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .player-mini-avatar {
-            width: 40px;
-            height: 40px;
-            background: #6366f1;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 8px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .final-score {
-            font-size: 48px;
-            font-weight: 800;
-            color: #10b981;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .waiting-text {
-            text-align: center;
-            margin: 30px 0;
-            color: #64748b;
-        }
-
-        .join-screen {
-            text-align: center;
-        }
-
-        .join-screen input {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 100px;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-family: inherit;
-        }
-
-        .join-screen button {
-            width: 100%;
-            padding: 16px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .error-msg {
-            color: #ef4444;
-            margin-top: 12px;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-left: 6px;
-        }
+        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .quiz-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
+        .header a { color: white; text-decoration: none; }
+        input { padding: 8px; width: 100%; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .category-filter { margin: 15px 0; }
+        .filter-btn { background: #ddd; color: #333; margin-right: 5px; }
+        .filter-btn.active { background: #4CAF50; color: white; }
     </style>
 </head>
 <body>
-    <div class="game-container" id="mainContainer"></div>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍🎓 УЧЕНИК</h1>
+            <div style="flex:1"></div>
+            <a href="index.html">Главная</a>
+            <a href="teacher.html">Учитель</a>
+        </div>
+
+        <input type="text" id="playerName" placeholder="Ваше имя" value="">
+        
+        <div class="category-filter" id="categories"></div>
+        
+        <div id="quizzesList"></div>
+    </div>
 
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
-        const TG_CHAT_ID = '1474901393';
 
-        let currentUser = null;
-        let currentLobby = null;
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let myScore = 0;
-        let hasAnswered = false;
-        let channel = null;
+        let playerName = localStorage.getItem('playerName') || '';
+        let currentCategory = 'all';
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const lobbyId = urlParams.get('lobby');
-        const quizId = urlParams.get('quiz');
-
-        async function sendToTG(msg) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
-                });
-            } catch(e) { console.error(e); }
-        }
-
-        function applyTheme(themeId) {
-            document.body.className = themeId + '-theme';
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        async function init() {
-            const saved = localStorage.getItem('currentUser');
-            if (!saved) {
-                window.location.href = 'index.html';
-                return;
-            }
-            currentUser = JSON.parse(saved);
-            
-            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-            applyTheme(savedTheme);
-
-            if (lobbyId) {
-                await loadGame(lobbyId);
-            } else if (quizId) {
-                await quickPlay(quizId);
-            } else {
-                window.location.href = 'student-menu.html';
-            }
-        }
-
-        async function quickPlay(quizId) {
-            const { data: lobby } = await sb
-                .from('lobbies')
-                .select('*')
-                .eq('quiz_id', quizId)
-                .eq('status', 'waiting')
-                .maybeSingle();
-
-            if (lobby) {
-                window.location.href = `student.html?lobby=${lobby.id}`;
-                return;
-            }
-
-            showJoinScreen(quizId);
-        }
-
-        function showJoinScreen(quizId) {
-            document.getElementById('mainContainer').innerHTML = `
-                <div class="join-screen">
-                    <h1 style="font-size: 28px; margin-bottom: 20px;">🎮 Вход в игру</h1>
-                    <div style="margin: 20px 0;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">👤 Твоё имя</label>
-                        <input type="text" id="playerName" value="${escapeHtml(currentUser.username)}">
-                    </div>
-                    <button onclick="joinQuickGame('${quizId}')">ПОДКЛЮЧИТЬСЯ</button>
-                    <div id="errorMsg" class="error-msg"></div>
-                    <a href="student-menu.html" style="display: inline-block; margin-top: 20px; color: #6366f1;">← Назад</a>
-                </div>
-            `;
-        }
-
-        window.joinQuickGame = async (quizId) => {
-            const name = document.getElementById('playerName').value.trim();
-            if (!name) {
-                document.getElementById('errorMsg').textContent = 'Введите имя';
-                return;
-            }
-
-            const { data: lobbies } = await sb
-                .from('lobbies')
-                .select('*')
-                .eq('quiz_id', quizId)
-                .eq('status', 'waiting');
-
-            if (!lobbies || lobbies.length === 0) {
-                document.getElementById('errorMsg').textContent = 'Нет активных игр для этой викторины';
-                return;
-            }
-
-            const lobby = lobbies[0];
-            const players = lobby.players || {};
-            
-            if (players[name]) {
-                document.getElementById('errorMsg').textContent = 'Игрок с таким именем уже есть';
-                return;
-            }
-
-            players[name] = { name, joined_at: Date.now(), score: 0 };
-            await sb.from('lobbies').update({ players }).eq('id', lobby.id);
-
-            window.location.href = `student.html?lobby=${lobby.id}`;
+        document.getElementById('playerName').value = playerName;
+        document.getElementById('playerName').onchange = function() {
+            playerName = this.value.trim();
+            if (playerName) localStorage.setItem('playerName', playerName);
         };
 
-        async function loadGame(lobbyId) {
-            const { data: lobby, error } = await sb
-                .from('lobbies')
-                .select('*')
-                .eq('id', lobbyId)
-                .single();
-                
-            if (error || !lobby) {
-                window.location.href = 'student-menu.html';
+        async function loadCategories() {
+            const { data: quizzes } = await sb.from('quizzes').select('category');
+            const cats = ['Все', ...new Set(quizzes?.map(q => q.category).filter(c => c))];
+            document.getElementById('categories').innerHTML = cats.map(cat => `
+                <button class="filter-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>
+            `).join('');
+        }
+
+        window.filterByCategory = function(cat) {
+            currentCategory = cat;
+            loadCategories();
+            loadQuizzes();
+        };
+
+        async function loadQuizzes() {
+            let query = sb.from('quizzes').select('*').order('created_at', { ascending: false });
+            if (currentCategory !== 'Все') query = query.eq('category', currentCategory);
+            const { data: quizzes } = await query;
+            
+            if (!quizzes?.length) {
+                document.getElementById('quizzesList').innerHTML = '<p>Нет викторин</p>';
                 return;
             }
-
-            currentLobby = lobby;
-            
-            const { data: qs } = await sb
-                .from('questions')
-                .select('*')
-                .eq('quiz_id', lobby.quiz_id)
-                .order('question_index');
-                
-            questions = qs || [];
-
-            showGameUI();
-            listenToLobby(lobbyId);
-            sendToTG(`🎯 ${currentUser.username} начал игру (код: ${lobby.code})`);
-        }
-
-        function showGameUI() {
-            document.getElementById('mainContainer').innerHTML = `
-                <div class="header">
-                    <a href="student-menu.html" class="back-btn"><i class="fas fa-arrow-left"></i> В меню</a>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <div class="player-info">
-                        <div class="player-avatar">${currentUser.username[0].toUpperCase()}</div>
-                        <span>${escapeHtml(currentUser.username)}</span>
+            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
+                <div class="quiz-card">
+                    <div>
+                        <b>${escapeHtml(q.title)}</b><br>
+                        <small>📁 ${escapeHtml(q.category)} | ${q.question_count} вопросов</small>
                     </div>
-                    <div class="score" id="playerScore">0</div>
-                </div>
-
-                <div id="waitingScreen" style="text-align: center; padding: 30px;">
-                    <div class="loader"></div>
-                    <h3>Ожидание начала игры...</h3>
-                    <div id="playersList" class="players-list"></div>
-                </div>
-
-                <div id="questionScreen" style="display: none;">
-                    <div class="question-text" id="questionText"></div>
-                    <div class="options-grid" id="optionsContainer"></div>
-                    <div id="statusMessage" class="status-message"></div>
-                </div>
-
-                <div id="resultsScreen" style="display: none; text-align: center;">
-                    <h2>🎉 Викторина завершена!</h2>
-                    <div class="final-score" id="finalScore">0</div>
-                    <div id="finalPlayersList" class="players-list"></div>
-                    <a href="student-menu.html" class="back-btn" style="display: inline-block; margin-top: 20px;">🏠 На главную</a>
-                </div>
-            `;
-        }
-
-        function listenToLobby(lobbyId) {
-            if (channel) sb.removeChannel(channel);
-
-            channel = sb.channel('lobby-student-' + lobbyId)
-                .on('postgres_changes', {
-                    event: '*',
-                    schema: 'public',
-                    table: 'lobbies',
-                    filter: `id=eq.${lobbyId}`
-                }, payload => {
-                    if (payload.new) handleLobbyUpdate(payload.new);
-                })
-                .subscribe();
-
-            sb.from('lobbies').select('*').eq('id', lobbyId).then(({ data }) => {
-                if (data?.[0]) handleLobbyUpdate(data[0]);
-            });
-        }
-
-        function handleLobbyUpdate(lobby) {
-            currentLobby = lobby;
-            updatePlayersList(lobby.players);
-
-            if (lobby.status === 'active') {
-                const idx = lobby.current_question || 0;
-                if (idx < questions.length) {
-                    showQuestion(questions[idx], idx);
-                }
-            } else if (lobby.status === 'waiting') {
-                document.getElementById('waitingScreen').style.display = 'block';
-                document.getElementById('questionScreen').style.display = 'none';
-                document.getElementById('resultsScreen').style.display = 'none';
-            } else if (lobby.status === 'finished') {
-                document.getElementById('waitingScreen').style.display = 'none';
-                document.getElementById('questionScreen').style.display = 'none';
-                document.getElementById('resultsScreen').style.display = 'block';
-                showFinalResults(lobby.players);
-                sendToTG(`🏁 ${currentUser.username} закончил игру: ${myScore} очков`);
-            }
-        }
-
-        function updatePlayersList(players) {
-            if (!players) return;
-            
-            const list = document.getElementById('playersList');
-            if (list) {
-                list.innerHTML = Object.entries(players).map(([name, data]) => `
-                    <div class="player-mini-card">
-                        <div class="player-mini-avatar">${name[0].toUpperCase()}</div>
-                        <div>${escapeHtml(name)}</div>
-                        <div style="color: #f59e0b; font-weight: 600;">🎯 ${data.score || 0}</div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function showFinalResults(players) {
-            const list = document.getElementById('finalPlayersList');
-            if (list) {
-                const sorted = Object.entries(players).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
-                list.innerHTML = sorted.map(([name, data]) => `
-                    <div class="player-mini-card">
-                        <div class="player-mini-avatar">${name[0].toUpperCase()}</div>
-                        <div>${escapeHtml(name)}</div>
-                        <div style="color: #10b981; font-weight: 700;">${data.score || 0}</div>
-                    </div>
-                `).join('');
-            }
-            document.getElementById('finalScore').textContent = myScore;
-        }
-
-        function showQuestion(q, idx) {
-            document.getElementById('waitingScreen').style.display = 'none';
-            document.getElementById('questionScreen').style.display = 'block';
-            document.getElementById('resultsScreen').style.display = 'none';
-            
-            currentQuestionIndex = idx;
-            hasAnswered = false;
-            
-            document.getElementById('questionText').textContent = q.question;
-            
-            // Перемешиваем варианты ответов
-            const opts = [...q.answers];
-            for (let i = opts.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [opts[i], opts[j]] = [opts[j], opts[i]];
-            }
-            const correctIdx = opts.indexOf(q.answers[q.correct]);
-            
-            document.getElementById('optionsContainer').innerHTML = opts.map((opt, i) => `
-                <div class="option" onclick="selectAnswer(${i}, ${correctIdx})">
-                    <div class="option-letter">${String.fromCharCode(65 + i)}</div>
-                    <div>${escapeHtml(opt)}</div>
+                    <button onclick="playQuiz('${q.id}')">▶ Играть</button>
                 </div>
             `).join('');
-            
-            document.getElementById('statusMessage').textContent = '⏳ Выберите ответ';
-            document.getElementById('statusMessage').className = 'status-message';
         }
 
-        window.selectAnswer = async (selected, correct) => {
-            if (hasAnswered) return;
-            hasAnswered = true;
-
-            // Подсвечиваем выбранный ответ
-            document.querySelectorAll('.option').forEach((o, i) => {
-                if (i === selected) o.classList.add('selected');
-            });
-
-            const isCorrect = selected === correct;
-            const status = document.getElementById('statusMessage');
-            status.className = isCorrect ? 'status-message status-correct' : 'status-message status-wrong';
-            status.textContent = isCorrect ? '✅ Правильно! +1 очко' : '❌ Неправильно';
-
-            if (isCorrect) {
-                myScore++;
-                document.getElementById('playerScore').textContent = myScore;
-
-                // Обновляем счет в лобби
-                const players = currentLobby.players || {};
-                if (players[currentUser.username]) {
-                    players[currentUser.username].score = myScore;
-                    players[currentUser.username].last_answer = Date.now();
-                    await sb.from('lobbies').update({ players }).eq('id', currentLobby.id);
-                }
+        window.playQuiz = function(quizId) {
+            if (!playerName) {
+                alert('Введите ваше имя');
+                return;
             }
+            localStorage.setItem('playerName', playerName);
+            window.location.href = `play.html?quiz=${quizId}`;
         };
 
-        init();
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+
+        loadCategories();
+        loadQuizzes();
     </script>
 </body>
 </html>
