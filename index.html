@@ -3,467 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ИЛЬЯКЛАСС - Цифровой образовательный ресурс</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Главная - Викторины</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Header */
-        .header {
-            background: white;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 72px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-
-        .nav {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-link:hover {
-            color: #6366f1;
-        }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 100px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #6366f1;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #4f46e5;
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #6366f1;
-            color: #6366f1;
-        }
-
-        .btn-outline:hover {
-            background: #6366f1;
-            color: white;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 0;
-            margin-bottom: 60px;
-        }
-
-        .hero-content {
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 24px;
-        }
-
-        .hero p {
-            font-size: 20px;
-            opacity: 0.95;
-            margin-bottom: 32px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        /* Stats Block */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            margin: -40px 0 60px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 32px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .stat-number {
-            font-size: 48px;
-            font-weight: 800;
-            color: #6366f1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        /* How it works */
-        .section-title {
-            font-size: 36px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 48px;
-            color: #0f172a;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            margin-bottom: 60px;
-        }
-
-        .step {
-            text-align: center;
-            padding: 32px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: #6366f1;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 auto 20px;
-        }
-
-        .step h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
-        }
-
-        .step p {
-            color: #64748b;
-            line-height: 1.6;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            background: #f1f5f9;
-            padding: 60px 0;
-            margin: 60px 0;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-        }
-
-        .testimonial {
-            background: white;
-            padding: 32px;
-            border-radius: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .testimonial-text {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #334155;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .testimonial-role {
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 32px;
-            padding: 40px;
-            max-width: 450px;
-            width: 90%;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            font-size: 24px;
-            color: #94a3b8;
-        }
-
-        .modal-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .role-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .role-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .role-btn.active {
-            background: #6366f1;
-            color: white;
-            border-color: #6366f1;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 100px;
-            font-size: 16px;
-            margin-bottom: 16px;
-            font-family: inherit;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-
-        .error-msg {
-            color: #ef4444;
-            font-size: 14px;
-            margin-top: 12px;
-            text-align: center;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #6366f1;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            .stats {
-                grid-template-columns: 1fr;
-            }
-            .steps {
-                grid-template-columns: 1fr;
-            }
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-            .nav {
-                display: none;
-            }
-        }
+        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
+        .header a { color: white; text-decoration: none; padding: 5px 10px; background: rgba(255,255,255,0.2); border-radius: 5px; }
+        .quiz-card { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .quiz-title { font-size: 20px; font-weight: bold; }
+        .quiz-category { color: #666; font-size: 14px; margin: 5px 0; }
+        button { background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: white; margin: 50px auto; padding: 20px; width: 500px; border-radius: 8px; }
+        input, select { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .question-block { background: #f9f9f9; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
+        .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .filter-btn { background: #ddd; color: #333; margin-right: 5px; }
+        .filter-btn.active { background: #4CAF50; color: white; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #4CAF50; color: white; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
-                <nav class="nav">
-                    <a href="#" class="nav-link">Главная</a>
-                    <a href="#" class="nav-link">О проекте</a>
-                    <a href="#" class="nav-link">Для учителей</a>
-                    <a href="#" class="nav-link">Для учеников</a>
-                </nav>
-                <div>
-                    <button class="btn btn-outline" onclick="openLoginModal()">Войти</button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Цифровой образовательный ресурс для школ</h1>
-                <p>Избавьтесь от рутины проверки тетрадей. Система проверит работы автоматически.</p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="openRegisterModal()">Зарегистрироваться</button>
-                    <button class="btn btn-outline" style="background: white;" onclick="openLoginModal()">Войти</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number">1.6 млн</div>
-                <div class="stat-label">заданий в базе</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">1000+</div>
-                <div class="stat-label">викторин создано</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">активных учителей</div>
+        <div class="header">
+            <h1>🎮 ВИКТОРИНЫ</h1>
+            <div style="flex:1"></div>
+            <a href="#" onclick="showTab('quizzes')">Главная</a>
+            <a href="#" onclick="showTab('create')">Создать</a>
+            <a href="#" onclick="showTab('results')">Результаты</a>
+            <a href="profile.html">Профиль</a>
+            <a href="teacher.html">Учитель</a>
+            <a href="student.html">Ученик</a>
+        </div>
+
+        <div id="stats" style="display: flex; gap: 20px; margin-bottom: 20px;"></div>
+
+        <div id="quizzesTab">
+            <div id="categories" style="margin-bottom: 15px;"></div>
+            <div id="quizzesList"></div>
+        </div>
+
+        <div id="createTab" style="display:none">
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h2>Создание викторины</h2>
+                <input type="text" id="quizTitle" placeholder="Название викторины">
+                <input type="text" id="quizCategory" placeholder="Категория">
+                <div id="questionsList"></div>
+                <button onclick="addQuestion()">+ Добавить вопрос</button>
+                <button onclick="saveQuiz()" style="background: #2196F3;">💾 Сохранить</button>
             </div>
         </div>
 
-        <h2 class="section-title">Как это работает?</h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Учитель создаёт викторину</h3>
-                <p>Создайте интерактивную викторину с вопросами и ответами за несколько минут</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>Ученик проходит тест</h3>
-                <p>Ученик заходит по коду и отвечает на вопросы в удобном формате</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Автоматическая проверка</h3>
-                <p>Система моментально проверяет ответы и формирует подробный отчёт</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="testimonials">
-        <div class="container">
-            <h2 class="section-title">Отзывы педагогов</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial">
-                    <div class="testimonial-text">«Считаю ИЛЬЯКЛАСС одним из своих самых незаменимых помощников. Огромная экономия времени, а также возможность работать с детьми в режиме онлайн.»</div>
-                    <div class="testimonial-author">Михаил Петрович</div>
-                    <div class="testimonial-role">Учитель математики</div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-text">«Ученики с удовольствием проходят викторины. Система сама проверяет, а я вижу статистику каждого ребёнка. Очень удобно!»</div>
-                    <div class="testimonial-author">Анна Сергеевна</div>
-                    <div class="testimonial-role">Учитель русского языка</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close" onclick="closeLoginModal()">&times;</div>
-            <div class="modal-title">Вход в систему</div>
-            <div class="role-selector">
-                <button class="role-btn active" onclick="selectRole('teacher')">👨‍🏫 Учитель</button>
-                <button class="role-btn" onclick="selectRole('student')">👨‍🎓 Ученик</button>
-            </div>
-            <input type="text" id="loginName" class="input-field" placeholder="Имя пользователя">
-            <input type="password" id="loginPass" class="input-field" placeholder="Пароль">
-            <button class="btn btn-primary" style="width: 100%;" onclick="doLogin()">Войти</button>
-            <div class="register-link" onclick="showRegister()">Нет аккаунта? Зарегистрироваться</div>
-            <div id="errorMsg" class="error-msg"></div>
+        <div id="resultsTab" style="display:none">
+            <div id="resultsList"></div>
         </div>
     </div>
 
@@ -471,156 +66,154 @@
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
-        const TG_CHAT_ID = '1474901393';
 
-        let selectedRole = 'teacher';
+        let questionsData = [];
+        let currentCategory = 'all';
 
-        async function sendToTG(msg) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
-                });
-            } catch(e) { console.error(e); }
+        async function loadStats() {
+            const { data: quizzes } = await sb.from('quizzes').select('*');
+            const { data: results } = await sb.from('results').select('*');
+            document.getElementById('stats').innerHTML = `
+                <div style="background:white; padding:15px; border-radius:8px; flex:1; text-align:center">
+                    <h3>${quizzes?.length || 0}</h3>
+                    <div>Викторин</div>
+                </div>
+                <div style="background:white; padding:15px; border-radius:8px; flex:1; text-align:center">
+                    <h3>${results?.length || 0}</h3>
+                    <div>Всего игр</div>
+                </div>
+            `;
         }
 
-        function hashPassword(p) {
-            let h = 0;
-            for (let i = 0; i < p.length; i++) h = ((h << 5) - h) + p.charCodeAt(i);
-            return h.toString(16);
+        async function loadCategories() {
+            const { data: quizzes } = await sb.from('quizzes').select('category');
+            const cats = ['Все', ...new Set(quizzes?.map(q => q.category).filter(c => c))];
+            document.getElementById('categories').innerHTML = cats.map(cat => `
+                <button class="filter-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>
+            `).join('');
         }
 
-        window.selectRole = function(role) {
-            selectedRole = role;
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+        window.filterByCategory = function(cat) {
+            currentCategory = cat;
+            loadCategories();
+            loadQuizzes();
         };
 
-        window.openLoginModal = () => {
-            document.getElementById('loginModal').classList.add('active');
-        };
-
-        window.closeLoginModal = () => {
-            document.getElementById('loginModal').classList.remove('active');
-        };
-
-        window.openRegisterModal = () => {
-            closeLoginModal();
-            showRegister();
-        };
-
-        window.showRegister = function() {
-            const name = prompt('Введите имя:');
-            if (!name) return;
-            const pass = prompt('Введите пароль (мин. 3 символа):');
-            if (!pass || pass.length < 3) {
-                alert('Пароль должен быть минимум 3 символа');
+        async function loadQuizzes() {
+            let query = sb.from('quizzes').select('*').order('created_at', { ascending: false });
+            if (currentCategory !== 'Все') query = query.eq('category', currentCategory);
+            const { data: quizzes } = await query;
+            
+            if (!quizzes?.length) {
+                document.getElementById('quizzesList').innerHTML = '<div style="background:white; padding:20px; text-align:center">Нет викторин. Создайте первую!</div>';
                 return;
             }
-            registerUser(name, pass);
+            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
+                <div class="quiz-card">
+                    <div class="quiz-title">${escapeHtml(q.title)}</div>
+                    <div class="quiz-category">📁 ${escapeHtml(q.category || 'Общая')}</div>
+                    <div>📊 ${q.question_count} вопросов</div>
+                    <button onclick="playQuiz('${q.id}')">▶ Играть</button>
+                </div>
+            `).join('');
+        }
+
+        window.playQuiz = function(quizId) {
+            window.location.href = `play.html?quiz=${quizId}`;
         };
 
-        async function registerUser(name, pass) {
+        async function loadResults() {
+            const { data: results } = await sb.from('results').select('*, quizzes(title)').order('played_at', { ascending: false }).limit(50);
+            if (!results?.length) {
+                document.getElementById('resultsList').innerHTML = '<div style="background:white; padding:20px; text-align:center">Нет результатов</div>';
+                return;
+            }
+            document.getElementById('resultsList').innerHTML = `
+                <table>
+                    <tr><th>Игрок</th><th>Викторина</th><th>Результат</th><th>Дата</th></tr>
+                    ${results.map(r => `
+                        <tr>
+                            <td>${escapeHtml(r.player_name)}</td>
+                            <td>${escapeHtml(r.quizzes?.title)}</td>
+                            <td>${r.score}/${r.max_score}</td>
+                            <td>${new Date(r.played_at).toLocaleDateString()}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+        }
+
+        // Создание викторины
+        function addQuestion() {
+            questionsData.push({ id: Date.now(), text: '', answers: ['','','',''], correct: 0 });
+            renderQuestions();
+        }
+        function removeQuestion(i) { questionsData.splice(i,1); renderQuestions(); }
+        function updateQuestion(i, field, val) {
+            if (field === 'text') questionsData[i].text = val;
+            else if (field.startsWith('ans')) questionsData[i].answers[parseInt(field.slice(3))] = val;
+            else if (field === 'correct') questionsData[i].correct = parseInt(val);
+        }
+        function renderQuestions() {
+            const container = document.getElementById('questionsList');
+            if (!questionsData.length) { container.innerHTML = '<p>Нажмите "Добавить вопрос"</p>'; return; }
+            container.innerHTML = questionsData.map((q, idx) => `
+                <div class="question-block">
+                    <div style="display:flex; justify-content:space-between">
+                        <b>Вопрос ${idx+1}</b>
+                        <span style="color:red; cursor:pointer" onclick="removeQuestion(${idx})">Удалить</span>
+                    </div>
+                    <input type="text" placeholder="Текст вопроса" value="${escapeHtml(q.text)}" onchange="updateQuestion(${idx}, 'text', this.value)" style="width:100%; margin:5px 0">
+                    <div class="answers">
+                        ${[0,1,2,3].map(opt => `
+                            <div>
+                                <input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} onchange="updateQuestion(${idx}, 'correct', ${opt})">
+                                <input type="text" placeholder="Вариант ${opt+1}" value="${escapeHtml(q.answers[opt])}" onchange="updateQuestion(${idx}, 'ans${opt}', this.value)" style="width:80%">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.saveQuiz = async function() {
+            const title = document.getElementById('quizTitle').value.trim();
+            const category = document.getElementById('quizCategory').value.trim() || 'Общая';
+            if (!title) { alert('Введите название'); return; }
+            if (!questionsData.length) { alert('Добавьте вопросы'); return; }
+            for (let q of questionsData) {
+                if (!q.text.trim()) { alert('Заполните текст вопроса'); return; }
+                for (let a of q.answers) if (!a.trim()) { alert('Заполните все варианты'); return; }
+            }
+            
+            const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
             try {
-                const { data: existing } = await sb.from('users').select('*').eq('username', name);
-                if (existing?.length) {
-                    document.getElementById('errorMsg').textContent = 'Имя занято';
-                    return;
+                await sb.from('quizzes').insert({ id: quizId, title, category, question_count: questionsData.length, created_at: new Date().toISOString() });
+                for (let i = 0; i < questionsData.length; i++) {
+                    await sb.from('questions').insert({ quiz_id: quizId, question_index: i, question: questionsData[i].text, answers: questionsData[i].answers, correct: questionsData[i].correct });
                 }
+                alert('✅ Викторина создана!');
+                document.getElementById('quizTitle').value = '';
+                document.getElementById('quizCategory').value = '';
+                questionsData = [];
+                renderQuestions();
+                loadQuizzes();
+                loadStats();
+                showTab('quizzes');
+            } catch(e) { alert('Ошибка: ' + e.message); }
+        };
 
-                const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-                
-                await sb.from('users').insert({
-                    id: userId,
-                    username: name,
-                    password: hashPassword(pass),
-                    role: selectedRole,
-                    coins: 100,
-                    themes: ['pink'],
-                    liked_quizzes: [],
-                    role_title: 'user',
-                    created_at: new Date().toISOString()
-                });
-
-                await sb.from('user_tokens').insert({
-                    user_id: userId,
-                    balance: 0,
-                    referral_code: 'ref_' + userId + '_' + Math.floor(Math.random() * 1000000)
-                });
-
-                localStorage.setItem('currentUser', JSON.stringify({
-                    id: userId,
-                    username: name,
-                    role: selectedRole,
-                    coins: 100,
-                    themes: ['pink'],
-                    role_title: 'user'
-                }));
-                
-                sendToTG(`🆕 Новый пользователь: ${name} (${selectedRole})`);
-                
-                if (selectedRole === 'teacher') window.location.href = 'teacher-menu.html';
-                else window.location.href = 'student-menu.html';
-
-            } catch (error) {
-                document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message;
-            }
+        function showTab(tab) {
+            document.getElementById('quizzesTab').style.display = tab === 'quizzes' ? 'block' : 'none';
+            document.getElementById('createTab').style.display = tab === 'create' ? 'block' : 'none';
+            document.getElementById('resultsTab').style.display = tab === 'results' ? 'block' : 'none';
+            if (tab === 'quizzes') { loadQuizzes(); loadStats(); }
+            if (tab === 'results') loadResults();
         }
 
-        window.doLogin = async function() {
-            const name = document.getElementById('loginName').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
-            if (!name || !pass) {
-                document.getElementById('errorMsg').textContent = 'Введите имя и пароль';
-                return;
-            }
-
-            if (name === 'Ильяблоко' && pass === 'JojoTop1') {
-                localStorage.setItem('currentUser', JSON.stringify({
-                    id: 'owner',
-                    username: 'Ильяблоко',
-                    role: 'teacher',
-                    coins: 99999,
-                    themes: ['pink', 'blue', 'green', 'purple', 'orange', 'dark', 'gold', 'diamond', 'ruby'],
-                    role_title: 'owner'
-                }));
-                sendToTG(`👑 Вход: Ильяблоко (Владелец)`);
-                window.location.href = 'teacher-menu.html';
-                return;
-            }
-
-            try {
-                const { data: users } = await sb.from('users').select('*').eq('username', name);
-                const user = users && users[0];
-
-                if (user && user.password === hashPassword(pass)) {
-                    const { data: tokens } = await sb.from('user_tokens').select('balance').eq('user_id', user.id).maybeSingle();
-                    
-                    localStorage.setItem('currentUser', JSON.stringify({
-                        id: user.id,
-                        username: user.username,
-                        role: user.role,
-                        coins: user.coins || 100,
-                        themes: user.themes || ['pink'],
-                        role_title: user.role_title || 'user',
-                        user_tokens: { balance: tokens?.balance || 0 }
-                    }));
-                    
-                    sendToTG(`🔑 Вход: ${name} (${user.role_title})`);
-                    
-                    if (user.role === 'teacher') window.location.href = 'teacher-menu.html';
-                    else window.location.href = 'student-menu.html';
-                    
-                } else {
-                    document.getElementById('errorMsg').textContent = 'Неверное имя или пароль';
-                }
-            } catch (error) {
-                document.getElementById('errorMsg').textContent = 'Ошибка: ' + error.message;
-            }
-        };
+        loadStats(); loadCategories(); loadQuizzes();
     </script>
 </body>
 </html>
