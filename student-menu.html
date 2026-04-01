@@ -2,714 +2,76 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Панель ученика</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель ученика</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            transition: background 0.3s ease;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* ===== 20 ТЕМ ===== */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
-        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
-        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
-        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
-        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
-        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
-        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
-        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
-        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
-        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
-        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
-
-        @media (max-width: 768px) {
-            .container { padding: 10px; padding-bottom: 80px; }
-            .header {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                top: auto;
-                margin: 10px;
-                width: calc(100% - 20px);
-                z-index: 1000;
-                background: rgba(255,255,255,0.95);
-                backdrop-filter: blur(15px);
-                border-radius: 40px;
-                padding: 10px;
-                border: 1px solid #e2e8f0;
-            }
-            .logo-small { display: none; }
-            .nav-menu { width: 100%; display: flex; justify-content: space-around; gap: 5px; }
-            .nav-link { padding: 12px 5px; font-size: 0.75rem; text-align: center; flex: 1; background: rgba(99,102,241,0.1); border-radius: 30px; }
-            .header-right {
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                right: 10px;
-                width: calc(100% - 20px);
-                z-index: 999;
-            }
-            .user-card { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: white; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
-            .avatar { width: 35px; height: 35px; }
-            .logout-btn { padding: 6px 12px; font-size: 0.75rem; }
-            .join-section { padding: 20px; }
-            .join-title { font-size: 1.5rem; }
-            .quizzes-section { padding: 20px; }
-            .section-header { flex-direction: column; align-items: stretch; }
-            .section-header div { display: flex; gap: 10px; }
-            .shop-btn { flex: 1; padding: 10px; font-size: 0.85rem; }
-            .quiz-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            .tab-btn { padding: 10px; font-size: 0.8rem; }
-            .quizzes-grid { grid-template-columns: 1fr; }
-            .quiz-card { padding: 16px; }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .header {
-            background: white;
-            border-radius: 24px;
-            padding: 16px 24px;
-            margin-bottom: 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .logo-small {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            border-radius: 100px;
-            transition: all 0.2s;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: #6366f1;
-            color: white;
-        }
-
-        .user-card {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #f1f5f9;
-            padding: 8px 16px;
-            border-radius: 100px;
-            flex-wrap: wrap;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: white;
-        }
-
-        .logout-btn {
-            padding: 8px 16px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .coins {
-            color: #f59e0b;
-            font-weight: 600;
-        }
-
-        .tokens {
-            color: #10b981;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .join-section {
-            background: white;
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .join-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .join-input {
-            width: 100%;
-            max-width: 320px;
-            padding: 14px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 100px;
-            font-size: 18px;
-            font-family: inherit;
-            text-align: center;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .join-input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-
-        .join-btn {
-            padding: 14px 32px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .join-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
-        }
-
-        .error-msg {
-            color: #ef4444;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-
-        .quizzes-section {
-            background: white;
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .shop-btn {
-            padding: 10px 20px;
-            background: #f59e0b;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .shop-btn:hover {
-            background: #d97706;
-        }
-
-        .quiz-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 8px 20px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .tab-btn.active {
-            background: #6366f1;
-            color: white;
-        }
-
-        .quizzes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
-        .quiz-card {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 20px;
-            transition: all 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quiz-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: #6366f1;
-        }
-
-        .quiz-card.free {
-            border-left: 4px solid #10b981;
-        }
-
-        .quiz-card.premium {
-            border-left: 4px solid #f59e0b;
-        }
-
-        .quiz-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .quiz-meta {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 12px;
-        }
-
-        .quiz-price {
-            color: #f59e0b;
-            font-weight: 600;
-            margin: 12px 0;
-            font-size: 14px;
-        }
-
-        .play-btn, .buy-btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .play-btn {
-            background: #10b981;
-            color: white;
-        }
-
-        .play-btn:hover {
-            background: #059669;
-        }
-
-        .buy-btn {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .buy-btn:hover {
-            background: #d97706;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            color: #94a3b8;
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
-        .role-mediacoord { background: #c0c0c0; color: #2d3436; }
-        .role-chief { background: #ffd700; color: #2d3436; }
-        .role-curator { background: #cd7f32; color: white; }
-        .role-moderator { background: #6366f1; color: white; }
-
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 100px;
-            font-weight: 500;
-            z-index: 3000;
-            display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
+        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        button { background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .quiz-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
+        .header a { color: white; text-decoration: none; }
+        input { padding: 8px; width: 100%; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <div class="toast" id="toast">✅ Операция выполнена!</div>
-
     <div class="container">
         <div class="header">
-            <div class="logo-small" onclick="window.location='index.html'">
-                <span style="color: #6366f1;">ИЛЬ</span><span style="color: #f59e0b;">ЯКЛАСС</span>
-            </div>
-            <nav class="nav-menu">
-                <a href="student-menu.html" class="nav-link active">Главная</a>
-                <a href="student-shop.html" class="nav-link">Магазин</a>
-                <a href="results.html" class="nav-link">Результаты</a>
-                <a href="profile.html" class="nav-link">Профиль</a>
-            </nav>
-            <div class="header-right" id="userSection"></div>
+            <h1>🎮 ПАНЕЛЬ УЧЕНИКА</h1>
+            <div style="flex:1"></div>
+            <a href="index.html">Главная</a>
+            <a href="teacher.html">Учитель</a>
+            <a href="profile.html">Профиль</a>
         </div>
 
-        <div class="join-section">
-            <h2 class="join-title"><i class="fas fa-gamepad"></i> Вход в игру</h2>
-            <input type="text" id="gameCode" class="join-input" placeholder="Введите 8-значный код" maxlength="8">
-            <button class="join-btn" onclick="joinGame()"><i class="fas fa-sign-in-alt"></i> ПОДКЛЮЧИТЬСЯ</button>
-            <div id="joinError" class="error-msg"></div>
-        </div>
-
-        <div class="quizzes-section">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-gamepad"></i> Доступные викторины</h2>
-                <a href="student-shop.html"><button class="shop-btn"><i class="fas fa-store"></i> Магазин тем</button></a>
-            </div>
-            
-            <div class="quiz-tabs">
-                <button class="tab-btn active" onclick="loadQuizzes('free')">🎁 Бесплатные</button>
-                <button class="tab-btn" onclick="loadQuizzes('premium')">💎 Премиум</button>
-            </div>
-            
-            <div id="quizzesList" class="quizzes-grid">
-                <div class="empty-state"><div class="empty-icon">🎮</div><p>Загрузка...</p></div>
-            </div>
-        </div>
+        <input type="text" id="playerName" placeholder="Ваше имя" value="">
+        
+        <h2>Доступные викторины</h2>
+        <div id="quizzesList"></div>
     </div>
 
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
-        const TG_CHAT_ID = '1474901393';
 
-        let currentUser = null;
-        let userCoins = 100;
-        let userTokens = 0;
-        let userThemes = ['pink'];
+        let playerName = localStorage.getItem('playerName') || '';
+        document.getElementById('playerName').value = playerName;
+        document.getElementById('playerName').onchange = function() {
+            playerName = this.value.trim();
+            if (playerName) localStorage.setItem('playerName', playerName);
+        };
 
-        const allThemes = [
-            { id: 'pink', name: '🌸 Розовая', price: 0, color: '#ff0844' },
-            { id: 'blue', name: '💙 Синяя', price: 50, color: '#00c6fb' },
-            { id: 'green', name: '💚 Зеленая', price: 100, color: '#00b09b' },
-            { id: 'purple', name: '💜 Фиолетовая', price: 150, color: '#8e2de2' },
-            { id: 'orange', name: '🧡 Оранжевая', price: 200, color: '#f12711' },
-            { id: 'candy', name: '🍭 Карамель', price: 200, color: '#f43b47' },
-            { id: 'forest', name: '🌲 Лес', price: 250, color: '#134e5e' },
-            { id: 'sunset', name: '🌅 Закат', price: 300, color: '#f83600' },
-            { id: 'ocean', name: '🌊 Океан', price: 350, color: '#1c92d2' },
-            { id: 'dark', name: '🖤 Темная', price: 400, color: '#141e30' },
-            { id: 'gold', name: '👑 Золотая', price: 500, color: '#b8860b' },
-            { id: 'diamond', name: '💎 Алмазная', price: 600, color: '#00ffff' },
-            { id: 'ruby', name: '🔴 Рубиновая', price: 700, color: '#e0115f' },
-            { id: 'emerald', name: '💚 Изумрудная', price: 800, color: '#50c878' },
-            { id: 'sapphire', name: '💙 Сапфировая', price: 900, color: '#0f52ba' },
-            { id: 'amethyst', name: '🟣 Аметистовая', price: 1000, color: '#9966cc' },
-            { id: 'rose', name: '🌹 Розовая', price: 1200, color: '#ff66b2' },
-            { id: 'neon', name: '⚡ Неоновая', price: 1500, color: '#39ff14' },
-            { id: 'galaxy', name: '🌌 Галактика', price: 2000, color: '#000000' },
-            { id: 'lava', name: '🌋 Лава', price: 2500, color: '#ff4500' }
-        ];
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
-
-        async function sendToTG(msg) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
-                });
-            } catch(e) { console.error(e); }
-        }
-
-        function applyTheme(themeId) {
-            document.body.className = themeId + '-theme';
-            localStorage.setItem('currentTheme', themeId);
-        }
-
-        function getCurrentUser() {
-            const saved = localStorage.getItem('currentUser');
-            return saved ? JSON.parse(saved) : null;
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        function updateUI() {
-            const s = document.getElementById('userSection');
-            if (!s || !currentUser) return;
-            
-            const roleEmoji = {
-                'owner': '👑', 'mediacoord': '🎥', 'chief': '⭐', 
-                'curator': '📚', 'moderator': '🛡️', 'user': '👤'
-            }[currentUser.role_title] || '👤';
-            
-            const roleClass = {
-                'owner': 'role-owner', 'mediacoord': 'role-mediacoord', 
-                'chief': 'role-chief', 'curator': 'role-curator', 
-                'moderator': 'role-moderator', 'user': ''
-            }[currentUser.role_title] || '';
-            
-            s.innerHTML = `
-                <div class="user-card">
-                    <div class="avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
-                    <span>${escapeHtml(currentUser.username)}</span>
-                    ${currentUser.role_title !== 'user' ? `<span class="role-badge ${roleClass}">${roleEmoji} ${currentUser.role_title}</span>` : ''}
-                    <span class="coins"><i class="fas fa-coins"></i> ${userCoins}</span>
-                    <span class="tokens"><i class="fas fa-gem"></i> ${userTokens}</span>
-                    <button onclick="logout()" class="logout-btn">Выйти</button>
-                </div>
-            `;
-        }
-
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
-
-        async function loadUser() {
-            const user = getCurrentUser();
-            if (!user) {
-                window.location.href = 'index.html';
+        async function loadQuizzes() {
+            const { data: quizzes } = await sb.from('quizzes').select('*').order('created_at', { ascending: false });
+            if (!quizzes?.length) {
+                document.getElementById('quizzesList').innerHTML = '<p>Нет викторин</p>';
                 return;
             }
-            if (user.role !== 'student') {
-                window.location.href = 'teacher-menu.html';
-                return;
-            }
-            
-            currentUser = user;
-            userCoins = user.coins || 100;
-            userThemes = user.themes || ['pink'];
-            
-            const { data: tokens } = await sb
-                .from('user_tokens')
-                .select('balance')
-                .eq('user_id', user.id)
-                .maybeSingle();
-            userTokens = tokens?.balance || 0;
-            
-            updateUI();
-            loadQuizzes('free');
-            
-            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-            applyTheme(savedTheme);
-        }
-
-        window.loadQuizzes = async function(type) {
-            const container = document.getElementById('quizzesList');
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🎮</div><p>Загрузка...</p></div>';
-            
-            try {
-                const { data: quizzes, error } = await sb
-                    .from('quizzes')
-                    .select('*')
-                    .eq('published', true)
-                    .eq('type', type === 'free' ? 'kahoot' : 'constructed')
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                event.target.classList.add('active');
-                
-                if (!quizzes || quizzes.length === 0) {
-                    container.innerHTML = `<div class="empty-state"><div class="empty-icon">${type === 'free' ? '🎁' : '💎'}</div><p>${type === 'free' ? 'Бесплатных' : 'Премиум'} викторин пока нет</p></div>`;
-                    return;
-                }
-                
-                container.innerHTML = quizzes.map(q => `
-                    <div class="quiz-card ${type === 'free' ? 'free' : 'premium'}">
-                        <div class="quiz-title">${escapeHtml(q.title)}</div>
-                        <div class="quiz-meta">
-                            <i class="fas fa-book"></i> ${escapeHtml(q.subject) || 'Без предмета'} • 
-                            <i class="fas fa-graduation-cap"></i> ${escapeHtml(q.class) || 'Любой класс'} • 
-                            <i class="far fa-question-circle"></i> ${q.question_count || 0} вопросов
-                        </div>
-                        ${type === 'premium' ? `<div class="quiz-price"><i class="fas fa-gem"></i> ${q.price_tokens || 0} токенов</div>` : ''}
-                        <button class="${type === 'free' ? 'play-btn' : 'buy-btn'}" 
-                                onclick="${type === 'free' ? `playQuiz('${q.id}')` : `buyQuiz('${q.id}', ${q.price_tokens || 0})`}">
-                            ${type === 'free' ? '<i class="fas fa-play"></i> Играть' : '<i class="fas fa-shopping-cart"></i> Купить за токены'}
-                        </button>
+            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
+                <div class="quiz-card">
+                    <div>
+                        <b>${escapeHtml(q.title)}</b><br>
+                        <small>📁 ${escapeHtml(q.category)} | ${q.question_count} вопросов</small>
                     </div>
-                `).join('');
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                container.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Ошибка загрузки</p></div>';
-            }
-        };
-
-        window.buyQuiz = async function(quizId, price) {
-            if (!currentUser) return;
-            
-            if (userTokens < price) {
-                alert(`Недостаточно токенов! Нужно ${price}, у вас ${userTokens}`);
-                return;
-            }
-            
-            if (confirm(`Купить викторину за ${price} токенов?`)) {
-                try {
-                    const newTokens = userTokens - price;
-                    
-                    const { error: tokenError } = await sb
-                        .from('user_tokens')
-                        .update({ balance: newTokens })
-                        .eq('user_id', currentUser.id);
-                        
-                    if (tokenError) throw tokenError;
-                    
-                    userTokens = newTokens;
-                    updateUI();
-                    showToast('✅ Викторина куплена!');
-                    sendToTG(`💎 ${currentUser.username} купил викторину за ${price} токенов`);
-                    
-                } catch (error) {
-                    console.error('Ошибка покупки:', error);
-                    alert('Ошибка: ' + error.message);
-                }
-            }
-        };
+                    <button onclick="playQuiz('${q.id}')">▶ Играть</button>
+                </div>
+            `).join('');
+        }
 
         window.playQuiz = function(quizId) {
-            window.location.href = `student.html?quiz=${quizId}`;
-        };
-
-        window.joinGame = async function() {
-            const code = document.getElementById('gameCode').value.trim();
-            
-            if (!code || code.length !== 8) {
-                document.getElementById('joinError').textContent = 'Введите 8-значный код';
+            if (!playerName) {
+                alert('Введите ваше имя');
                 return;
             }
-            
-            try {
-                const { data: lobbies, error } = await sb
-                    .from('lobbies')
-                    .select('*')
-                    .eq('code', code)
-                    .in('status', ['waiting', 'active']);
-                
-                if (error) throw error;
-                
-                if (!lobbies || lobbies.length === 0) {
-                    document.getElementById('joinError').textContent = 'Игра с таким кодом не найдена';
-                    return;
-                }
-                
-                window.location.href = `student.html?lobby=${lobbies[0].id}`;
-                
-            } catch (error) {
-                console.error('Ошибка подключения:', error);
-                document.getElementById('joinError').textContent = 'Ошибка подключения к игре';
-            }
+            localStorage.setItem('playerName', playerName);
+            window.location.href = `play.html?quiz=${quizId}`;
         };
 
-        loadUser();
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+
+        loadQuizzes();
     </script>
 </body>
 </html>
