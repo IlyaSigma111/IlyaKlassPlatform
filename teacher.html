@@ -2,485 +2,46 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ИЛЬЯКЛАСС - Игровой режим учителя</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учитель - Викторины</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-
-        /* ===== 20 ТЕМ ===== */
-        body.pink-theme { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-        body.blue-theme { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
-        body.green-theme { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
-        body.purple-theme { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
-        body.orange-theme { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
-        body.dark-theme { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); }
-        body.sunset-theme { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
-        body.ocean-theme { background: linear-gradient(135deg, #1c92d2 0%, #0f2027 100%); }
-        body.forest-theme { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
-        body.candy-theme { background: linear-gradient(135deg, #f43b47 0%, #6a3093 100%); }
-        body.gold-theme { background: linear-gradient(135deg, #b8860b 0%, #ffd700 100%); color: #2d3436; }
-        body.diamond-theme { background: linear-gradient(135deg, #00ffff 0%, #4169e1 100%); }
-        body.ruby-theme { background: linear-gradient(135deg, #e0115f 0%, #8b0000 100%); }
-        body.emerald-theme { background: linear-gradient(135deg, #50c878 0%, #006400 100%); }
-        body.sapphire-theme { background: linear-gradient(135deg, #0f52ba 0%, #191970 100%); }
-        body.amethyst-theme { background: linear-gradient(135deg, #9966cc 0%, #4b0082 100%); }
-        body.rose-theme { background: linear-gradient(135deg, #ff66b2 0%, #8b008b 100%); }
-        body.neon-theme { background: linear-gradient(135deg, #39ff14 0%, #00ffff 100%); color: #2d3436; }
-        body.galaxy-theme { background: linear-gradient(135deg, #000000 0%, #4b0082 100%); }
-        body.lava-theme { background: linear-gradient(135deg, #ff4500 0%, #8b0000 100%); }
-
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-                padding: 10px;
-                overflow-y: auto;
-                height: auto;
-            }
-            .left-column, .right-column { width: 100%; }
-            .big-code { font-size: 2rem; }
-            .link-container { flex-direction: column; }
-            .copy-btn { width: 100%; }
-            .players-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-            .questions-list { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
-            .presentation-question { padding: 20px; }
-            .presentation-question h2 { font-size: 20px; }
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        .header {
-            background: white;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-            flex-wrap: wrap;
-            gap: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .back-btn {
-            padding: 10px 20px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .code-display {
-            background: #f1f5f9;
-            padding: 10px 24px;
-            border-radius: 100px;
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            color: #10b981;
-            font-family: monospace;
-        }
-
-        .main-content {
-            display: flex;
-            flex: 1;
-            padding: 24px;
-            gap: 24px;
-            overflow: hidden;
-            flex-wrap: wrap;
-        }
-
-        .left-column {
-            flex: 1;
-            min-width: 280px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .right-column {
-            flex: 2;
-            min-width: 300px;
-        }
-
-        .glass-panel {
-            background: white;
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .glass-panel h2 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            color: #0f172a;
-        }
-
-        .big-code {
-            font-size: 56px;
-            font-weight: 800;
-            text-align: center;
-            padding: 24px;
-            background: #f1f5f9;
-            border-radius: 20px;
-            margin: 16px 0;
-            letter-spacing: 8px;
-            color: #10b981;
-            font-family: monospace;
-        }
-
-        .players-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
-        .player-card {
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .player-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 8px;
-            font-weight: 700;
-            font-size: 18px;
-            color: white;
-        }
-
-        .player-name {
-            font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .player-score {
-            color: #f59e0b;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        .control-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .control-btn {
-            flex: 1;
-            padding: 12px;
-            background: #f1f5f9;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .control-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .control-btn.primary {
-            background: #6366f1;
-            color: white;
-        }
-
-        .control-btn.primary:hover {
-            background: #4f46e5;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .questions-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 8px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
-        .question-item {
-            padding: 12px;
-            background: #f1f5f9;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .question-item:hover {
-            background: #e2e8f0;
-        }
-
-        .question-item.active {
-            background: #10b981;
-            color: white;
-        }
-
-        .question-item.completed {
-            background: #e2e8f0;
-            opacity: 0.6;
-            cursor: default;
-        }
-
-        .link-container {
-            display: flex;
-            gap: 12px;
-            margin: 20px 0;
-            background: #f1f5f9;
-            border-radius: 100px;
-            padding: 4px 4px 4px 20px;
-            align-items: center;
-        }
-
-        .link-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px 0;
-            font-family: inherit;
-            font-size: 14px;
-            color: #0f172a;
-        }
-
-        .link-input:focus {
-            outline: none;
-        }
-
-        .copy-btn {
-            padding: 10px 20px;
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .copy-btn:hover {
-            background: #4f46e5;
-        }
-
-        .start-btn {
-            width: 100%;
-            padding: 16px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 100px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-            transition: all 0.2s;
-        }
-
-        .start-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
-        }
-
-        .quiz-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        /* Presentation Mode */
-        .presentation-mode {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .presentation-mode.active {
-            display: flex;
-        }
-
-        .presentation-header {
-            background: rgba(0,0,0,0.2);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-        }
-
-        .presentation-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-        }
-
-        .presentation-question {
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255,255,255,0.95);
-            border-radius: 48px;
-            padding: 48px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .presentation-question h2 {
-            font-size: 32px;
-            color: #0f172a;
-            line-height: 1.4;
-        }
-
-        .correct-answer {
-            margin-top: 30px;
-            padding: 20px;
-            background: #10b981;
-            color: white;
-            border-radius: 100px;
-            font-size: 20px;
-            font-weight: 600;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .presentation-footer {
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            background: rgba(0,0,0,0.2);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 100px;
-            font-weight: 500;
-            z-index: 2000;
-            display: none;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .role-owner { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #2d3436; }
+        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        input, select { padding: 8px; width: 100%; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .question { background: #f9f9f9; padding: 15px; margin: 10px 0; border: 1px solid #ddd; }
+        .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .quiz-card { background: #f9f9f9; padding: 10px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
+        .header a { color: white; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="toast" id="toast">Ссылка скопирована!</div>
-
-    <div class="container" id="mainInterface">
-        <header class="header">
-            <a href="teacher-menu.html" class="back-btn"><i class="fas fa-arrow-left"></i> В меню</a>
-            <div id="codeDisplay" class="code-display" style="display: none;">----</div>
-        </header>
-        <div class="main-content" id="dynamicContent"></div>
-    </div>
-
-    <div class="presentation-mode" id="presentationMode">
-        <div class="presentation-header">
-            <span><i class="fas fa-chalkboard-teacher"></i> РЕЖИМ ПРЕЗЕНТАЦИИ</span>
-            <span id="presentationCounter">Вопрос 1/0</span>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍🏫 УЧИТЕЛЬ</h1>
+            <div style="flex:1"></div>
+            <a href="index.html">Главная</a>
+            <a href="student.html">Ученик</a>
         </div>
-        <div class="presentation-content">
-            <div id="presentationQuestion" class="presentation-question">
-                <h2>Вопрос появится здесь</h2>
-            </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button onclick="showTab('list')">📋 Мои викторины</button>
+            <button onclick="showTab('create')">✏️ Создать</button>
         </div>
-        <div class="presentation-footer">
-            <button onclick="exitPresentation()" class="control-btn"><i class="fas fa-arrow-left"></i> Назад</button>
-            <button onclick="showAnswer()" class="control-btn primary"><i class="fas fa-check-circle"></i> Ответ</button>
-            <button onclick="nextQuestion()" class="control-btn"><i class="fas fa-forward"></i> Далее</button>
+
+        <div id="listTab">
+            <div id="myQuizzes"></div>
+        </div>
+
+        <div id="createTab" style="display:none">
+            <h2>Создать викторину</h2>
+            <input type="text" id="quizTitle" placeholder="Название">
+            <input type="text" id="quizCategory" placeholder="Категория">
+            <div id="questionsList"></div>
+            <button onclick="addQuestion()">+ Добавить вопрос</button>
+            <button onclick="saveQuiz()" style="background:#2196F3">💾 Сохранить</button>
         </div>
     </div>
 
@@ -488,352 +49,105 @@
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        const TG_BOT_TOKEN = '8601731421:AAH9bkz4eG34G5JDShFZCjwlZBNzUfeiMN4';
-        const TG_CHAT_ID = '1474901393';
 
-        let currentUser = null;
-        let currentLobby = null;
-        let quizData = null;
-        let questions = [];
-        let currentQuestionIndex = 0;
-        let lobbyCode = null;
+        let questionsData = [];
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const quizId = urlParams.get('quiz');
-        const lobbyId = urlParams.get('lobby');
-
-        async function sendToTG(msg) {
-            try {
-                await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
-                });
-            } catch(e) { console.error(e); }
-        }
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 2000);
-        }
-
-        function applyTheme(themeId) {
-            document.body.className = themeId + '-theme';
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        async function init() {
-            const saved = localStorage.getItem('currentUser');
-            if (!saved) {
-                window.location.href = 'index.html';
+        async function loadMyQuizzes() {
+            const { data: quizzes } = await sb.from('quizzes').select('*').order('created_at', { ascending: false });
+            if (!quizzes?.length) {
+                document.getElementById('myQuizzes').innerHTML = '<p>Нет викторин. Создайте первую!</p>';
                 return;
             }
-            currentUser = JSON.parse(saved);
-            if (currentUser.role !== 'teacher') {
-                window.location.href = 'student-menu.html';
-                return;
-            }
-
-            const savedTheme = localStorage.getItem('currentTheme') || 'pink';
-            applyTheme(savedTheme);
-
-            if (lobbyId) {
-                await loadGame(lobbyId);
-            } else if (quizId) {
-                await createLobby(quizId);
-            } else {
-                window.location.href = 'teacher-menu.html';
-            }
-        }
-
-        async function createLobby(quizId) {
-            const { data: quiz, error: quizError } = await sb
-                .from('quizzes')
-                .select('*')
-                .eq('id', quizId)
-                .single();
-                
-            if (quizError || !quiz) {
-                alert('Викторина не найдена');
-                window.location.href = 'teacher-menu.html';
-                return;
-            }
-
-            quizData = quiz;
-            lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
-            const newLobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-
-            const { error: insertError } = await sb.from('lobbies').insert({
-                id: newLobbyId,
-                quiz_id: quizId,
-                teacher_id: currentUser.id,
-                teacher_name: currentUser.username,
-                code: lobbyCode,
-                status: 'waiting',
-                created_at: new Date().toISOString(),
-                players: {},
-                current_question: 0
-            });
-
-            if (insertError) {
-                console.error('Ошибка создания лобби:', insertError);
-                alert('Ошибка создания игры');
-                return;
-            }
-
-            currentLobby = { id: newLobbyId, quiz_id: quizId, code: lobbyCode };
-            
-            const { data: qs } = await sb
-                .from('questions')
-                .select('*')
-                .eq('quiz_id', quizId)
-                .order('question_index');
-            questions = qs || [];
-
-            sendToTG(`🎮 ${currentUser.username} создал лобби для "${quizData.title}" (код: ${lobbyCode})`);
-
-            showLobbyUI();
-            listenToLobby(newLobbyId);
-        }
-
-        function showLobbyUI() {
-            document.getElementById('codeDisplay').style.display = 'block';
-            document.getElementById('codeDisplay').textContent = lobbyCode;
-            const studentLink = window.location.origin + window.location.pathname.replace('teacher.html', 'student.html') + '?lobby=' + currentLobby.id;
-
-            document.getElementById('dynamicContent').innerHTML = `
-                <div class="left-column">
-                    <div class="glass-panel">
-                        <h2><i class="fas fa-info-circle"></i> ИНФОРМАЦИЯ</h2>
-                        <div class="quiz-title">${escapeHtml(quizData.title)}</div>
-                        <div style="color: #64748b; margin-bottom: 16px;">${questions.length} вопросов</div>
-                        <div class="big-code">${lobbyCode}</div>
-                        <div class="link-container">
-                            <input type="text" class="link-input" id="studentLink" value="${studentLink}" readonly>
-                            <button class="copy-btn" onclick="copyStudentLink()"><i class="fas fa-copy"></i> Копировать</button>
-                        </div>
-                        <button class="start-btn" onclick="startGame()" id="startGameBtn"><i class="fas fa-play"></i> НАЧАТЬ ИГРУ</button>
+            document.getElementById('myQuizzes').innerHTML = quizzes.map(q => `
+                <div class="quiz-card">
+                    <div><b>${escapeHtml(q.title)}</b><br><small>${escapeHtml(q.category)} | ${q.question_count} вопросов</small></div>
+                    <div>
+                        <button onclick="playQuiz('${q.id}')" style="background:#2196F3">Играть</button>
+                        <button onclick="deleteQuiz('${q.id}')" style="background:#dc3545">Удалить</button>
                     </div>
-                </div>
-                <div class="right-column">
-                    <div class="glass-panel">
-                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
-                        <div id="playersList" class="players-grid">
-                            <div class="empty-state">Ожидание игроков...</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        window.copyStudentLink = function() {
-            const input = document.getElementById('studentLink');
-            input.select();
-            document.execCommand('copy');
-            showToast('🔗 Ссылка скопирована!');
-        };
-
-        async function loadGame(lobbyId) {
-            const { data: lobby, error: lobbyError } = await sb
-                .from('lobbies')
-                .select('*')
-                .eq('id', lobbyId)
-                .single();
-                
-            if (lobbyError || !lobby) {
-                window.location.href = 'teacher-menu.html';
-                return;
-            }
-
-            currentLobby = lobby;
-            lobbyCode = lobby.code;
-            
-            const { data: quiz } = await sb
-                .from('quizzes')
-                .select('*')
-                .eq('id', lobby.quiz_id)
-                .single();
-                
-            const { data: qs } = await sb
-                .from('questions')
-                .select('*')
-                .eq('quiz_id', lobby.quiz_id)
-                .order('question_index');
-            
-            quizData = quiz;
-            questions = qs || [];
-            currentQuestionIndex = lobby.current_question || 0;
-
-            document.getElementById('codeDisplay').style.display = 'block';
-            document.getElementById('codeDisplay').textContent = lobbyCode;
-            showGameUI();
-            listenToLobby(lobbyId);
-            sendToTG(`▶️ ${currentUser.username} загрузил игру (код: ${lobbyCode})`);
-        }
-
-        function showGameUI() {
-            document.getElementById('dynamicContent').innerHTML = `
-                <div class="left-column">
-                    <div class="glass-panel">
-                        <h2><i class="fas fa-gamepad"></i> УПРАВЛЕНИЕ</h2>
-                        <div class="control-buttons">
-                            <button onclick="startNextQuestion()" class="control-btn primary"><i class="fas fa-tv"></i> ПОКАЗАТЬ ВОПРОС</button>
-                            <button onclick="nextQuestion()" class="control-btn"><i class="fas fa-forward"></i> СЛЕДУЮЩИЙ</button>
-                        </div>
-                        <div class="game-info">
-                            <span><i class="fas fa-question-circle"></i> Вопрос: <span id="currentQ">${currentQuestionIndex + 1}/${questions.length}</span></span>
-                            <span><i class="fas fa-users"></i> Игроков: <span id="playerCount">0</span></span>
-                        </div>
-                    </div>
-                    <div class="glass-panel">
-                        <h2><i class="fas fa-users"></i> УЧАСТНИКИ</h2>
-                        <div id="playersList" class="players-grid"></div>
-                    </div>
-                </div>
-                <div class="right-column">
-                    <div class="glass-panel">
-                        <h2><i class="fas fa-list"></i> ВОПРОСЫ</h2>
-                        <div id="questionsList" class="questions-list"></div>
-                    </div>
-                </div>
-            `;
-            renderQuestionsList();
-        }
-
-        function listenToLobby(id) {
-            const channel = sb.channel('lobby-teacher-' + id);
-            channel.on('postgres_changes', {
-                event: '*',
-                schema: 'public',
-                table: 'lobbies',
-                filter: `id=eq.${id}`
-            }, payload => {
-                if (payload.new) {
-                    updatePlayersList(payload.new.players);
-                    currentLobby = payload.new;
-                    if (payload.new.current_question !== undefined) {
-                        currentQuestionIndex = payload.new.current_question;
-                        renderQuestionsList();
-                    }
-                }
-            }).subscribe();
-
-            sb.from('lobbies').select('*').eq('id', id).then(({ data }) => {
-                if (data?.[0]) updatePlayersList(data[0].players);
-            });
-        }
-
-        function updatePlayersList(players) {
-            const container = document.getElementById('playersList');
-            const countSpan = document.getElementById('playerCount');
-            const startBtn = document.getElementById('startGameBtn');
-            
-            if (!players || Object.keys(players).length === 0) {
-                if (container) container.innerHTML = '<div class="empty-state"><i class="fas fa-user-plus"></i> Ожидание игроков...</div>';
-                if (countSpan) countSpan.textContent = '0';
-                if (startBtn) startBtn.disabled = true;
-                return;
-            }
-            
-            const playersArray = Object.values(players);
-            if (countSpan) countSpan.textContent = playersArray.length;
-            if (startBtn) startBtn.disabled = false;
-            
-            if (container) {
-                container.innerHTML = playersArray.map(p => `
-                    <div class="player-card">
-                        <div class="player-avatar">${(p.name || '?')[0].toUpperCase()}</div>
-                        <div class="player-name">${escapeHtml(p.name)}</div>
-                        <div class="player-score"><i class="fas fa-star"></i> ${p.score || 0}</div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function renderQuestionsList() {
-            const container = document.getElementById('questionsList');
-            if (!container) return;
-            
-            container.innerHTML = questions.map((q, i) => `
-                <div class="question-item ${i === currentQuestionIndex ? 'active' : (i < currentQuestionIndex ? 'completed' : '')}" 
-                     onclick="jumpToQuestion(${i})">
-                    ${i + 1}
                 </div>
             `).join('');
         }
 
-        window.startGame = function() {
-            window.location.href = `teacher.html?lobby=${currentLobby.id}`;
+        window.playQuiz = function(quizId) {
+            window.location.href = `play.html?quiz=${quizId}`;
         };
 
-        window.startNextQuestion = function() {
-            if (currentQuestionIndex >= questions.length) {
-                alert('🎉 Викторина завершена!');
-                return;
+        window.deleteQuiz = async function(quizId) {
+            if (!confirm('Удалить викторину?')) return;
+            await sb.from('quizzes').delete().eq('id', quizId);
+            await sb.from('questions').delete().eq('quiz_id', quizId);
+            await sb.from('results').delete().eq('quiz_id', quizId);
+            loadMyQuizzes();
+        };
+
+        function addQuestion() {
+            questionsData.push({ id: Date.now(), text: '', answers: ['','','',''], correct: 0 });
+            renderQuestions();
+        }
+        function removeQuestion(i) { questionsData.splice(i,1); renderQuestions(); }
+        function updateQuestion(i, field, val) {
+            if (field === 'text') questionsData[i].text = val;
+            else if (field.startsWith('ans')) questionsData[i].answers[parseInt(field.slice(3))] = val;
+            else if (field === 'correct') questionsData[i].correct = parseInt(val);
+        }
+        function renderQuestions() {
+            const container = document.getElementById('questionsList');
+            if (!questionsData.length) { container.innerHTML = '<p>Нажмите "Добавить вопрос"</p>'; return; }
+            container.innerHTML = questionsData.map((q, idx) => `
+                <div class="question">
+                    <div style="display:flex; justify-content:space-between">
+                        <b>Вопрос ${idx+1}</b>
+                        <span style="color:red; cursor:pointer" onclick="removeQuestion(${idx})">Удалить</span>
+                    </div>
+                    <input type="text" placeholder="Текст вопроса" value="${escapeHtml(q.text)}" onchange="updateQuestion(${idx}, 'text', this.value)">
+                    <div class="answers">
+                        ${[0,1,2,3].map(opt => `
+                            <div>
+                                <input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} onchange="updateQuestion(${idx}, 'correct', ${opt})">
+                                <input type="text" placeholder="Вариант ${opt+1}" value="${escapeHtml(q.answers[opt])}" onchange="updateQuestion(${idx}, 'ans${opt}', this.value)" style="width:80%">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.saveQuiz = async function() {
+            const title = document.getElementById('quizTitle').value.trim();
+            const category = document.getElementById('quizCategory').value.trim() || 'Общая';
+            if (!title) { alert('Введите название'); return; }
+            if (!questionsData.length) { alert('Добавьте вопросы'); return; }
+            for (let q of questionsData) {
+                if (!q.text.trim()) { alert('Заполните текст вопроса'); return; }
+                for (let a of q.answers) if (!a.trim()) { alert('Заполните все варианты'); return; }
             }
             
-            document.getElementById('presentationMode').classList.add('active');
-            document.getElementById('presentationCounter').textContent = `Вопрос ${currentQuestionIndex + 1}/${questions.length}`;
-            document.getElementById('presentationQuestion').innerHTML = `<h2>${escapeHtml(questions[currentQuestionIndex].question)}</h2>`;
-            
-            sb.from('lobbies')
-                .update({ current_question: currentQuestionIndex, status: 'active' })
-                .eq('id', currentLobby.id);
-            
-            renderQuestionsList();
-            sendToTG(`❓ ${currentUser.username} показал вопрос ${currentQuestionIndex + 1}`);
+            const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
+            try {
+                await sb.from('quizzes').insert({ id: quizId, title, category, question_count: questionsData.length, created_at: new Date().toISOString() });
+                for (let i = 0; i < questionsData.length; i++) {
+                    await sb.from('questions').insert({ quiz_id: quizId, question_index: i, question: questionsData[i].text, answers: questionsData[i].answers, correct: questionsData[i].correct });
+                }
+                alert('✅ Викторина создана!');
+                document.getElementById('quizTitle').value = '';
+                document.getElementById('quizCategory').value = '';
+                questionsData = [];
+                renderQuestions();
+                loadMyQuizzes();
+                showTab('list');
+            } catch(e) { alert('Ошибка: ' + e.message); }
         };
 
-        window.showAnswer = function() {
-            const q = questions[currentQuestionIndex];
-            if (!q) return;
-            
-            const el = document.getElementById('presentationQuestion');
-            el.innerHTML += `<div class="correct-answer"><i class="fas fa-check-circle"></i> ${escapeHtml(q.answers[q.correct])}</div>`;
-            sendToTG(`🔓 ${currentUser.username} показал ответ на вопрос ${currentQuestionIndex + 1}`);
-        };
+        function showTab(tab) {
+            document.getElementById('listTab').style.display = tab === 'list' ? 'block' : 'none';
+            document.getElementById('createTab').style.display = tab === 'create' ? 'block' : 'none';
+            if (tab === 'list') loadMyQuizzes();
+        }
 
-        window.nextQuestion = function() {
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                exitPresentation();
-                renderQuestionsList();
-            } else {
-                sb.from('lobbies')
-                    .update({ status: 'finished' })
-                    .eq('id', currentLobby.id);
-                exitPresentation();
-                alert('🎉 Викторина завершена!');
-                sendToTG(`🏁 ${currentUser.username} завершил викторину`);
-            }
-        };
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
-        window.exitPresentation = function() {
-            document.getElementById('presentationMode').classList.remove('active');
-        };
-
-        window.jumpToQuestion = function(index) {
-            if (index < currentQuestionIndex && confirm('Перейти к пройденному вопросу? Это может повлиять на ход игры.')) {
-                currentQuestionIndex = index;
-                renderQuestionsList();
-                sb.from('lobbies')
-                    .update({ current_question: currentQuestionIndex })
-                    .eq('id', currentLobby.id);
-            }
-        };
-
-        init();
+        loadMyQuizzes();
     </script>
 </body>
 </html>
