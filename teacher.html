@@ -3,151 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учитель - Викторины</title>
+    <title>ИЛЬЯКЛАСС - Игра</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
-        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
-        input, select { padding: 8px; width: 100%; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
-        .question { background: #f9f9f9; padding: 15px; margin: 10px 0; border: 1px solid #ddd; }
-        .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .quiz-card { background: #f9f9f9; padding: 10px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
-        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
-        .header a { color: white; text-decoration: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #1e293b; min-height: 100vh; color: white; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .back-btn { padding: 10px 20px; background: #475569; border: none; border-radius: 30px; color: white; cursor: pointer; text-decoration: none; }
+        .code-box { background: #0f172a; padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 30px; }
+        .code { font-size: 48px; font-weight: 800; letter-spacing: 8px; color: #10b981; font-family: monospace; }
+        .players-list { background: #0f172a; border-radius: 20px; padding: 20px; margin-bottom: 30px; min-height: 150px; }
+        .player-tag { display: inline-block; background: #6366f1; padding: 8px 16px; border-radius: 30px; margin: 5px; }
+        .question-box { background: #0f172a; border-radius: 20px; padding: 30px; margin-bottom: 30px; }
+        .question-text { font-size: 28px; margin-bottom: 20px; }
+        .answer-item { background: #334155; padding: 12px 20px; border-radius: 50px; margin: 10px 0; }
+        .controls { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .ctrl-btn { padding: 12px 25px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .show-btn { background: #f59e0b; color: white; }
+        .answer-btn { background: #10b981; color: white; }
+        .next-btn { background: #6366f1; color: white; }
+        @media (max-width: 768px) { .code { font-size: 28px; letter-spacing: 4px; } .question-text { font-size: 20px; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>👨‍🏫 УЧИТЕЛЬ</h1>
-            <div style="flex:1"></div>
-            <a href="index.html">Главная</a>
-            <a href="student.html">Ученик</a>
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button onclick="showTab('list')">📋 Мои викторины</button>
-            <button onclick="showTab('create')">✏️ Создать</button>
-        </div>
-
-        <div id="listTab">
-            <div id="myQuizzes"></div>
-        </div>
-
-        <div id="createTab" style="display:none">
-            <h2>Создать викторину</h2>
-            <input type="text" id="quizTitle" placeholder="Название">
-            <input type="text" id="quizCategory" placeholder="Категория">
-            <div id="questionsList"></div>
-            <button onclick="addQuestion()">+ Добавить вопрос</button>
-            <button onclick="saveQuiz()" style="background:#2196F3">💾 Сохранить</button>
-        </div>
-    </div>
-
+    <div class="container" id="app">Загрузка...</div>
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
-        let questionsData = [];
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizId = urlParams.get('quiz');
+        let quiz, questions, lobbyId, lobbyCode, players = {}, currentIndex = 0, channel;
 
-        async function loadMyQuizzes() {
-            const { data: quizzes } = await sb.from('quizzes').select('*').order('created_at', { ascending: false });
-            if (!quizzes?.length) {
-                document.getElementById('myQuizzes').innerHTML = '<p>Нет викторин. Создайте первую!</p>';
-                return;
-            }
-            document.getElementById('myQuizzes').innerHTML = quizzes.map(q => `
-                <div class="quiz-card">
-                    <div><b>${escapeHtml(q.title)}</b><br><small>${escapeHtml(q.category)} | ${q.question_count} вопросов</small></div>
-                    <div>
-                        <button onclick="playQuiz('${q.id}')" style="background:#2196F3">Играть</button>
-                        <button onclick="deleteQuiz('${q.id}')" style="background:#dc3545">Удалить</button>
-                    </div>
-                </div>
-            `).join('');
+        async function init() {
+            if (!quizId) { window.location.href = 'teacher-menu.html'; return; }
+            const { data: qData } = await sb.from('quizzes').select('*').eq('id', quizId).single();
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', quizId).order('question_index');
+            quiz = qData; questions = qs || [];
+            if (!quiz) { document.getElementById('app').innerHTML = '<p>Викторина не найдена</p>'; return; }
+            await createLobby();
         }
 
-        window.playQuiz = function(quizId) {
-            window.location.href = `play.html?quiz=${quizId}`;
+        async function createLobby() {
+            lobbyCode = Math.floor(10000000 + Math.random() * 90000000).toString();
+            lobbyId = 'lobby_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
+            await sb.from('lobbies').insert({ id: lobbyId, quiz_id: quizId, code: lobbyCode, status: 'waiting', players: {}, current_question: 0, created_at: new Date().toISOString() });
+            listenLobby();
+            renderLobbyScreen();
+        }
+
+        function listenLobby() {
+            channel = sb.channel('lobby-' + lobbyId);
+            channel.on('postgres_changes', { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` }, payload => { if (payload.new) { players = payload.new.players || {}; updatePlayersDisplay(); if (payload.new.status === 'active') startGame(); } }).subscribe();
+        }
+
+        function renderLobbyScreen() {
+            document.getElementById('app').innerHTML = `
+                <div class="header"><a href="teacher-menu.html" class="back-btn">← Назад</a><h2>${escapeHtml(quiz.title)}</h2></div>
+                <div class="code-box"><div class="code">${lobbyCode}</div><div>Код игры для учеников</div><button onclick="copyCode()" style="margin-top:15px; padding:8px 20px; background:#10b981; border:none; border-radius:30px; cursor:pointer;">📋 Копировать</button></div>
+                <div class="players-list"><h3>Игроки (<span id="playersCount">0</span>)</h3><div id="playersContainer"></div></div>
+                <button onclick="startGame()" style="width:100%; padding:15px; background:#10b981; border:none; border-radius:50px; font-size:18px; font-weight:700; cursor:pointer;">🚀 Начать игру</button>
+            `;
+        }
+
+        function updatePlayersDisplay() {
+            const container = document.getElementById('playersContainer');
+            const countSpan = document.getElementById('playersCount');
+            if (!container) return;
+            const playersArr = Object.values(players);
+            if (countSpan) countSpan.textContent = playersArr.length;
+            if (!playersArr.length) { container.innerHTML = '<p>Ожидание подключения...</p>'; return; }
+            container.innerHTML = playersArr.map(p => `<div class="player-tag">👤 ${escapeHtml(p.name)} (${p.score || 0}⭐)</div>`).join('');
+        }
+
+        window.copyCode = () => { navigator.clipboard.writeText(lobbyCode); alert('Код скопирован: ' + lobbyCode); };
+
+        async function startGame() { await sb.from('lobbies').update({ status: 'active' }).eq('id', lobbyId); }
+
+        function startGame() {
+            currentIndex = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIndex >= questions.length) { finishGame(); return; }
+            const q = questions[currentIndex];
+            document.getElementById('app').innerHTML = `
+                <div class="header"><a href="teacher-menu.html" class="back-btn">← Выход</a><h2>${escapeHtml(quiz.title)}</h2></div>
+                <div class="question-box"><div class="question-text">${escapeHtml(q.question)}</div>${q.answers.map((a,i) => `<div class="answer-item"><b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(a)}</div>`).join('')}</div>
+                <div class="controls"><button class="ctrl-btn show-btn" onclick="showAnswer()">✅ Показать ответ</button><button class="ctrl-btn next-btn" onclick="nextQuestion()">⏩ Следующий вопрос</button></div>
+                <div class="players-list"><h3>Игроки (${Object.values(players).length})</h3><div id="playersContainer">${Object.values(players).map(p => `<div class="player-tag">👤 ${escapeHtml(p.name)} (${p.score || 0}⭐)</div>`).join('')}</div></div>
+                <div id="answerDisplay"></div>
+            `;
+            sb.from('lobbies').update({ current_question: currentIndex, question_text: q.question, question_answers: q.answers }).eq('id', lobbyId);
+        }
+
+        window.showAnswer = function() {
+            const q = questions[currentIndex];
+            document.getElementById('answerDisplay').innerHTML = `<div style="background:#10b981; padding:15px; border-radius:20px; margin-top:20px;">✅ Правильный ответ: ${escapeHtml(q.answers[q.correct])}</div>`;
         };
 
-        window.deleteQuiz = async function(quizId) {
-            if (!confirm('Удалить викторину?')) return;
-            await sb.from('quizzes').delete().eq('id', quizId);
-            await sb.from('questions').delete().eq('quiz_id', quizId);
-            await sb.from('results').delete().eq('quiz_id', quizId);
-            loadMyQuizzes();
-        };
+        window.nextQuestion = function() { currentIndex++; showQuestion(); };
 
-        function addQuestion() {
-            questionsData.push({ id: Date.now(), text: '', answers: ['','','',''], correct: 0 });
-            renderQuestions();
-        }
-        function removeQuestion(i) { questionsData.splice(i,1); renderQuestions(); }
-        function updateQuestion(i, field, val) {
-            if (field === 'text') questionsData[i].text = val;
-            else if (field.startsWith('ans')) questionsData[i].answers[parseInt(field.slice(3))] = val;
-            else if (field === 'correct') questionsData[i].correct = parseInt(val);
-        }
-        function renderQuestions() {
-            const container = document.getElementById('questionsList');
-            if (!questionsData.length) { container.innerHTML = '<p>Нажмите "Добавить вопрос"</p>'; return; }
-            container.innerHTML = questionsData.map((q, idx) => `
-                <div class="question">
-                    <div style="display:flex; justify-content:space-between">
-                        <b>Вопрос ${idx+1}</b>
-                        <span style="color:red; cursor:pointer" onclick="removeQuestion(${idx})">Удалить</span>
-                    </div>
-                    <input type="text" placeholder="Текст вопроса" value="${escapeHtml(q.text)}" onchange="updateQuestion(${idx}, 'text', this.value)">
-                    <div class="answers">
-                        ${[0,1,2,3].map(opt => `
-                            <div>
-                                <input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} onchange="updateQuestion(${idx}, 'correct', ${opt})">
-                                <input type="text" placeholder="Вариант ${opt+1}" value="${escapeHtml(q.answers[opt])}" onchange="updateQuestion(${idx}, 'ans${opt}', this.value)" style="width:80%">
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        window.saveQuiz = async function() {
-            const title = document.getElementById('quizTitle').value.trim();
-            const category = document.getElementById('quizCategory').value.trim() || 'Общая';
-            if (!title) { alert('Введите название'); return; }
-            if (!questionsData.length) { alert('Добавьте вопросы'); return; }
-            for (let q of questionsData) {
-                if (!q.text.trim()) { alert('Заполните текст вопроса'); return; }
-                for (let a of q.answers) if (!a.trim()) { alert('Заполните все варианты'); return; }
-            }
-            
-            const quizId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
-            try {
-                await sb.from('quizzes').insert({ id: quizId, title, category, question_count: questionsData.length, created_at: new Date().toISOString() });
-                for (let i = 0; i < questionsData.length; i++) {
-                    await sb.from('questions').insert({ quiz_id: quizId, question_index: i, question: questionsData[i].text, answers: questionsData[i].answers, correct: questionsData[i].correct });
-                }
-                alert('✅ Викторина создана!');
-                document.getElementById('quizTitle').value = '';
-                document.getElementById('quizCategory').value = '';
-                questionsData = [];
-                renderQuestions();
-                loadMyQuizzes();
-                showTab('list');
-            } catch(e) { alert('Ошибка: ' + e.message); }
-        };
-
-        function showTab(tab) {
-            document.getElementById('listTab').style.display = tab === 'list' ? 'block' : 'none';
-            document.getElementById('createTab').style.display = tab === 'create' ? 'block' : 'none';
-            if (tab === 'list') loadMyQuizzes();
+        async function finishGame() {
+            await sb.from('lobbies').update({ status: 'finished' }).eq('id', lobbyId);
+            const sorted = Object.values(players).sort((a,b) => (b.score||0) - (a.score||0));
+            document.getElementById('app').innerHTML = `
+                <div class="header"><a href="teacher-menu.html" class="back-btn">← На главную</a><h2>🏆 Игра завершена!</h2></div>
+                <div class="players-list"><h3>Результаты:</h3>${sorted.map((p,i) => `<div class="player-tag" style="display:block; margin:10px">${i+1}. ${escapeHtml(p.name)} — ${p.score||0} очков</div>`).join('')}</div>
+                <button onclick="window.location.href='teacher-menu.html'" style="width:100%; padding:15px; background:#6366f1; border:none; border-radius:50px; cursor:pointer;">На главную</button>
+            `;
         }
 
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-
-        loadMyQuizzes();
+        init();
     </script>
 </body>
 </html>
