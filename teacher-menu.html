@@ -3,29 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель учителя</title>
+    <title>ИЛЬЯКЛАСС - Учитель</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
-        button { background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin: 5px; }
-        .quiz-item { background: #f9f9f9; padding: 10px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
-        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
-        .header a { color: white; text-decoration: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: white; border-radius: 20px; padding: 15px 25px; margin-bottom: 25px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav a { padding: 8px 20px; text-decoration: none; color: #475569; border-radius: 30px; font-weight: 500; }
+        .nav a:hover, .nav a.active { background: #6366f1; color: white; }
+        .user-card { display: flex; align-items: center; gap: 15px; background: #f1f5f9; padding: 5px 15px; border-radius: 40px; }
+        .avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .logout-btn { padding: 6px 15px; background: #ef4444; color: white; border: none; border-radius: 30px; cursor: pointer; }
+        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .dashboard-card { background: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .dashboard-number { font-size: 36px; font-weight: 800; color: #6366f1; }
+        .quizzes-section { background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .section-title { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .create-btn { padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; }
+        .quiz-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { padding: 8px 20px; background: #f1f5f9; border: none; border-radius: 30px; cursor: pointer; font-weight: 500; }
+        .tab-btn.active { background: #6366f1; color: white; }
+        .quizzes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; max-height: 500px; overflow-y: auto; }
+        .quiz-card { background: #f8fafc; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; }
+        .quiz-card.free { border-left: 4px solid #10b981; }
+        .quiz-card.premium { border-left: 4px solid #f59e0b; }
+        .quiz-title { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+        .quiz-meta { color: #64748b; font-size: 13px; margin-bottom: 10px; }
+        .quiz-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .quiz-action-btn { flex: 1; padding: 8px; border: none; border-radius: 30px; cursor: pointer; font-weight: 500; }
+        .play-btn { background: #10b981; color: white; }
+        .edit-btn { background: #f59e0b; color: white; }
+        .delete-btn { background: #ef4444; color: white; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .constructor-window { background: white; border-radius: 30px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 30px; }
+        .constructor-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .close-btn { width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; border: none; cursor: pointer; font-size: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: 600; font-size: 14px; }
+        .form-group input, .form-group select { padding: 10px; border: 1px solid #ddd; border-radius: 12px; }
+        .question-card { background: #f8fafc; padding: 15px; border-radius: 16px; margin-bottom: 15px; }
+        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .answer-option { display: flex; align-items: center; gap: 10px; }
+        .add-question-btn { width: 100%; padding: 12px; background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 30px; cursor: pointer; margin: 15px 0; }
+        .save-quiz-btn { width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; }
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .dashboard { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .answers-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📋 ПАНЕЛЬ УЧИТЕЛЯ</h1>
-            <div style="flex:1"></div>
-            <a href="index.html">Главная</a>
-            <a href="teacher.html">Создать</a>
-            <a href="student.html">Ученик</a>
+            <div class="logo" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
+            <div class="nav">
+                <a href="teacher-menu.html" class="active">Главная</a>
+                <a href="teacher-shop.html">Магазин</a>
+                <a href="results.html">Результаты</a>
+                <a href="profile.html">Профиль</a>
+            </div>
+            <div id="userSection"></div>
         </div>
 
-        <h2>Мои викторины</h2>
-        <div id="quizzesList"></div>
+        <div class="dashboard">
+            <div class="dashboard-card"><h3>Мои викторины</h3><div class="dashboard-number" id="totalMy">0</div></div>
+            <div class="dashboard-card"><h3>Всего вопросов</h3><div class="dashboard-number" id="totalQuestions">0</div></div>
+            <div class="dashboard-card"><h3>Сыграно раз</h3><div class="dashboard-number" id="totalPlays">0</div></div>
+        </div>
+
+        <div class="quizzes-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-gamepad"></i> Мои викторины</h2>
+                <button class="create-btn" onclick="openConstructor()"><i class="fas fa-plus"></i> Создать</button>
+            </div>
+            <div class="quiz-tabs">
+                <button class="tab-btn active" onclick="filterQuizzes('all')">Все</button>
+                <button class="tab-btn" onclick="filterQuizzes('free')">Бесплатные</button>
+                <button class="tab-btn" onclick="filterQuizzes('premium')">Премиум</button>
+            </div>
+            <div id="quizzesList" class="quizzes-grid"><div style="text-align:center; padding:40px;">Загрузка...</div></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="constructorModal">
+        <div class="constructor-window">
+            <div class="constructor-header">
+                <h2 id="constructorTitle">Создание викторины</h2>
+                <button class="close-btn" onclick="closeConstructor()">&times;</button>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Название</label><input type="text" id="quizTitle" placeholder="Название викторины"></div>
+                <div class="form-group"><label>Класс</label><input type="text" id="quizClass" placeholder="5 класс"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Предмет</label><input type="text" id="quizSubject" placeholder="Математика"></div>
+                <div class="form-group"><label>Тип</label><select id="quizType"><option value="kahoot">Бесплатная</option><option value="constructed">Премиум</option></select></div>
+            </div>
+            <div class="form-row" id="priceRow" style="display:none;">
+                <div class="form-group"><label>Цена (токены)</label><input type="number" id="quizPrice" value="10"></div>
+            </div>
+            <div class="publish-checkbox"><input type="checkbox" id="publishQuiz"> <label>Опубликовать в магазине (+50 монет)</label></div>
+            <div id="questionsContainer"></div>
+            <button class="add-question-btn" onclick="addQuestion()">+ Добавить вопрос</button>
+            <button class="save-quiz-btn" onclick="saveQuiz()">Сохранить викторину</button>
+        </div>
     </div>
 
     <script>
@@ -33,38 +128,142 @@
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
+        let currentUser = null, allQuizzes = [], questionsList = [], editingId = null, currentFilter = 'all';
+
+        function getCurrentUser() { const s = localStorage.getItem('currentUser'); return s ? JSON.parse(s) : null; }
+
+        async function loadUser() {
+            currentUser = getCurrentUser();
+            if (!currentUser) { window.location.href = 'index.html'; return; }
+            if (currentUser.role !== 'teacher') { window.location.href = 'student-menu.html'; return; }
+            document.getElementById('userSection').innerHTML = `
+                <div class="user-card"><div class="avatar">${currentUser.username[0].toUpperCase()}</div><span>${currentUser.username}</span><span>💰 ${currentUser.coins}</span><button onclick="logout()" class="logout-btn">Выйти</button></div>
+            `;
+            await loadQuizzes();
+            await loadStats();
+        }
+
+        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+
+        async function loadStats() {
+            const { data: results } = await sb.from('results').select('*');
+            const myQuizIds = allQuizzes.map(q => q.id);
+            const myPlays = results?.filter(r => myQuizIds.includes(r.quiz_id)).length || 0;
+            document.getElementById('totalMy').textContent = allQuizzes.length;
+            document.getElementById('totalQuestions').textContent = allQuizzes.reduce((s,q) => s + (q.question_count||0), 0);
+            document.getElementById('totalPlays').textContent = myPlays;
+        }
+
         async function loadQuizzes() {
-            const { data: quizzes } = await sb.from('quizzes').select('*').order('created_at', { ascending: false });
-            if (!quizzes?.length) {
-                document.getElementById('quizzesList').innerHTML = '<p>Нет викторин. <a href="teacher.html">Создать</a></p>';
-                return;
-            }
-            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
-                <div class="quiz-item">
-                    <div><b>${escapeHtml(q.title)}</b><br><small>${escapeHtml(q.category)} | ${q.question_count} вопросов</small></div>
-                    <div>
-                        <button onclick="playQuiz('${q.id}')">Играть</button>
-                        <button onclick="deleteQuiz('${q.id}')" style="background:#dc3545">Удалить</button>
+            const { data } = await sb.from('quizzes').select('*').eq('created_by', currentUser.id).order('created_at', { ascending: false });
+            allQuizzes = data || [];
+            renderQuizzes();
+            await loadStats();
+        }
+
+        function renderQuizzes() {
+            let filtered = allQuizzes;
+            if (currentFilter === 'free') filtered = allQuizzes.filter(q => q.type === 'kahoot');
+            if (currentFilter === 'premium') filtered = allQuizzes.filter(q => q.type === 'constructed');
+            const container = document.getElementById('quizzesList');
+            if (!filtered.length) { container.innerHTML = '<div style="text-align:center; padding:40px;">Нет викторин. Создайте первую!</div>'; return; }
+            container.innerHTML = filtered.map(q => `
+                <div class="quiz-card ${q.type === 'kahoot' ? 'free' : 'premium'}">
+                    <div class="quiz-title">${escapeHtml(q.title)}</div>
+                    <div class="quiz-meta">${q.class || 'Любой класс'} • ${q.subject || 'Без предмета'} • ${q.question_count} вопросов</div>
+                    <div class="quiz-actions">
+                        <button class="quiz-action-btn play-btn" onclick="startGame('${q.id}')"><i class="fas fa-play"></i> Играть</button>
+                        <button class="quiz-action-btn edit-btn" onclick="editQuiz('${q.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="quiz-action-btn delete-btn" onclick="deleteQuiz('${q.id}')"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        window.playQuiz = function(quizId) {
-            window.location.href = `play.html?quiz=${quizId}`;
-        };
+        window.startGame = function(quizId) { window.location.href = `teacher.html?quiz=${quizId}`; };
+        window.filterQuizzes = function(type) { currentFilter = type; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); renderQuizzes(); };
 
-        window.deleteQuiz = async function(quizId) {
-            if (!confirm('Удалить викторину?')) return;
-            await sb.from('quizzes').delete().eq('id', quizId);
-            await sb.from('questions').delete().eq('quiz_id', quizId);
-            await sb.from('results').delete().eq('quiz_id', quizId);
-            loadQuizzes();
-        };
+        async function deleteQuiz(id) { if (!confirm('Удалить викторину?')) return; await sb.from('quizzes').delete().eq('id', id); await sb.from('questions').delete().eq('quiz_id', id); await loadQuizzes(); }
+
+        async function editQuiz(id) {
+            editingId = id;
+            document.getElementById('constructorTitle').innerHTML = 'Редактирование';
+            const { data: quiz } = await sb.from('quizzes').select('*').eq('id', id).single();
+            const { data: qs } = await sb.from('questions').select('*').eq('quiz_id', id).order('question_index');
+            document.getElementById('quizTitle').value = quiz.title || '';
+            document.getElementById('quizClass').value = quiz.class || '';
+            document.getElementById('quizSubject').value = quiz.subject || '';
+            document.getElementById('quizType').value = quiz.type || 'kahoot';
+            document.getElementById('quizPrice').value = quiz.price_tokens || 0;
+            document.getElementById('publishQuiz').checked = quiz.published || false;
+            document.getElementById('priceRow').style.display = quiz.type === 'constructed' ? 'grid' : 'none';
+            questionsList = (qs || []).map(q => ({ id: q.id, text: q.question, answers: q.answers || ['','','',''], correct: q.correct || 0 }));
+            renderQuestions();
+            document.getElementById('constructorModal').classList.add('active');
+        }
+
+        function openConstructor() { editingId = null; document.getElementById('constructorTitle').innerHTML = 'Создание'; document.getElementById('quizTitle').value = ''; document.getElementById('quizClass').value = ''; document.getElementById('quizSubject').value = ''; document.getElementById('quizType').value = 'kahoot'; document.getElementById('quizPrice').value = '0'; document.getElementById('publishQuiz').checked = false; document.getElementById('priceRow').style.display = 'none'; questionsList = []; renderQuestions(); document.getElementById('constructorModal').classList.add('active'); }
+        function closeConstructor() { document.getElementById('constructorModal').classList.remove('active'); editingId = null; }
+
+        function addQuestion() { questionsList.push({ id: Date.now(), text: '', answers: ['','','',''], correct: 0 }); renderQuestions(); }
+        function removeQuestion(i) { questionsList.splice(i,1); renderQuestions(); }
+        function updateQuestion(i, field, val) {
+            if (field === 'text') questionsList[i].text = val;
+            else if (field.startsWith('ans')) questionsList[i].answers[parseInt(field.slice(3))] = val;
+            else if (field === 'correct') questionsList[i].correct = parseInt(val);
+        }
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            if (!questionsList.length) { container.innerHTML = '<div style="text-align:center; padding:40px;">Нажмите "Добавить вопрос"</div>'; return; }
+            container.innerHTML = questionsList.map((q, idx) => `
+                <div class="question-card">
+                    <div style="display:flex; justify-content:space-between;"><b>Вопрос ${idx+1}</b><span style="color:red; cursor:pointer" onclick="removeQuestion(${idx})">Удалить</span></div>
+                    <input type="text" placeholder="Текст вопроса" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:12px;" value="${escapeHtml(q.text)}" onchange="updateQuestion(${idx}, 'text', this.value)">
+                    <div class="answers-grid">
+                        ${[0,1,2,3].map(opt => `
+                            <div class="answer-option"><input type="radio" name="correct_${idx}" ${q.correct === opt ? 'checked' : ''} onchange="updateQuestion(${idx}, 'correct', ${opt})">
+                            <input type="text" placeholder="Вариант ${opt+1}" value="${escapeHtml(q.answers[opt])}" onchange="updateQuestion(${idx}, 'ans${opt}', this.value)" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:12px;"></div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveQuiz() {
+            const title = document.getElementById('quizTitle').value.trim();
+            const quizClass = document.getElementById('quizClass').value.trim();
+            const subject = document.getElementById('quizSubject').value.trim();
+            const type = document.getElementById('quizType').value;
+            const price = parseInt(document.getElementById('quizPrice').value) || 0;
+            const publish = document.getElementById('publishQuiz').checked;
+            if (!title) { alert('Введите название'); return; }
+            if (!questionsList.length) { alert('Добавьте вопросы'); return; }
+            for (let q of questionsList) {
+                if (!q.text.trim()) { alert('Заполните текст вопроса'); return; }
+                for (let a of q.answers) if (!a.trim()) { alert('Заполните все варианты'); return; }
+            }
+            const quizId = editingId || 'quiz_' + Date.now() + '_' + Math.random().toString(36).substring(2,7);
+            try {
+                if (editingId) {
+                    await sb.from('quizzes').update({ title, class: quizClass, subject, type, price_tokens: price, question_count: questionsList.length, published: publish, updated_at: new Date().toISOString() }).eq('id', quizId);
+                    await sb.from('questions').delete().eq('quiz_id', quizId);
+                } else {
+                    await sb.from('quizzes').insert({ id: quizId, title, class: quizClass, subject, type, price_tokens: price, question_count: questionsList.length, created_by: currentUser.id, published: publish, created_at: new Date().toISOString() });
+                    if (publish) { const newCoins = currentUser.coins + 50; await sb.from('users').update({ coins: newCoins }).eq('id', currentUser.id); currentUser.coins = newCoins; localStorage.setItem('currentUser', JSON.stringify(currentUser)); alert('✅ +50 монет за публикацию!'); }
+                }
+                for (let i = 0; i < questionsList.length; i++) {
+                    await sb.from('questions').insert({ quiz_id: quizId, question_index: i, question: questionsList[i].text, answers: questionsList[i].answers, correct: questionsList[i].correct });
+                }
+                alert(editingId ? '✅ Викторина обновлена!' : '✅ Викторина создана!');
+                closeConstructor();
+                await loadQuizzes();
+            } catch(e) { alert('Ошибка: ' + e.message); }
+        }
 
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
-        loadQuizzes();
+        document.getElementById('quizType').addEventListener('change', function() { document.getElementById('priceRow').style.display = this.value === 'constructed' ? 'grid' : 'none'; });
+        loadUser();
     </script>
 </body>
 </html>
