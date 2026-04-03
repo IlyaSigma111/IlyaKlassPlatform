@@ -3,32 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель ученика</title>
+    <title>ИЛЬЯКЛАСС - Ученик</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
-        button { background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
-        .quiz-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
-        .header a { color: white; text-decoration: none; }
-        input { padding: 8px; width: 100%; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: white; border-radius: 20px; padding: 15px 25px; margin-bottom: 25px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav a { padding: 8px 20px; text-decoration: none; color: #475569; border-radius: 30px; font-weight: 500; }
+        .nav a:hover, .nav a.active { background: #6366f1; color: white; }
+        .user-card { display: flex; align-items: center; gap: 15px; background: #f1f5f9; padding: 5px 15px; border-radius: 40px; }
+        .avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .logout-btn { padding: 6px 15px; background: #ef4444; color: white; border: none; border-radius: 30px; cursor: pointer; }
+        .join-card { background: white; border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .join-input { width: 100%; max-width: 300px; padding: 15px; border: 2px solid #e2e8f0; border-radius: 60px; text-align: center; letter-spacing: 4px; font-size: 18px; }
+        .join-btn { padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 60px; font-weight: 700; cursor: pointer; margin-top: 15px; }
+        .quizzes-section { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+        .quizzes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .quiz-card { background: #f8fafc; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; }
+        .quiz-title { font-size: 18px; font-weight: 700; }
+        .quiz-meta { color: #64748b; font-size: 13px; margin: 10px 0; }
+        .play-quick-btn { width: 100%; padding: 10px; background: #6366f1; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; }
+        @media (max-width: 768px) { .quizzes-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎮 ПАНЕЛЬ УЧЕНИКА</h1>
-            <div style="flex:1"></div>
-            <a href="index.html">Главная</a>
-            <a href="teacher.html">Учитель</a>
-            <a href="profile.html">Профиль</a>
+            <div class="logo" onclick="window.location='index.html'">ИЛЬЯКЛАСС</div>
+            <div class="nav">
+                <a href="student-menu.html" class="active">Главная</a>
+                <a href="student-shop.html">Магазин</a>
+                <a href="results.html">Результаты</a>
+                <a href="profile.html">Профиль</a>
+            </div>
+            <div id="userSection"></div>
         </div>
 
-        <input type="text" id="playerName" placeholder="Ваше имя" value="">
-        
-        <h2>Доступные викторины</h2>
-        <div id="quizzesList"></div>
+        <div class="join-card">
+            <h2><i class="fas fa-gamepad"></i> Войти по коду</h2>
+            <input type="text" id="gameCode" class="join-input" placeholder="00000000" maxlength="8">
+            <div><button class="join-btn" onclick="joinByCode()">🔌 Подключиться</button></div>
+            <div id="joinError" style="color:red; margin-top:10px;"></div>
+        </div>
+
+        <div class="quizzes-section">
+            <h2 class="section-title"><i class="fas fa-list"></i> Быстрый старт</h2>
+            <div id="quizzesList" class="quizzes-grid">Загрузка...</div>
+        </div>
     </div>
 
     <script>
@@ -36,42 +67,41 @@
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
-        let playerName = localStorage.getItem('playerName') || '';
-        document.getElementById('playerName').value = playerName;
-        document.getElementById('playerName').onchange = function() {
-            playerName = this.value.trim();
-            if (playerName) localStorage.setItem('playerName', playerName);
-        };
+        let currentUser = null;
+
+        async function loadUser() {
+            const saved = localStorage.getItem('currentUser');
+            if (!saved) { window.location.href = 'index.html'; return; }
+            currentUser = JSON.parse(saved);
+            if (currentUser.role !== 'student') { window.location.href = 'teacher-menu.html'; return; }
+            document.getElementById('userSection').innerHTML = `
+                <div class="user-card"><div class="avatar">${currentUser.username[0].toUpperCase()}</div><span>${currentUser.username}</span><span>💰 ${currentUser.coins}</span><button onclick="logout()" class="logout-btn">Выйти</button></div>
+            `;
+            await loadQuizzes();
+        }
+
+        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
 
         async function loadQuizzes() {
-            const { data: quizzes } = await sb.from('quizzes').select('*').order('created_at', { ascending: false });
-            if (!quizzes?.length) {
-                document.getElementById('quizzesList').innerHTML = '<p>Нет викторин</p>';
-                return;
-            }
-            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
-                <div class="quiz-card">
-                    <div>
-                        <b>${escapeHtml(q.title)}</b><br>
-                        <small>📁 ${escapeHtml(q.category)} | ${q.question_count} вопросов</small>
-                    </div>
-                    <button onclick="playQuiz('${q.id}')">▶ Играть</button>
-                </div>
+            const { data } = await sb.from('quizzes').select('*').eq('published', true).order('created_at', { ascending: false });
+            const container = document.getElementById('quizzesList');
+            if (!data?.length) { container.innerHTML = '<div style="text-align:center; padding:40px;">Нет доступных викторин</div>'; return; }
+            container.innerHTML = data.map(q => `
+                <div class="quiz-card"><div class="quiz-title">${escapeHtml(q.title)}</div><div class="quiz-meta">${q.class || 'Любой класс'} • ${q.subject || 'Без предмета'} • ${q.question_count} вопросов</div><button class="play-quick-btn" onclick="quickPlay('${q.id}')"><i class="fas fa-play"></i> Быстрая игра</button></div>
             `).join('');
         }
 
-        window.playQuiz = function(quizId) {
-            if (!playerName) {
-                alert('Введите ваше имя');
-                return;
-            }
-            localStorage.setItem('playerName', playerName);
-            window.location.href = `play.html?quiz=${quizId}`;
+        window.quickPlay = function(quizId) { window.location.href = `student.html?quiz=${quizId}`; };
+        window.joinByCode = async function() {
+            const code = document.getElementById('gameCode').value.trim();
+            if (!code || code.length !== 8) { document.getElementById('joinError').textContent = 'Введите 8-значный код'; return; }
+            const { data } = await sb.from('lobbies').select('*').eq('code', code).in('status', ['waiting', 'active']);
+            if (!data?.length) { document.getElementById('joinError').textContent = 'Игра не найдена'; return; }
+            window.location.href = `student.html?lobby=${data[0].id}`;
         };
 
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-
-        loadQuizzes();
+        loadUser();
     </script>
 </body>
 </html>
