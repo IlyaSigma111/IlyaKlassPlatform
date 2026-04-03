@@ -3,98 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ученик - Викторины</title>
+    <title>ИЛЬЯКЛАСС - Ученик</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
-        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .quiz-card { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .header { background: #4CAF50; color: white; padding: 15px; margin-bottom: 20px; display: flex; gap: 20px; }
-        .header a { color: white; text-decoration: none; }
-        input { padding: 8px; width: 100%; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        .category-filter { margin: 15px 0; }
-        .filter-btn { background: #ddd; color: #333; margin-right: 5px; }
-        .filter-btn.active { background: #4CAF50; color: white; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .game-card { background: white; border-radius: 40px; padding: 40px; max-width: 600px; width: 100%; color: #1e293b; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .back-btn { padding: 8px 20px; background: #f1f5f9; border: none; border-radius: 30px; cursor: pointer; text-decoration: none; color: #475569; }
+        .score { background: #10b981; padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; }
+        .question { font-size: 24px; margin: 30px 0; text-align: center; }
+        .option { background: #f1f5f9; padding: 15px 20px; margin: 10px 0; border-radius: 60px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #e2e8f0; transform: translateX(5px); }
+        .waiting { text-align: center; padding: 40px; }
+        .loader { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 60px; margin: 10px 0; }
+        button { width: 100%; padding: 15px; background: #6366f1; color: white; border: none; border-radius: 60px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>👨‍🎓 УЧЕНИК</h1>
-            <div style="flex:1"></div>
-            <a href="index.html">Главная</a>
-            <a href="teacher.html">Учитель</a>
-        </div>
-
-        <input type="text" id="playerName" placeholder="Ваше имя" value="">
-        
-        <div class="category-filter" id="categories"></div>
-        
-        <div id="quizzesList"></div>
-    </div>
-
+    <div class="game-card" id="app"></div>
     <script>
         const SB_URL = 'https://sekiunglzxycjkgraudd.supabase.co';
         const SB_KEY = 'sb_publishable_k5F_fZwKqsbwpO-itXvT9Q_UhRc6svh';
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
 
-        let playerName = localStorage.getItem('playerName') || '';
-        let currentCategory = 'all';
+        let lobbyId = null, playerName = localStorage.getItem('playerName') || '', myScore = 0, currentLobby = null, channel;
 
-        document.getElementById('playerName').value = playerName;
-        document.getElementById('playerName').onchange = function() {
-            playerName = this.value.trim();
-            if (playerName) localStorage.setItem('playerName', playerName);
-        };
-
-        async function loadCategories() {
-            const { data: quizzes } = await sb.from('quizzes').select('category');
-            const cats = ['Все', ...new Set(quizzes?.map(q => q.category).filter(c => c))];
-            document.getElementById('categories').innerHTML = cats.map(cat => `
-                <button class="filter-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>
-            `).join('');
+        function showJoinScreen() {
+            document.getElementById('app').innerHTML = `
+                <div class="header"><a href="index.html" class="back-btn">← На главную</a></div>
+                <h2 style="text-align:center;">Вход в игру</h2>
+                <input type="text" id="gameCode" placeholder="Код игры" maxlength="8" style="text-align:center; letter-spacing:4px;">
+                <input type="text" id="playerName" placeholder="Ваше имя" value="${escapeHtml(playerName)}">
+                <button onclick="joinGame()">🔌 Подключиться</button>
+            `;
         }
 
-        window.filterByCategory = function(cat) {
-            currentCategory = cat;
-            loadCategories();
-            loadQuizzes();
-        };
-
-        async function loadQuizzes() {
-            let query = sb.from('quizzes').select('*').order('created_at', { ascending: false });
-            if (currentCategory !== 'Все') query = query.eq('category', currentCategory);
-            const { data: quizzes } = await query;
-            
-            if (!quizzes?.length) {
-                document.getElementById('quizzesList').innerHTML = '<p>Нет викторин</p>';
-                return;
-            }
-            document.getElementById('quizzesList').innerHTML = quizzes.map(q => `
-                <div class="quiz-card">
-                    <div>
-                        <b>${escapeHtml(q.title)}</b><br>
-                        <small>📁 ${escapeHtml(q.category)} | ${q.question_count} вопросов</small>
-                    </div>
-                    <button onclick="playQuiz('${q.id}')">▶ Играть</button>
-                </div>
-            `).join('');
-        }
-
-        window.playQuiz = function(quizId) {
-            if (!playerName) {
-                alert('Введите ваше имя');
-                return;
-            }
+        window.joinGame = async function() {
+            const code = document.getElementById('gameCode').value.trim();
+            const name = document.getElementById('playerName').value.trim();
+            if (!code || code.length !== 8) { alert('Введите 8-значный код'); return; }
+            if (!name) { alert('Введите имя'); return; }
+            playerName = name;
             localStorage.setItem('playerName', playerName);
-            window.location.href = `play.html?quiz=${quizId}`;
+            const { data: lobbies } = await sb.from('lobbies').select('*').eq('code', code).in('status', ['waiting', 'active']);
+            if (!lobbies?.length) { alert('Игра не найдена'); return; }
+            lobbyId = lobbies[0].id;
+            const players = lobbies[0].players || {};
+            if (players[playerName]) { alert('Имя уже занято'); return; }
+            players[playerName] = { name: playerName, score: 0 };
+            await sb.from('lobbies').update({ players }).eq('id', lobbyId);
+            listenLobby();
+            showWaitingScreen();
         };
+
+        function listenLobby() {
+            channel = sb.channel('student-' + lobbyId);
+            channel.on('postgres_changes', { event: '*', schema: 'public', table: 'lobbies', filter: `id=eq.${lobbyId}` }, payload => { if (payload.new) handleUpdate(payload.new); }).subscribe();
+        }
+
+        function handleUpdate(lobby) {
+            currentLobby = lobby;
+            if (lobby.status === 'waiting') showWaitingScreen();
+            else if (lobby.status === 'active') showQuestion(lobby);
+            else if (lobby.status === 'finished') showResults();
+        }
+
+        function showWaitingScreen() {
+            const players = Object.values(currentLobby?.players || {});
+            document.getElementById('app').innerHTML = `
+                <div class="waiting"><div class="loader"></div><h3>Ожидание начала игры...</h3><div>Игроки: ${players.map(p => `<span style="background:#f1f5f9; padding:5px 12px; border-radius:30px; margin:5px; display:inline-block;">👤 ${escapeHtml(p.name)}</span>`).join('')}</div><div class="score" style="margin-top:20px;">⭐ ${myScore} очков</div></div>
+            `;
+        }
+
+        function showQuestion(lobby) {
+            const qText = lobby.question_text || 'Загрузка...';
+            const answers = lobby.question_answers || [];
+            document.getElementById('app').innerHTML = `
+                <div class="header"><div class="score">⭐ ${myScore}</div></div>
+                <div class="question">${escapeHtml(qText)}</div>
+                <div id="options">${answers.map((a,i) => `<div class="option" onclick="selectAnswer(${i})"><b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(a)}</div>`).join('')}</div>
+                <div id="status"></div>
+            `;
+        }
+
+        window.selectAnswer = async function(selected) {
+            if (!currentLobby) return;
+            const players = currentLobby.players || {};
+            const myPlayer = players[playerName];
+            if (!myPlayer) return;
+            const { data: qData } = await sb.from('questions').select('correct').eq('quiz_id', currentLobby.quiz_id).eq('question_index', currentLobby.current_question).single();
+            const isCorrect = (selected === qData?.correct);
+            if (isCorrect) { myScore++; myPlayer.score = myScore; await sb.from('lobbies').update({ players }).eq('id', lobbyId); document.getElementById('status').innerHTML = '<div style="color:green; margin-top:15px;">✅ Правильно! +1 очко</div>'; }
+            else { document.getElementById('status').innerHTML = '<div style="color:red; margin-top:15px;">❌ Неправильно!</div>'; }
+            document.querySelectorAll('.option').forEach(opt => opt.style.opacity = '0.5');
+        };
+
+        function showResults() {
+            const players = Object.values(currentLobby?.players || {}).sort((a,b) => (b.score||0) - (a.score||0));
+            document.getElementById('app').innerHTML = `
+                <div class="header"><a href="index.html" class="back-btn">← На главную</a></div>
+                <h2 style="text-align:center;">🏆 Игра завершена!</h2>
+                <div style="text-align:center; margin:20px;"><div style="font-size:48px;">${myScore}</div><div>ваших очков</div></div>
+                <h3>Рейтинг:</h3>${players.map((p,i) => `<div style="padding:10px; border-bottom:1px solid #e2e8f0;">${i+1}. ${escapeHtml(p.name)} — ${p.score||0} очков</div>`).join('')}
+                <button onclick="window.location.href='index.html'" style="margin-top:20px;">На главную</button>
+            `;
+        }
 
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-
-        loadCategories();
-        loadQuizzes();
+        showJoinScreen();
     </script>
 </body>
 </html>
